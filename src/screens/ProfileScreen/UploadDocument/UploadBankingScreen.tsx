@@ -30,8 +30,8 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
     const [bankValue, setBankValue] = useState('');
     const [image, setImage] = useState<any>(null);
     const [checked1, setChecked1] = useState<boolean>(false);
-    const [imageURL,setImageURL] = useState<string>('');
-    const [toggleModal,setToggleModal] = useState<boolean>(false)
+    const [imageURL, setImageURL] = useState<string>('');
+    const [toggleModal, setToggleModal] = useState<boolean>(false)
 
     const bankItems = banks.map((bank) => ({
         label: bank.bankName,
@@ -50,12 +50,12 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
         /*   console.log(previousBookbank) */
     }, [])
 
-    const getImg =async () => {
+    const getImg = async () => {
         const droner_id = await AsyncStorage.getItem('droner_id');
         ProfileDatasource.getImgePath(droner_id!, previousBookbank.path)
-        .then((res)=>{
-            setImageURL(res.url)
-        })
+            .then((res) => {
+                setImageURL(res.url)
+            })
     }
 
     const onAddImage = useCallback(async () => {
@@ -198,8 +198,7 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
                             marginVertical: 20,
                         }}
                         onPress={onAddImage}>
-                        {image == null||previousBookbank!== undefined?  (
-
+                        {previousBookbank !== undefined ? (
                             <View style={{
                                 width: width * 0.9,
                                 height: normalize(76),
@@ -214,7 +213,7 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
                             }}>
                                 <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                     <Image
-                                        source={{ uri:image == null&&previousBookbank!== undefined?imageURL: image.assets[0].uri }}
+                                        source={{ uri: imageURL }}
                                         style={{
                                             width: normalize(36),
                                             height: normalize(36),
@@ -222,16 +221,14 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
                                         }}
                                     />
                                     <View style={{ width: '70%', marginLeft: 10 }}>
-                                    <Text ellipsizeMode="tail" numberOfLines={1}>{image == null&&previousBookbank!== undefined?previousBookbank.fileName:image.assets[0].fileName}</Text>
+                                        <Text ellipsizeMode="tail" numberOfLines={1}>{previousBookbank.fileName}</Text>
 
                                     </View>
                                 </View>
                                 <Image source={icons.closeBlack} style={{ width: normalize(16), height: normalize(16) }} />
 
                             </View>
-
-                        ):
-                        (
+                        ) : image == null ? (
                             <View style={styles.addImage}>
                                 <View style={styles.camera}>
                                     <Image
@@ -245,8 +242,39 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
                                 </View>
                                 <Text>เพิ่มเอกสารด้วย ไฟล์รูป หรือ PDF</Text>
                             </View>
-                        )
-                        }
+                        ) : (
+                            <View style={{
+                                width: width * 0.9,
+                                height: normalize(76),
+                                borderRadius: 8,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                backgroundColor: '#FFFBF6',
+                                borderColor: '#FF981E',
+                                borderWidth: 1,
+                                paddingHorizontal: normalize(10)
+                            }}>
+                                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                    <Image
+                                        source={{ uri:  image.assets[0].uri }}
+                                        style={{
+                                            width: normalize(36),
+                                            height: normalize(36),
+
+                                        }}
+                                    />
+                                    <View style={{ width: '70%', marginLeft: 10 }}>
+                                        <Text ellipsizeMode="tail" numberOfLines={1}>{ image.assets[0].fileName}</Text>
+
+                                    </View>
+                                </View>
+                                <Image source={icons.closeBlack} style={{ width: normalize(16), height: normalize(16) }} />
+
+                            </View>
+                        )}
+
+
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setChecked1(!checked1)}
@@ -279,7 +307,7 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
                 <MainButton
                     label="บันทึก"
                     color={colors.orange}
-                    onPress={()=>setToggleModal(true)}
+                    onPress={() => setToggleModal(true)}
                     disable={image === null}
                 />
 
@@ -287,19 +315,19 @@ const UploadBankingScreen: React.FC<any> = ({ navigation, route }) => {
 
             <Modal transparent={true} visible={toggleModal} >
                 <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(4, 19, 10, 0.3)', paddingHorizontal: normalize(16) }}>
-                    <View style={{ paddingVertical: normalize(24), paddingHorizontal: normalize(16), backgroundColor: 'white', borderRadius: 16,  }}>
-                        <View style={{alignItems: 'center'}}>
-                        <Text style={styles.h1}>บันทึกการส่งเอกสาร?</Text>
-                        <Text style={styles.label}>กรุณาตรวจสอบเอกสารและรายละเอียด</Text>
-                        <Text style={styles.label}>ของคุณให้ถูกต้อง หากข้อมูลไม่ถูกต้อง</Text>
-                        <Text style={styles.label}>จะส่งผลต่อการรับงานบินโดรน</Text>
+                    <View style={{ paddingVertical: normalize(24), paddingHorizontal: normalize(16), backgroundColor: 'white', borderRadius: 16, }}>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={styles.h1}>บันทึกการส่งเอกสาร?</Text>
+                            <Text style={styles.label}>กรุณาตรวจสอบเอกสารและรายละเอียด</Text>
+                            <Text style={styles.label}>ของคุณให้ถูกต้อง หากข้อมูลไม่ถูกต้อง</Text>
+                            <Text style={styles.label}>จะส่งผลต่อการรับงานบินโดรน</Text>
                         </View>
                         <View>
-                        <MainButton label="บันทึก" color={"#FB8705"} onPress={onSubmit} />
-                        <MainButton label="ยกเลิก" color={"white"}  fontColor={'black'}  onPress={()=>setToggleModal(false)}/>
+                            <MainButton label="บันทึก" color={"#FB8705"} onPress={onSubmit} />
+                            <MainButton label="ยกเลิก" color={"white"} fontColor={'black'} onPress={() => setToggleModal(false)} />
+                        </View>
                     </View>
-                    </View>
-                    
+
 
                 </View>
             </Modal>
