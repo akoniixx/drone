@@ -1,4 +1,4 @@
-import React, {createContext, useMemo} from 'react';
+import React, {createContext, useEffect, useMemo, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import LoginScreen from '../screens/LoginScreen/LoginScreen';
@@ -22,6 +22,8 @@ import NotificationList from '../screens/ProfileScreen/NotificationList';
 import UploadBankingScreen from '../screens/ProfileScreen/UploadDocument/UploadBankingScreen';
 import UploadDronerLicenseScreen from '../screens/ProfileScreen/UploadDocument/UploadDronerLicenseScreen';
 import ServiceArea from '../screens/ProfileScreen/ServiceArea';
+import { MaintenanceSystem, MaintenanceSystem_INIT } from '../entities/MaintenanceEntities';
+import { SystemMaintenance } from '../datasource/MaintenanceDatasource';
 // import DeleteSuccess from '../screens/ProfileScreen/DeleteProfile/DeleteSuccess';
 
 export type StackParamList = {
@@ -51,6 +53,31 @@ export type StackNativeScreenProps<T extends keyof StackParamList> =
 const Stack = createStackNavigator<StackParamList>();
 
 const MainNavigator: React.FC = () => {
+
+  const [reload, setReload] = useState(false);
+  const [end, setEnd] = useState<any>();
+  const [start, setStart] = useState<any>();
+  const [maintenanceApp, setMaintenanceApp] = useState<MaintenanceSystem>(
+    MaintenanceSystem_INIT,
+  );
+
+  const Maintenance = async () => {
+    await SystemMaintenance.Maintenance('DRONER')
+      .then(res => {
+        setMaintenanceApp(res.responseData);
+        setReload(!reload);
+      })
+      .catch(err => console.log(err));
+    if (maintenanceApp != null) {
+      setStart(Date.parse(maintenanceApp.dateStart));
+      setEnd(Date.parse(maintenanceApp.dateEnd));
+    }
+  };
+
+   useEffect(() => {
+    Maintenance();
+  }, [reload]);
+
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen

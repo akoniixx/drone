@@ -2,7 +2,7 @@ import {Switch} from '@rneui/themed';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {colors, font} from '../../assets';
+import {colors, font, image} from '../../assets';
 import {normalize} from '../../function/Normalize';
 import TaskTapNavigator from '../../navigations/topTabs/TaskTapNavigator';
 import {stylesCentral} from '../../styles/StylesCentral';
@@ -25,6 +25,11 @@ import Toast from 'react-native-toast-message';
 import {responsiveHeigth, responsiveWidth} from '../../function/responsive';
 import fonts from '../../assets/fonts';
 import { mixpanel } from '../../../mixpanel';
+import { momentExtend } from '../../utils/moment-buddha-year';
+import MaintenanceModal from '../../components/Modal/MaintenanceModal';
+import { MaintenanceSystem, MaintenanceSystem_INIT } from '../../entities/MaintenanceEntities';
+import moment from 'moment';
+import { SystemMaintenance } from '../../datasource/MaintenanceDatasource';
 
 const MainScreen: React.FC<any> = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
@@ -41,6 +46,19 @@ const MainScreen: React.FC<any> = ({navigation, route}) => {
     status: '',
   });
   const [openNoti, setOpenNoti] = useState(false);
+  const [notiEnd, setNotiEnd] = useState<any>();
+  const [notiStart, setNotiStart] = useState<any>();
+  const [popupMaintenance, setPopupMaintenance] = useState<boolean>(true);
+  const [maintenance, setMaintenance] = useState<MaintenanceSystem>(
+    MaintenanceSystem_INIT,
+  );
+  const [end, setEnd] = useState<any>();
+  const [start, setStart] = useState<any>();
+  const date = new Date();
+  const d = momentExtend.toBuddhistYear(date, 'DD MMMM YYYY');
+  const checkDateNoti = d >= notiStart && d <= notiEnd;
+  const [reload, setReload] = useState(false);
+  const [loading,setLoading] = useState<boolean>(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -53,6 +71,53 @@ const MainScreen: React.FC<any> = ({navigation, route}) => {
     getProfile();
     openSocket();
   }, []);
+
+  useEffect(() => {
+    const getMaintenance = async () => {
+      setLoading(true);
+      const value = await AsyncStorage.getItem('Maintenance');
+      await SystemMaintenance.Maintenance('DRONER')
+        .then(res => {
+          if(res.responseData != null){
+            if (value === 'read') {
+              setMaintenance(res.responseData);
+            } else {
+              setMaintenance(res.responseData);
+              setPopupMaintenance(res.responseData.id ? true : false);
+            }
+          }
+          if (maintenance != null) {
+            setStart(
+              momentExtend.toBuddhistYear(
+                maintenance.dateStart,
+                'DD MMMM YYYY',
+              ),
+            );
+            setEnd(
+              momentExtend.toBuddhistYear(
+                maintenance.dateStart,
+                'DD MMMM YYYY',
+              ),
+            );
+            setNotiStart(
+              momentExtend.toBuddhistYear(
+                maintenance.dateNotiStart,
+                'DD MMMM YYYY',
+              ),
+            );
+            setNotiEnd(
+              momentExtend.toBuddhistYear(
+                maintenance.dateNotiEnd,
+                'DD MMMM YYYY',
+              ),
+            );
+          }
+        })
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false));
+    };
+    getMaintenance();
+  }, [reload]);
 
   const openSocket = async () => {
     const dronerId = await AsyncStorage.getItem('droner_id');
@@ -164,7 +229,6 @@ const MainScreen: React.FC<any> = ({navigation, route}) => {
         }}
       />
       <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
-        <View style={{flex: 2}}>
           <View style={styles.headCard}>
             <View>
               <Text
@@ -192,7 +256,8 @@ const MainScreen: React.FC<any> = ({navigation, route}) => {
                 />
                 <Text style={styles.activeFont}>เปิดรับงาน</Text>
               </View>
-            </View>
+            </View> 
+            
             <View>
               <TouchableOpacity
                 onPress={() => {
@@ -245,9 +310,159 @@ const MainScreen: React.FC<any> = ({navigation, route}) => {
                 </View>
               </TouchableOpacity>
             </View>
+            
           </View>
+          <View>
+                  {checkDateNoti === true && (
+                    <View style={{ marginTop: 20, marginBottom: 20 }}>
+                      <View
+                        style={{
+                          paddingHorizontal: 20,
+                          height: 'auto',
+                          width: normalize(340),
+                          alignSelf: 'center',
+                          backgroundColor: '#FFF4E9',
+                          borderRadius: 10,
+                        }}>
+                        <View
+                          style={{
+                            paddingVertical: 20,
+                            justifyContent: 'space-between',
+                            flexDirection: 'row',
+                          }}>
+                          <View style={{ marginTop: 15 }}>
+                            <Image
+                              source={image.maintenance}
+                              style={{ width: 58, height: 60 }}
+                            />
+                          </View>
+                          <View style={{ paddingHorizontal: 30 }}>
+                            {start != end ? (
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: font.medium,
+                                    fontSize: normalize(18),
+                                    color: colors.fontBlack,
+                                    fontWeight: '800',
+                                  }}>
+                                  {`วันที่ `}
+                                  <Text
+                                    style={{
+                                      color: '#FB8705',
+                                    }}>
+                                    {momentExtend.toBuddhistYear(
+                                      maintenance.dateStart,
+                                      'DD MMMM YYYY',
+                                    )}
+                                  </Text>
+                                </Text>
+                                <Text
+                                  style={{
+                                    fontFamily: font.medium,
+                                    fontSize: normalize(18),
+                                    color: colors.fontBlack,
+                                    fontWeight: '800',
+                                  }}>
+                                  ช่วงเวลา{' '}
+                                  {moment(maintenance.dateStart)
+                                    .add(543, 'year')
+                                    .locale('th')
+                                    .format('HH.mm')}
+                                  {' - 23:59 น.'}
+                                </Text>
+                                <Text
+                                  style={{
+                                    fontFamily: font.medium,
+                                    fontSize: normalize(18),
+                                    color: colors.fontBlack,
+                                    fontWeight: '800',
+                                  }}>
+                                  {`ถึงวันที่ `}
+                                  <Text
+                                    style={{
+                                      color: '#FB8705',
+                                    }}>
+                                    {momentExtend.toBuddhistYear(
+                                      maintenance.dateEnd,
+                                      'DD MMMM YYYY',
+                                    )}
+                                  </Text>
+                                </Text>
+                                <Text
+                                  style={{
+                                    fontFamily: font.medium,
+                                    fontSize: normalize(18),
+                                    color: colors.fontBlack,
+                                    fontWeight: '800',
+                                  }}>
+                                  ช่วงเวลา
+                                  {` 00:00 - `}
+                                  {moment(maintenance.dateEnd)
+                                    .add(543, 'year')
+                                    .locale('th')
+                                    .format('HH.mm น.')}
+                                </Text>
+                              </View>
+                            ) : (
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: font.medium,
+                                    fontSize: normalize(18),
+                                    color: colors.fontBlack,
+                                    fontWeight: '800',
+                                  }}>
+                                  {`วันที่ `}
+                                  <Text
+                                    style={{
+                                      color: '#FB8705',
+                                    }}>
+                                    {maintenance != null &&
+                                      momentExtend.toBuddhistYear(
+                                        maintenance.dateStart,
+                                        'DD MMMM YYYY',
+                                      )}
+                                  </Text>
+                                </Text>
+                                <Text
+                                  style={{
+                                    fontFamily: font.medium,
+                                    fontSize: normalize(18),
+                                    color: colors.fontBlack,
+                                    fontWeight: '800',
+                                  }}>
+                                  ช่วงเวลา{' '}
+                                  {moment(maintenance.dateStart)
+                                    .add(543, 'year')
+                                    .locale('th')
+                                    .format('HH.mm')}
+                                  {' - '}
+                                  {moment(maintenance.dateEnd)
+                                    .add(543, 'year')
+                                    .locale('th')
+                                    .format('HH.mm')}
+                                  {' น.'}
+                                </Text>
+                              </View>
+                            )}
+                            <Text
+                              style={{
+                                marginRight: 20,
+                                fontFamily: font.light,
+                                fontSize: normalize(16),
+                                color: colors.fontBlack,
+                              }}>
+                              {maintenance.text}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )}
+                </View>
           <View
-            style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
+            style={{ justifyContent: 'center', alignItems: 'center'}}>
             <View style={{height: normalize(95)}}>
               <ScrollView
                 showsHorizontalScrollIndicator={false}
@@ -347,8 +562,17 @@ const MainScreen: React.FC<any> = ({navigation, route}) => {
               </ScrollView>
             </View>
           </View>
-        </View>
-        <View style={{flex: 4}}>
+        {checkDateNoti === true && (
+            <MaintenanceModal
+              show={popupMaintenance}
+              onClose={async () => {
+                await AsyncStorage.setItem('Maintenance', 'read');
+                setPopupMaintenance(!popupMaintenance);
+              }}
+              data={maintenance}
+            />
+          )}
+        <View style={{flex: 1}}>
           <TaskTapNavigator
             isOpenReceiveTask={profile.isOpenReceiveTask}
             dronerStatus={profile.status}
@@ -362,7 +586,6 @@ export default MainScreen;
 
 const styles = StyleSheet.create({
   headCard: {
-    flex: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: normalize(23),
