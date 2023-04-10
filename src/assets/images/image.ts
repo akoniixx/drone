@@ -27,4 +27,5 @@ export default {
   emptyareaservice : require('./emptyareaservice.png'),
   areaaround : require('./areaaround.png'),
   maintenance: require('./maintenance.png'),
+  academy: require('./academy.png')
 };
