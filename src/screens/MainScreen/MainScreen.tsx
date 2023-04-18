@@ -70,54 +70,56 @@ const MainScreen: React.FC<any> = ({navigation, route}) => {
   useEffect(() => {
     getProfile();
     openSocket();
+    getMaintenance();
   }, []);
 
   useEffect(() => {
-    const getMaintenance = async () => {
-      setLoading(true);
-      const value = await AsyncStorage.getItem('Maintenance');
-      await SystemMaintenance.Maintenance('DRONER')
-        .then(res => {
-          if(res.responseData != null){
-            if (value === 'read') {
-              setMaintenance(res.responseData);
-            } else {
-              setMaintenance(res.responseData);
-              setPopupMaintenance(res.responseData.id ? true : false);
-            }
-          }
-          if (maintenance != null) {
-            setStart(
-              momentExtend.toBuddhistYear(
-                maintenance.dateStart,
-                'DD MMMM YYYY',
-              ),
-            );
-            setEnd(
-              momentExtend.toBuddhistYear(
-                maintenance.dateStart,
-                'DD MMMM YYYY',
-              ),
-            );
-            setNotiStart(
-              momentExtend.toBuddhistYear(
-                maintenance.dateNotiStart,
-                'DD MMMM YYYY',
-              ),
-            );
-            setNotiEnd(
-              momentExtend.toBuddhistYear(
-                maintenance.dateNotiEnd,
-                'DD MMMM YYYY',
-              ),
-            );
-          }
-        })
-        .catch(err => console.log(err))
-        .finally(() => setLoading(false));
-    };
     getMaintenance();
   }, [reload]);
+
+  const getMaintenance = async () => {
+    setLoading(true);
+    const value = await AsyncStorage.getItem('Maintenance');
+    await SystemMaintenance.Maintenance('DRONER')
+      .then(res => {
+        if(res.responseData != null){
+          if (value === 'read') {
+            setMaintenance(res.responseData);
+          } else {
+            setMaintenance(res.responseData);
+            setPopupMaintenance(res.responseData.id ? true : false);
+          }
+        }
+        if (maintenance != null) {
+          setStart(
+            momentExtend.toBuddhistYear(
+              maintenance.dateStart,
+              'DD MMMM YYYY',
+            ),
+          );
+          setEnd(
+            momentExtend.toBuddhistYear(
+              maintenance.dateStart,
+              'DD MMMM YYYY',
+            ),
+          );
+          setNotiStart(
+            momentExtend.toBuddhistYear(
+              maintenance.dateNotiStart,
+              'DD MMMM YYYY',
+            ),
+          );
+          setNotiEnd(
+            momentExtend.toBuddhistYear(
+              maintenance.dateNotiEnd,
+              'DD MMMM YYYY',
+            ),
+          );
+        }
+      })
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false));
+  };
 
   const openSocket = async () => {
     const dronerId = await AsyncStorage.getItem('droner_id');
