@@ -340,7 +340,7 @@ const Tasklists: React.FC<any> = (props: any) => {
           </Text>
         </View>
       </View>
-      <Modal isVisible={props.toggleModalStartTask}>
+      <Modal isVisible={props.toggleModalStartTask} backdropOpacity={0.2}>
         <View
           style={{
             backgroundColor: 'white',

@@ -1078,7 +1078,7 @@ const TaskDetailScreen: React.FC<any> = ({ navigation, route }) => {
           />
         </View>
       </CModal>
-      <CModal isVisible={showModalStartTask}>
+      <CModal isVisible={showModalStartTask}  backdropOpacity={0.2}>
         <View
           style={{
             backgroundColor: 'white',
