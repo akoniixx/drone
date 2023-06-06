@@ -1,3 +1,5 @@
+## Fix [1.3.1] 2023-04-25
+- fix noti point
 ## Feature [1.3.0] 2023-05-25
 - Add feature history point 
 - Add point toast and noti
