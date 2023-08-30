@@ -147,13 +147,14 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
 
   const onLogout = async () => {
     const dronerId = await AsyncStorage.getItem('droner_id');
-    socket.removeAllListeners(`send-task-${dronerId!}`);
-    socket.close();
-    const fcmtoken = await AsyncStorage.getItem('fcmtoken');
+    // const fcmtoken = await AsyncStorage.getItem('fcmtoken');
     FCMtokenDatasource.deleteFCMtoken(fcmToken)
-      .then(async res => await Authentication.logout())
+      .then(async res => {
+        socket.removeAllListeners(`send-task-${dronerId!}`);
+        socket.close();
+        await AsyncStorage.clear();
+      })
       .catch(err => console.log(err));
-    await AsyncStorage.clear();
   };
 
   useEffect(() => {

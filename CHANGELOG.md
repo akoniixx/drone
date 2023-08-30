@@ -1,3 +1,6 @@
+## Fix [1.6.14] 2023-09-20
+- change lvl clear cache logout
+
 ## Fix [1.6.13] 2023-08-01
 - fix bug display challenge news
 
