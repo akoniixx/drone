@@ -87,7 +87,9 @@ export const HistoryPoint: React.FC<guruData> = ({
           paddingVertical: 15,
         }}>
         <View style={{flex: 0.6}}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={2}>
+            {title}
+          </Text>
           <Text style={styles.textDate}>
             {/* {taskNo ? '#' : '#'} */}
             {action === 'RETURN'
@@ -152,24 +154,24 @@ const styles = StyleSheet.create({
     fontFamily: font.medium,
     fontWeight: '600',
     color: colors.fontGrey,
-    lineHeight: 30,
+    lineHeight: 26,
   },
   textDate: {
     fontSize: normalize(14),
     fontFamily: font.light,
     color: colors.gray,
-    lineHeight: 30,
+    lineHeight: 26,
   },
   positive: {
     fontSize: normalize(18),
     fontFamily: font.bold,
     color: colors.green,
-    lineHeight: 30,
+    lineHeight: 26,
   },
   negative: {
     fontSize: normalize(18),
     fontFamily: font.bold,
     color: colors.redPrice,
-    lineHeight: 30,
+    lineHeight: 26,
   },
 });

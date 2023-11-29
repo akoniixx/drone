@@ -1,6 +1,10 @@
 import axios from 'axios';
 import {BASE_URL} from '../config/develop-config';
 
+interface GroupGuruKaset {
+  page?: number;
+  take?: number;
+}
 export class GuruKaset {
   static async findAllNews({
     status,
@@ -47,5 +51,10 @@ export class GuruKaset {
       .then(res => {
         return res.data;
       });
+  }
+  static async getGroupGuru(): Promise<any> {
+    return axios.get(BASE_URL + '/promotion/news/group-guru').then(res => {
+      return res.data;
+    });
   }
 }

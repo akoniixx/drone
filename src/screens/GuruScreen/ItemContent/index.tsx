@@ -13,7 +13,7 @@ interface Props {
 }
 export default function ItemContent({navigation}: Props) {
   const loveCount = Math.round(Math.random() * 1000);
-  const commentCount = Math.round(Math.random() * 1000);
+  // const commentCount = Math.round(Math.random() * 1000);
   const readCount = Math.round(Math.random() * 10000);
   const dateCreate = moment().subtract(
     Math.round(Math.random() * 1000),
@@ -50,10 +50,10 @@ export default function ItemContent({navigation}: Props) {
               />
               <Text style={styles.textBold}>{loveCount}</Text>
             </View>
-            <View style={styles.row}>
+            {/* <View style={styles.row}> 
               <Image source={icons.commentIcon} style={styles.icon} />
               <Text style={styles.textBold}>{commentCount}</Text>
-            </View>
+            </View> */}
           </View>
           <View style={styles.row}>
             <Text style={styles.textNormal}>{dateCreate.fromNow()}</Text>

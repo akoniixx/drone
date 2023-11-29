@@ -1,4 +1,6 @@
 
+## Fix [1.10.4] 2023-11-29
+- Pending point bug ui
 ## Enhance [1.10.2] 2023-11-27
 - fixed icon size for noti
 - add close circle icon

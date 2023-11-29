@@ -15,8 +15,12 @@ export default function SectionFooter({loveCount, commentCount}: Props) {
   const onPressLove = () => {
     setIsLoved(prev => !prev);
   };
-  const onOpenComment = () => {
-    SheetManager.show('commentSheet');
+  const onOpenComment = async () => {
+    await SheetManager.show('commentSheet', {
+      payload: {
+        commentCount,
+      },
+    });
   };
   const mockText = `
   “ยาเหลือง” ใช้แล้วติดถังพ่น!! นักบินโดรนสามารถใช้ยาอะไร ทดแทนได้บ้าง!! วันนี้กูรูเกษตรมีคำตอบ ?

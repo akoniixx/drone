@@ -9,7 +9,7 @@ interface Props {
 export default function BadgeGuru({title, isDetail = false}: Props) {
   const {color} = useMemo(() => {
     return {
-      color: isDetail ? colors.orange : colors.orangeSoft,
+      color: isDetail ? colors.orange : colors.fontBlack,
     };
   }, [isDetail]);
   return (

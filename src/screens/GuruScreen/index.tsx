@@ -17,6 +17,7 @@ import Text from '../../components/Text';
 import {colors, font, icons} from '../../assets';
 import GuruTapNavigator from './GuruTapNavigator';
 import ItemContent from './ItemContent';
+import {GuruKaset} from '../../datasource/GuruDatasource';
 
 interface Props {
   navigation: any;
@@ -75,6 +76,16 @@ export default function GuruScreen({navigation}: Props) {
   //   setProgress(percent);
   // };
   // console.log('progress', progress);
+
+  useEffect(() => {
+    const getInitialData = async () => {
+      try {
+        const getListGroupGuru = await GuruKaset.getGroupGuru();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>

@@ -5,16 +5,18 @@ import {colors, font} from '../../assets';
 interface Props extends TextProps {
   title?: boolean;
 }
-export default function Text({children, ...props}: Props) {
+const Text = React.forwardRef<TextRN, Props>(({children, ...props}, ref) => {
   return (
     <TextRN
       {...props}
+      ref={ref}
       style={[styles(props).text, props.style]}
       allowFontScaling={false}>
       {children}
     </TextRN>
   );
-}
+});
+export default Text;
 const styles = ({...rest}: Props) => {
   return StyleSheet.create({
     text: {

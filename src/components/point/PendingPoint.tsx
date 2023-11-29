@@ -33,8 +33,10 @@ export const PendingPoint: React.FC<guruData> = ({
           paddingHorizontal: 15,
           paddingVertical: 15,
         }}>
-        <View>
-          <Text style={styles.title}>{action}</Text>
+        <View style={{flex: 1}}>
+          <Text style={styles.title} numberOfLines={2}>
+            {action}
+          </Text>
           <Text style={styles.textDate}>{'#' + taskNo}</Text>
         </View>
 
@@ -73,25 +75,25 @@ const styles = StyleSheet.create({
     fontFamily: font.medium,
     fontWeight: '600',
     color: colors.fontGrey,
-    lineHeight: 30,
+    lineHeight: 26,
   },
   textDate: {
     fontSize: normalize(14),
     fontFamily: font.bold,
     color: colors.grey2,
-    lineHeight: 30,
+    lineHeight: 26,
   },
   positive: {
     fontSize: normalize(17),
     fontFamily: font.bold,
     color: colors.grey3,
-    lineHeight: 30,
+    lineHeight: 26,
     textAlign: 'right',
   },
   negative: {
     fontSize: normalize(18),
     fontFamily: font.bold,
     color: colors.redPrice,
-    lineHeight: 30,
+    lineHeight: 26,
   },
 });
