@@ -1,4 +1,5 @@
-
+## Checkpoint [1.10.6] 2023-12-01
+- checkpoint before deploy production
 ## Feature [1.10.5] 2023-12-01
 - guru kaset screen
 ## Fix [1.10.4] 2023-11-29
