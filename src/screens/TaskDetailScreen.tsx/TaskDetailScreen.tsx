@@ -49,12 +49,13 @@ import BadgeStatus from '../../components/BadgeStatus/BadgeStatus';
 import NetworkLost from '../../components/NetworkLost/NetworkLost';
 import {RefreshControl} from 'react-native';
 import {checkDecimal} from '../../function/checkDecimal';
+import {useIsFocused} from '@react-navigation/native';
 
 const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   const taskId = route.params.taskId;
   const isFinishTask = route.params.isFinishTask;
   const isFromTaskDetail = route.params.isFromTaskDetail || false;
-  const isGoBack = route.params.isGoBack || false;
+  const isFocused = useIsFocused();
 
   const [data, setData] = useState<any>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -127,7 +128,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
       }, 3000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [taskId]);
+  }, [taskId, isFocused]);
 
   const onFinishTask = () => {
     setTogleModalReview(false);

@@ -96,8 +96,17 @@ export default function StepOne({
     });
     if (result && result.length > 0) {
       const hashMap: {[key: string]: boolean} = {};
+      const format: any = imageData.assets.map(el => {
+        return {
+          path: el.uri,
+          size: el.fileSize,
+          mime: el.type,
+          filename: el.fileName,
+        };
+      });
+      const newResult = [...format, ...result];
 
-      const array = result.map(async (item: ImageType) => {
+      const array = newResult.map(async (item: ImageType) => {
         const fileData = await RNFS.readFile(item.path, 'base64');
         const convertSha = SHA256(fileData).toString();
         const errorMessages = [];
@@ -150,7 +159,7 @@ export default function StepOne({
           errorTypeList,
         };
       });
-      const currentListPhoto = [...imageData.assets, ...array];
+      const currentListPhoto = [...array];
 
       setShowModalSelectImage(false);
       setLoading(true);
@@ -161,6 +170,7 @@ export default function StepOne({
       const newAssets = await Promise.all([...currentListPhoto]).finally(() => {
         setLoading(false);
       });
+      //   console.log('newAssets :>> ', JSON.stringify(newAssets, null, 2));
       const errorTypeList = newAssets.reduce((acc: any, item: any) => {
         if (item.errorTypeList) {
           return [...acc, ...item.errorTypeList];

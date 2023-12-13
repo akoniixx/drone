@@ -1,17 +1,35 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import Text from '../../components/Text';
 import CustomHeader from '../../components/CustomHeader';
-import {colors, font, icons} from '../../assets';
+import {colors, font, icons, image} from '../../assets';
 import {normalize} from '../../function/Normalize';
 import AsyncButton from '../../components/Button/AsyncButton';
 import TextInputArea from '../../components/TextInputArea/TextInputArea';
 import {StackParamList} from '../../navigations/MainNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
+import Modal from '../../components/Modal/Modal';
+import Lottie from 'lottie-react-native';
+import PureAnimatedBar from '../../components/ProgressBarAnimated/PureAnimateBar';
 
 interface Props {
   onPressBack: () => void;
-  onSubmit: (payload: {rating: number; comment: string}) => Promise<void>;
+  onSubmit: (payload: {
+    rating: number;
+    comment: string;
+    onProgressUpload: (progress: number) => void;
+  }) => Promise<
+    | {
+        success: boolean;
+      }
+    | undefined
+  >;
   navigation: StackNavigationProp<StackParamList, 'FinishTaskScreen'>;
   taskId: string;
   isFromTaskDetail: boolean;
@@ -27,20 +45,35 @@ export default function StepThree({
   const [isFocus, setIsFocus] = React.useState(false);
   const [comment, setComment] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [progress, setProgress] = React.useState(0);
+  const [isDone, setIsDone] = React.useState(false);
   const onSubmitFinishTask = async () => {
     try {
       setLoading(true);
       await onSubmit({
         rating,
         comment,
-      }).then(() => {
-        setLoading(false);
-        navigation.navigate('TaskDetailScreen', {
-          taskId: taskId,
-          isFinishTask: true,
-          isFromTaskDetail: isFromTaskDetail,
-        });
-      });
+        onProgressUpload: (progress: number) => {
+          setProgress(progress);
+        },
+      })
+        .then(async res => {
+          if (res?.success) {
+            await Promise.resolve(
+              setTimeout(() => {
+                setLoading(false);
+              }, 1500),
+            );
+            setTimeout(() => {
+              navigation.navigate('TaskDetailScreen', {
+                taskId: taskId,
+                isFinishTask: true,
+                isFromTaskDetail: isFromTaskDetail,
+              });
+            }, 1000);
+          }
+        })
+        .finally(() => {});
     } catch (err) {
       console.log(err);
     }
@@ -120,6 +153,37 @@ export default function StepThree({
           disabled={rating == 0 || loading}
           onPress={onSubmitFinishTask}
         />
+        <Modal visible={loading}>
+          {/* <Modal visible={false}> */}
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: colors.white,
+              borderRadius: 12,
+              width: '100%',
+              padding: 24,
+            }}>
+            <Lottie
+              autoPlay
+              loop
+              source={image.imageUploading}
+              resizeMode="cover"
+              speed={1}
+              style={{
+                width: Dimensions.get('window').width * 0.4,
+                height: Dimensions.get('window').width * 0.4,
+              }}
+            />
+            <PureAnimatedBar progress={progress / 100} />
+            <View style={{height: 10}} />
+            <Text style={styles.content}>ระบบกำลังอัพโหลดรูปภาพ</Text>
+            <Text
+              style={
+                styles.content
+              }>{`(ความเร็วขึ้นอยู่กับสัญญาณอินเตอร์เน็ต)`}</Text>
+          </View>
+        </Modal>
       </View>
     </>
   );
@@ -163,5 +227,9 @@ const styles = StyleSheet.create({
     width: normalize(36),
     height: normalize(36),
     marginHorizontal: normalize(5),
+  },
+  content: {
+    color: colors.gray,
+    fontSize: normalize(14),
   },
 });

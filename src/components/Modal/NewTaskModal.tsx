@@ -436,7 +436,8 @@ export const NewTaskModal = (
 
 const styles = StyleSheet.create({
   task: {
-    padding: normalize(14),
+    paddingHorizontal: normalize(14),
+    paddingBottom: normalize(16),
     marginVertical: normalize(-20),
   },
   title: {

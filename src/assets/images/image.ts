@@ -61,4 +61,5 @@ export default {
   emptyGuru: require('./emptyGuru.png'),
   previewController: require('./previewController.png'),
   lineChat: require('./LineChat.png'),
+  imageUploading: require('./imageUploading.json'),
 };

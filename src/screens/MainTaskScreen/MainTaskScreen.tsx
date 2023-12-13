@@ -1,5 +1,5 @@
 import {normalize} from '@rneui/themed';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, font} from '../../assets';

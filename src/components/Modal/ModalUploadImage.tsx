@@ -5,6 +5,7 @@ import {
   Platform,
   Linking,
   PermissionsAndroid,
+  StyleSheet,
 } from 'react-native';
 import React from 'react';
 import Modal from './Modal';
@@ -12,6 +13,8 @@ import {colors, font, icons} from '../../assets';
 import Text from '../Text';
 import {Camera, PhotoFile} from 'react-native-vision-camera';
 import {navigate} from '../../navigations/RootNavigation';
+import {MainButton} from '../Button/MainButton';
+import AsyncButton from '../Button/AsyncButton';
 
 interface Props {
   visible: boolean;
@@ -36,6 +39,7 @@ export default function ModalUploadImage({
 
     return imageBlob;
   };
+  const [showModalPermission, setShowModalPermission] = React.useState(false);
 
   // const blobToBase64 = (blob: any): Promise<string> => {
   //   return new Promise((resolve, reject) => {
@@ -91,6 +95,7 @@ export default function ModalUploadImage({
   };
   const onTakePhotoIOS = async () => {
     const alreadyHasPermission = await Camera.getCameraPermissionStatus();
+    console.log('alreadyHasPermission :>> ', alreadyHasPermission);
     if (alreadyHasPermission === 'authorized') {
       onPressCamera();
     } else {
@@ -98,7 +103,9 @@ export default function ModalUploadImage({
       if (requested === 'authorized') {
         onPressCamera();
       } else {
-        await Linking.openSettings();
+        onCancel();
+        setShowModalPermission(true);
+        // await Linking.openSettings();
       }
     }
   };
@@ -223,6 +230,56 @@ export default function ModalUploadImage({
           })}
         </View>
       </Modal>
+      <Modal visible={showModalPermission}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            borderRadius: 12,
+            width: '100%',
+            borderWidth: 1,
+            borderColor: colors.disable,
+            padding: 16,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={styles.title}>กรุณาเปิดการตั้งค่า</Text>
+          <Text style={styles.title}>การเข้าถึงคลังภาพในโทรศัพท์</Text>
+          <View
+            style={{
+              height: 8,
+            }}
+          />
+          <Text style={styles.desc}>เพื่อเปิดใช้งานการเลือก</Text>
+          <Text style={styles.desc}>และอัปโหลดรูปภาพในแอปพลิเคชัน</Text>
+          <AsyncButton
+            onPress={async () => {
+              await Linking.openSettings();
+            }}
+            title="ตกลง"
+            style={{
+              marginVertical: 8,
+            }}
+          />
+          <AsyncButton
+            title="ไว้ภายหลัง"
+            type="secondary"
+            noBorder
+            onPress={() => {
+              setShowModalPermission(false);
+            }}
+          />
+        </View>
+      </Modal>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+    fontFamily: font.semiBold,
+  },
+  desc: {
+    fontSize: 16,
+    fontFamily: font.light,
+  },
+});

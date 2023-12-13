@@ -116,9 +116,11 @@ export default function FinishTaskScreen({navigation, route}: Props) {
   const onSubmitTask = async ({
     rating,
     comment,
+    onProgressUpload,
   }: {
     rating: number;
     comment: string;
+    onProgressUpload: (progress: number) => void;
   }) => {
     try {
       const multiList = (imageData.assets || []).map((item, index) => {
@@ -126,6 +128,13 @@ export default function FinishTaskScreen({navigation, route}: Props) {
           file: item,
           taskId: taskId,
           updateBy: user?.firstname + ' ' + user?.lastname,
+          onProgressUpload: (progress: number) => {
+            const overallProgress =
+              (index + progress) / imageData.assets.length;
+            if (onProgressUpload) {
+              onProgressUpload(overallProgress);
+            }
+          },
         });
       });
       await Promise.all(multiList);
@@ -136,11 +145,15 @@ export default function FinishTaskScreen({navigation, route}: Props) {
         reviewFarmerComment: comment,
         reviewFarmerScore: rating,
       });
+      onProgressUpload(100);
       mixpanel.track('FinishTaskScreen_ReviewStep_Submit', {
         rating,
         comment,
         taskId,
       });
+      return {
+        success: true,
+      };
     } catch (err) {
       console.log(err);
     }

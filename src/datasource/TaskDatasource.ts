@@ -25,6 +25,7 @@ interface PayloadUploadImage {
     type: string;
     fileName?: string;
   };
+  onProgressUpload: (progress: number) => void;
 }
 export class TaskDatasource {
   static getTaskById(
@@ -241,6 +242,7 @@ export class TaskDatasource {
     file,
     taskId,
     updateBy,
+    onProgressUpload,
   }: PayloadUploadImage): Promise<any> {
     const data = new FormData();
     const dronerId = await AsyncStorage.getItem('droner_id');
@@ -253,12 +255,19 @@ export class TaskDatasource {
     data.append('updateBy', updateBy);
     data.append('file', {
       uri: file.uri,
-      name: 'Hello',
-      // name: fileName[fileName.length - 1] + moment().unix(),
+      name: fileName[fileName.length - 1] + moment().unix(),
       type: file.type,
     });
     return taskFormDataClient
-      .post(BASE_URL + '/tasks/task-image/image-finish-task', data)
+      .post(BASE_URL + '/tasks/task-image/image-finish-task', data, {
+        onUploadProgress(progressEvent) {
+          const progress = Math.round(
+            (progressEvent.loaded / progressEvent.total) * 100,
+          );
+
+          onProgressUpload(progress);
+        },
+      })
       .then(response => {
         return response.data;
       })
