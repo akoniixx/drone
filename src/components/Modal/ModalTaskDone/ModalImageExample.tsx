@@ -30,11 +30,23 @@ const staticData = [
     value: 'airFastDrone',
     image: imagesLogoDrone.airFastDroneLogo,
   },
+  {
+    label: 'Nac Drone',
+    value: 'nacDrone',
+    image: imagesLogoDrone.NacDroneLogo,
+  },
+  {
+    label: 'STD',
+    value: 'std',
+    image: imagesLogoDrone.STDDroneLogo,
+  },
 ];
 const mappingImage = {
   dji: imagesControllerDrone.DJI,
   airFastDrone: imagesControllerDrone.airFastDrone,
   bugAway: imagesControllerDrone.bugAway,
+  std: imagesControllerDrone.STD,
+  nacDrone: imagesControllerDrone.NacDrone,
 };
 
 export default function Example({visible, onPressBack}: Props) {

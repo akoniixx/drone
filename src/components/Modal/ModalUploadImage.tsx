@@ -13,7 +13,6 @@ import {colors, font, icons} from '../../assets';
 import Text from '../Text';
 import {Camera, PhotoFile} from 'react-native-vision-camera';
 import {navigate} from '../../navigations/RootNavigation';
-import {MainButton} from '../Button/MainButton';
 import AsyncButton from '../Button/AsyncButton';
 
 interface Props {
@@ -95,7 +94,6 @@ export default function ModalUploadImage({
   };
   const onTakePhotoIOS = async () => {
     const alreadyHasPermission = await Camera.getCameraPermissionStatus();
-    console.log('alreadyHasPermission :>> ', alreadyHasPermission);
     if (alreadyHasPermission === 'authorized') {
       onPressCamera();
     } else {

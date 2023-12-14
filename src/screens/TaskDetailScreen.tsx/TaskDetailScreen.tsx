@@ -1110,7 +1110,8 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
             </Text>
             <Image
               source={image.reviewSuccess}
-              style={{width: normalize(170), height: normalize(168)}}
+              style={{width: normalize(210), height: normalize(168)}}
+              resizeMode="contain"
             />
           </View>
           {/* <MainButton
