@@ -39,15 +39,14 @@ import DronerList from './ProfileScreenComponent/DronerList';
 const ProfileScreen: React.FC<any> = ({navigation, route}) => {
   const [profilestate, dispatch] = useReducer(profileReducer, initProfileState);
   const {
-    authContext: {getProfileAuth},
-    state: {isDoneAuth, user},
+    authContext: {getProfileAuth, getNotiList},
+    state: {isDoneAuth, user, countNoti = 0},
   } = useAuth();
 
   const backbotton = !route.params ? true : route.params.navbar;
 
   const [reload, setReload] = useState(false);
   const [fcmToken, setFcmToken] = useState('');
-  const [notidata, setnotidata] = useState(0);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -56,20 +55,14 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
     setFcmToken(token!);
   };
 
-  const getNotiList = async () => {
-    FCMtokenDatasource.getNotificationList()
-      .then(res => {
-        const count = res.data.filter((item: any) => !item.isRead);
-        setnotidata(count.length);
-      })
-      .catch(err => console.log(err));
-  };
-
   const getInitialData = async () => {
     setLoadingProfile(true);
-    await Promise.all([getProfile(), getToken(), getNotiList()]).finally(() =>
-      setLoadingProfile(false),
-    );
+    await Promise.all([
+      getProfile(),
+      getToken(),
+      getNotiList(),
+      getNotiList,
+    ]).finally(() => setLoadingProfile(false));
   };
   const onRefresh = async () => {
     try {
@@ -158,7 +151,12 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
 
   return (
     <SafeAreaView
-      style={[stylesCentral.container]}
+      style={[
+        stylesCentral.container,
+        {
+          backgroundColor: colors.white,
+        },
+      ]}
       edges={['right', 'top', 'left']}>
       <View style={styles.appBarBack}>
         {backbotton ? (
@@ -479,7 +477,7 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                   }}>
-                  {notidata != 0 ? (
+                  {countNoti !== 0 ? (
                     <View
                       style={{
                         width: responsiveWidth(39),
@@ -496,7 +494,7 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
                           fontSize: normalize(12),
                           color: colors.white,
                         }}>
-                        {notidata > 99 ? '99+' : notidata}
+                        {countNoti > 99 ? '99+' : countNoti}
                       </Text>
                     </View>
                   ) : (

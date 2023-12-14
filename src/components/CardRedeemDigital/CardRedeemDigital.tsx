@@ -40,6 +40,17 @@ export default function CardRedeemDigital({
   const isCancel = React.useMemo(() => {
     return data?.dronerTransaction?.redeemDetail?.redeemStatus === 'CANCEL';
   }, [data]);
+  const isRequest = React.useMemo(() => {
+    return (
+      data?.dronerTransaction?.dronerRedeemHistories?.[0].status ===
+        'REQUEST' && data?.dronerTransaction?.dronerRedeemHistories.length === 1
+    );
+  }, [data]);
+  const usedData = React.useMemo(() => {
+    return data?.dronerTransaction?.dronerRedeemHistories?.find(
+      item => item.status === 'USED',
+    );
+  }, [data]) || {createAt: ''};
   const {
     state: {user},
   } = useAuth();
@@ -47,7 +58,6 @@ export default function CardRedeemDigital({
   if (!data) {
     return <View />;
   }
-
   return (
     <>
       <View style={styles.card}>
@@ -270,7 +280,7 @@ export default function CardRedeemDigital({
                 style={{
                   fontSize: 14,
                 }}>
-                แลกเมื่อ
+                {isRequest ? 'แลกเมื่อ' : 'ใช้เมื่อ'}
               </Text>
             </View>
             <View
@@ -290,7 +300,9 @@ export default function CardRedeemDigital({
                   fontSize: 14,
                 }}>
                 {momentExtend.toBuddhistYear(
-                  data.createAt,
+                  isRequest
+                    ? data.dronerTransaction.dronerRedeemHistories[0].createAt
+                    : usedData?.createAt,
                   'DD MMM YYYY HH:mm',
                 )}
               </Text>

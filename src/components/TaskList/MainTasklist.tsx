@@ -89,7 +89,7 @@ const MainTasklists: React.FC<any> = (props: any) => {
               });
               RootNavigation.navigate('Main', {
                 screen: 'TaskDetailScreen',
-                params: {taskId: props.taskId},
+                params: {taskId: props.taskId, isGoBack: true},
               });
             }}>
             <View style={styles.listTile}>

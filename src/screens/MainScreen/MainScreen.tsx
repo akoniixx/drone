@@ -226,46 +226,93 @@ const MainScreen: React.FC<any> = ({navigation}) => {
         }}
       />
 
-      <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
+      <View
+        style={[
+          stylesCentral.container,
+          {paddingTop: insets.top, backgroundColor: colors.orange},
+        ]}>
         <View style={{flex: 1, backgroundColor: 'white'}}>
           <View>
             <View style={styles.headCard}>
               <View>
                 {loading ? (
+                  // <View
+                  //   style={{
+                  //     flexDirection: 'row',
+                  //     alignItems: 'center',
+                  //   }}>
+                  //   <Text
+                  //     style={{
+                  //       fontFamily: font.bold,
+                  //       fontSize: normalize(24),
+                  //       color: colors.fontBlack,
+                  //     }}>
+                  //     สวัสดี,
+                  //   </Text>
+                  //   <SkeletonPlaceholder
+                  //     speed={2000}
+                  //     borderRadius={10}
+                  //     backgroundColor={colors.skeleton}>
+                  //     <SkeletonPlaceholder.Item
+                  //       width={100}
+                  //       height={24}
+                  //       borderRadius={4}
+                  //       marginLeft={10}
+                  //     />
+                  //   </SkeletonPlaceholder>
+                  // </View>
                   <View
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
                     }}>
-                    <Text
-                      style={{
-                        fontFamily: font.bold,
-                        fontSize: normalize(24),
-                        color: colors.fontBlack,
-                      }}>
-                      สวัสดี,
-                    </Text>
                     <SkeletonPlaceholder
                       speed={2000}
                       borderRadius={10}
                       backgroundColor={colors.skeleton}>
-                      <SkeletonPlaceholder.Item
-                        width={100}
-                        height={24}
-                        borderRadius={4}
-                        marginLeft={10}
-                      />
+                      <SkeletonPlaceholder.Item flexDirection="row">
+                        <SkeletonPlaceholder.Item
+                          borderRadius={16}
+                          width={32}
+                          height={32}
+                        />
+                        <SkeletonPlaceholder.Item
+                          width={100}
+                          height={24}
+                          borderRadius={4}
+                          marginLeft={10}
+                        />
+                      </SkeletonPlaceholder.Item>
                     </SkeletonPlaceholder>
                   </View>
                 ) : (
-                  <Text
+                  <View
                     style={{
-                      fontFamily: font.bold,
-                      fontSize: normalize(24),
-                      color: colors.fontBlack,
+                      flexDirection: 'row',
+                      alignItems: 'center',
                     }}>
-                    สวัสดี, {profile.name}
-                  </Text>
+                    <ProgressiveImage
+                      source={{
+                        uri: profile.image,
+                      }}
+                      resizeMode="cover"
+                      style={{
+                        width: normalize(32),
+                        height: normalize(32),
+                        borderRadius: normalize(16),
+                        marginRight: normalize(10),
+                        minWidth: normalize(32),
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: font.bold,
+                        fontSize: normalize(20),
+                        color: colors.white,
+                      }}>
+                      {profile.name}
+                    </Text>
+                  </View>
                 )}
                 {/* <View style={styles.activeContainer}>
                   <Switch
@@ -286,7 +333,18 @@ const MainScreen: React.FC<any> = ({navigation}) => {
                 </View> */}
               </View>
 
-              <View>
+              <View style={styles.row}>
+                <TouchableOpacity
+                  style={styles.buttonNoti}
+                  onPress={() => {
+                    mixpanel.track('MainScreen_NotificationList_Press');
+                    navigation.navigate('NotificationList');
+                  }}>
+                  <Image
+                    source={icons.notification}
+                    style={styles.notification}
+                  />
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     mixpanel.track('MainScreen_ButtonPointHistory_Press', {
@@ -297,7 +355,7 @@ const MainScreen: React.FC<any> = ({navigation}) => {
                     navigation.navigate('PointHistoryScreen');
                   }}>
                   <LinearGradient
-                    colors={['#FA7052', '#F89132']}
+                    colors={['#fff', '#fff']}
                     start={{x: 0, y: 0.5}}
                     end={{x: 1, y: 0.5}}
                     style={{
@@ -318,7 +376,7 @@ const MainScreen: React.FC<any> = ({navigation}) => {
                     />
                     <Text
                       style={{
-                        color: 'white',
+                        color: colors.orange,
                         fontSize: 18,
                         fontFamily: font.bold,
                         textAlign: 'right',
@@ -331,9 +389,8 @@ const MainScreen: React.FC<any> = ({navigation}) => {
                 </TouchableOpacity>
               </View>
             </View>
-            {/* <MenuList navigation={navigation} /> */}
-
-            <View
+            <MenuList navigation={navigation} />
+            {/* <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -367,7 +424,7 @@ const MainScreen: React.FC<any> = ({navigation}) => {
                   ดูทั้งหมด
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
             {guruKaset !== undefined ? (
               <GuruKasetCarousel
                 loading={loading}
@@ -435,10 +492,16 @@ export default MainScreen;
 
 const styles = StyleSheet.create({
   headCard: {
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // paddingHorizontal: 16,
+    // paddingTop: normalize(5),
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: normalize(5),
+    paddingVertical: normalize(5),
+    backgroundColor: colors.orange,
   },
   activeContainer: {
     flexDirection: 'row',
@@ -463,5 +526,23 @@ const styles = StyleSheet.create({
     width: normalize(20),
     height: normalize(20),
     marginRight: normalize(5),
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  notification: {
+    width: normalize(20),
+    height: normalize(20),
+  },
+  buttonNoti: {
+    width: normalize(36),
+    height: normalize(36),
+    borderRadius: normalize(20),
+    marginRight: normalize(6),
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

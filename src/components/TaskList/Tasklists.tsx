@@ -64,6 +64,8 @@ const Tasklists: React.FC<any> = (props: Props) => {
   const taskId = props.taskId;
   const statusDelay = props.statusDelay;
   const isProblem = props.isProblem;
+  // const status = 'WAIT_START';
+  const status = props.status;
 
   const [visible, setVisible] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -106,8 +108,7 @@ const Tasklists: React.FC<any> = (props: Props) => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor:
-                props.status === 'WAIT_START' ? '#D1F4FF' : '#FCE588',
+              backgroundColor: status === 'WAIT_START' ? '#D1F4FF' : '#FCE588',
               paddingHorizontal: normalize(12),
               paddingVertical: normalize(5),
               borderRadius: normalize(12),
@@ -115,10 +116,10 @@ const Tasklists: React.FC<any> = (props: Props) => {
             <Text
               style={{
                 fontFamily: fonts.medium,
-                color: props.status === 'WAIT_START' ? '#0B69A3' : '#B16F05',
+                color: status === 'WAIT_START' ? '#0B69A3' : '#B16F05',
                 fontSize: normalize(12),
               }}>
-              {props.status === 'WAIT_START' ? 'รอเริ่มงาน' : 'กำลังดำเนินการ'}
+              {status === 'WAIT_START' ? 'รอเริ่มงาน' : 'กำลังดำเนินการ'}
             </Text>
           </View>
         </View>
@@ -248,10 +249,11 @@ const Tasklists: React.FC<any> = (props: Props) => {
             alignItems: 'center',
             flexDirection: 'row',
             paddingVertical: normalize(10),
+            flex: 1,
           }}>
           <TouchableOpacity
             style={{
-              width: normalize(props.status === 'WAIT_START' ? 155 : 49),
+              width: status === 'IN_PROGRESS' ? 'auto' : '100%',
               height: normalize(49),
               borderRadius: normalize(8),
               borderWidth: 0.5,
@@ -260,6 +262,9 @@ const Tasklists: React.FC<any> = (props: Props) => {
               justifyContent: 'center',
               alignItems: 'center',
               flexDirection: 'row',
+              maxWidth: status === 'IN_PROGRESS' ? 48 : '100%',
+              flex: 1,
+              marginRight: 8,
             }}
             onPress={() => {
               SheetManager.show('CallingSheet', {
@@ -273,7 +278,7 @@ const Tasklists: React.FC<any> = (props: Props) => {
                 height: normalize(24),
               }}
             />
-            {props.status === 'WAIT_START' ? (
+            {status === 'WAIT_START' ? (
               <Text
                 style={{
                   fontFamily: fonts.medium,
@@ -285,14 +290,16 @@ const Tasklists: React.FC<any> = (props: Props) => {
               </Text>
             ) : null}
           </TouchableOpacity>
-          {props.status === 'IN_PROGRESS' ? (
+          {status === 'IN_PROGRESS' ? (
             <TouchableOpacity
               disabled={!!statusDelay || isProblem}
               onPress={() => {
                 setVisible(true);
               }}
               style={{
-                width: normalize(127.5),
+                width: '100%',
+                flex: 1,
+
                 height: normalize(49),
                 borderRadius: normalize(8),
                 backgroundColor:
@@ -300,6 +307,7 @@ const Tasklists: React.FC<any> = (props: Props) => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                marginRight: 8,
               }}>
               <Text
                 style={{
@@ -315,25 +323,34 @@ const Tasklists: React.FC<any> = (props: Props) => {
 
           <TouchableOpacity
             disabled={
-              (props.status === 'WAIT_START' && checkdate >= today) ||
+              (status === 'WAIT_START' && checkdate >= today) ||
               statusDelay === 'WAIT_APPROVE'
             }
             onPress={() => {
               onPressSetTaskId(props.taskId);
-              if (props.status === 'WAIT_START') {
+              if (status === 'WAIT_START') {
                 props.setShowModalStartTask();
                 setToggleModalStartTask(true);
               } else {
-                props.openModalUpload();
-                setToggleModalUpload(true);
+                // props.openModalUpload();
+                // setToggleModalUpload(true);
+                RootNavigation.navigate('Main', {
+                  screen: 'FinishTaskScreen',
+                  params: {
+                    taskId: props.taskId,
+                    taskAppointment: props.dateAppointment,
+                    isFromTaskDetail: true,
+                  },
+                });
               }
             }}
             style={{
-              width: normalize(props.status === 'WAIT_START' ? 155 : 127.5),
+              width: '100%',
+              flex: 1,
               height: normalize(49),
               borderRadius: normalize(8),
               backgroundColor:
-                props.status === 'WAIT_START'
+                status === 'WAIT_START'
                   ? checkdate <= today
                     ? '#2BB0ED'
                     : colors.disable
@@ -349,7 +366,7 @@ const Tasklists: React.FC<any> = (props: Props) => {
                 fontSize: normalize(19),
                 color: colors.white,
               }}>
-              {props.status === 'WAIT_START' ? 'เริ่มทำงาน' : 'งานเสร็จสิ้น'}
+              {status === 'WAIT_START' ? 'เริ่มทำงาน' : 'งานเสร็จสิ้น'}
             </Text>
           </TouchableOpacity>
         </View>

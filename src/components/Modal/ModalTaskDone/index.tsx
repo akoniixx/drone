@@ -16,6 +16,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import RNFS from 'react-native-fs';
 import SHA256 from 'crypto-js/sha256';
 import moment from 'moment';
+import Example from './ModalImageExample';
 
 interface Props {
   visible: boolean;
@@ -562,7 +563,7 @@ export default function ModalTaskDone({
         </View>
       </Modal>
 
-      <ModalImageExample
+      <Example
         visible={demoModal}
         onPressBack={() => {
           setDemoModal(false);

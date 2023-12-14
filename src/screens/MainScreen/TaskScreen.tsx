@@ -82,14 +82,12 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
   const starImgFilled = icons.starfill;
   const starImgCorner = icons.starCorner;
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     getData();
-  //   }, []),
-  // );
-  useEffect(() => {
-    getData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getData();
+    }, []),
+  );
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getData();

@@ -1,51 +1,87 @@
-import {Pressable, StyleSheet, View} from 'react-native';
-import React from 'react';
+import {Dimensions, Pressable, StyleSheet, View} from 'react-native';
+import React, {useMemo} from 'react';
 import Text from '../../../components/Text';
 import {Image} from 'react-native';
-import mockGuru from '../../../assets/mockGuru';
 import BadgeGuru from '../../../components/BadgeGuru';
 import {colors, font, icons} from '../../../assets';
 import moment from 'moment';
 import {numberWithCommas} from '../../../function/utility';
+import RenderHTML from 'react-native-render-html';
+import FastImage from 'react-native-fast-image';
+import {GuruData} from '..';
 
 interface Props {
   navigation: any;
+  item: GuruData;
 }
-export default function ItemContent({navigation}: Props) {
-  const loveCount = Math.round(Math.random() * 1000);
-  // const commentCount = Math.round(Math.random() * 1000);
-  const readCount = Math.round(Math.random() * 10000);
-  const dateCreate = moment().subtract(
-    Math.round(Math.random() * 1000),
-    'hours',
+const Desc = ({text}: {text: string}) => {
+  const htmlCss = useMemo(() => {
+    return {
+      body: {
+        color: colors.fontBlack,
+        fontSize: 16,
+        fontFamily: font.light,
+        width: Dimensions.get('window').width - 100,
+      },
+    };
+  }, []);
+  return (
+    <RenderHTML
+      source={{html: text}}
+      ignoredDomTags={['br', 'iframe']}
+      defaultTextProps={{
+        allowFontScaling: false,
+        numberOfLines: 1,
+      }}
+      contentWidth={Dimensions.get('window').width - 64}
+      tagsStyles={htmlCss}
+      systemFonts={[font.light, font.semiBold, font.medium, font.bold]}
+    />
   );
-  const mockId = Math.round(Math.random() * 1000);
-  const isOdd = Math.round(Math.random() * 10) % 2 === 0;
+};
+
+export default function ItemContent({navigation, item}: Props) {
+  const loveCount = item.like;
+  // const commentCount =  item.commentCount;
+  const readCount = item.view;
+  const dateCreate = moment(item.createdAt);
+
   const onNavigateToDetail = () => {
     navigation.navigate('GuruDetailScreen', {
-      guruId: mockId,
+      guruId: item._id,
     });
   };
   return (
     <View style={styles.container}>
       <Pressable onPress={onNavigateToDetail}>
-        <Image source={mockGuru.imageContent} style={styles.image} />
-        <BadgeGuru title="โรคพืช" />
+        <FastImage
+          source={{
+            uri: item.image,
+            priority: FastImage.priority.normal,
+          }}
+          style={styles.image}
+        />
+        <BadgeGuru title={item.groupName} />
       </Pressable>
       <View style={styles.containerFooter}>
-        <Text numberOfLines={2} style={styles.textTitle}>
-          3 หลักการแก้ปัญหาหญ้าข้าวนกดื้อยา หญ้าตัวร้ายปราบเซียนมืออาชีพ
-          หญ้าตัวร้ายปราบเซียนมืออาชีพ หญ้าตัวร้ายปราบเซียนมืออาชีพ
+        <Text numberOfLines={3} style={styles.textTitle}>
+          {item.name}
         </Text>
-        <Text style={styles.textDesc}>
-          จากภาพ “ข้าวแสดงอาการเมล็ดลีบ”...
-          <Text style={styles.textReadMore}>{' อ่านเพิ่ม'}</Text>
-        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            overflow: 'hidden',
+            height: 50,
+          }}>
+          <Desc text={item.description} />
+          {/* <Text style={styles.textReadMore}>{' อ่านเพิ่ม'}</Text> */}
+        </View>
+
         <View style={styles.footer}>
           <View style={styles.row}>
             <View style={styles.row}>
               <Image
-                source={isOdd ? icons.loveIcon : icons.loveFill}
+                source={item.favorite ? icons.loveFill : icons.loveIcon}
                 style={styles.icon}
               />
               <Text style={styles.textBold}>{loveCount}</Text>

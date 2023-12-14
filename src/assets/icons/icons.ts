@@ -103,4 +103,5 @@ export default {
   showReadIcon: require('./showReadIcon.png'),
   loveIcon: require('./loveIcon.png'),
   loveFill: require('./loveFill.png'),
+  showBrown: require('./showBrown.png'),
 };

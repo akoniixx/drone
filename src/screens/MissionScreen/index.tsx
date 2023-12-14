@@ -4,12 +4,13 @@ import {
   ImageBackground,
   Platform,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {useEffect} from 'react';
 
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {TabNavigatorParamList} from '../../navigations/bottomTabs/MainTapNavigator';
-import {colors, font, image} from '../../assets';
+import {colors, font, icons, image} from '../../assets';
 import Text from '../../components/Text';
 import Body from './Body';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -80,6 +81,20 @@ export default function MissionScreen({navigation}: MissionScreenProps) {
             paddingHorizontal: 16,
             marginTop: 16,
           }}>
+          <TouchableOpacity
+            onPress={() => {
+              mixpanel.track('กดเข้าหน้าหลัก');
+              navigation.navigate('home');
+            }}>
+            <Image
+              source={icons.arrowLeft}
+              style={{
+                width: 32,
+                height: 32,
+                marginLeft: 16,
+              }}
+            />
+          </TouchableOpacity>
           <Text
             style={{
               fontSize: 24,

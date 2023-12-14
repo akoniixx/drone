@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     flexDirection: 'row',
     backgroundColor: colors.softGrey2,
-    marginTop: 8,
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomColor: colors.disable,

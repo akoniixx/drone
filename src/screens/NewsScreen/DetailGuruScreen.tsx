@@ -153,7 +153,14 @@ const DetailGuruScreen: React.FC<any> = ({navigation}) => {
                       em: {
                         color: colors.fontGrey,
                         fontSize: normalize(18),
+                        lineHeight: 28,
+                        fontStyle: 'italic',
+                      },
+                      i: {
+                        color: colors.fontGrey,
+                        fontSize: normalize(18),
                         fontWeight: '200',
+                        fontStyle: 'italic',
                         lineHeight: 28,
                       },
                       ul: {

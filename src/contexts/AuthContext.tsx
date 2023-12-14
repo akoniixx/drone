@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppState} from 'react-native';
 import {ProfileDatasource} from '../datasource/ProfileDatasource';
 import {Authentication} from '../datasource/AuthDatasource';
+import {FCMtokenDatasource} from '../datasource/FCMDatasource';
 interface Address {
   id: string;
   address1: string;
@@ -109,6 +110,7 @@ interface State {
   isDoneAuth: boolean;
   user: null | Droner;
   droneList?: Drone[];
+  countNoti?: number;
 }
 
 interface Action {
@@ -116,6 +118,7 @@ interface Action {
   user?: any;
   isDoneAuth?: boolean;
   droneList?: Drone[];
+  countNoti?: number;
 }
 interface LoginPayload {
   telNumber: string;
@@ -129,6 +132,7 @@ interface Context {
     getProfileAuth: () => Promise<any>;
     login: (v: LoginPayload) => Promise<any>;
     getDroneList: (payload: {page: number; limit: number}) => Promise<any>;
+    getNotiList: () => void;
   };
   setUser: (user: Droner) => void;
   state: State;
@@ -139,6 +143,7 @@ const initialState = {
   isLoading: true,
   isDoneAuth: true,
   droneList: [],
+  countNoti: 0,
 };
 
 const AuthContext = React.createContext<Context>({
@@ -146,6 +151,7 @@ const AuthContext = React.createContext<Context>({
     getProfileAuth: Promise.resolve,
     login: Promise.resolve,
     getDroneList: Promise.resolve,
+    getNotiList: () => {},
   },
   setUser: () => {},
   state: initialState,
@@ -180,6 +186,12 @@ export const AuthProvider: React.FC<Props> = ({children}) => {
         return {
           ...prevState,
           user: action.user,
+        };
+      }
+      case 'SET_HAVE_NOTI': {
+        return {
+          ...prevState,
+          countNoti: action.countNoti,
         };
       }
 
@@ -234,6 +246,14 @@ export const AuthProvider: React.FC<Props> = ({children}) => {
       }) => {
         const result = await ProfileDatasource.getDroneBrand(page, limit);
         dispatch({type: 'GET_DRONE_LIST', droneList: result.data});
+      },
+      getNotiList: async () => {
+        FCMtokenDatasource.getNotificationList()
+          .then(res => {
+            const count = res.data.filter((item: any) => !item.isRead);
+            dispatch({type: 'SET_HAVE_NOTI', countNoti: count.length || 0});
+          })
+          .catch(err => console.log(err));
       },
     }),
     [],

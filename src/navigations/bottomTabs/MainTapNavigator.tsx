@@ -30,7 +30,6 @@ import MyProfileScreen from '../../screens/ProfileVerifyScreen/MyProfileScreen';
 import {ProfileDatasource} from '../../datasource/ProfileDatasource';
 import {TaskDatasource} from '../../datasource/TaskDatasource';
 import {useAuth} from '../../contexts/AuthContext';
-import {rewardDatasource} from '../../datasource/RewardDatasource';
 import {missionDatasource} from '../../datasource/MissionDatasource';
 import moment from 'moment';
 import analytics from '@react-native-firebase/analytics';
@@ -89,13 +88,13 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
       activeIcon: icons.task_active,
       inactiveIcon: icons.task,
     },
-    {
-      name: 'mission',
-      title: 'ภารกิจ',
-      component: MissionScreen,
-      activeIcon: icons.mission_active,
-      inactiveIcon: icons.mission,
-    },
+    // {
+    //   name: 'mission',
+    //   title: 'ภารกิจ',
+    //   component: MissionScreen,
+    //   activeIcon: icons.mission_active,
+    //   inactiveIcon: icons.mission,
+    // },
     {
       name: 'reward',
       title: 'รีวอร์ด',
@@ -445,7 +444,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
           });
           break;
         case 'RECEIVE_TASK_SUCCESS':
-          const time = new Date(message.data?.dateAppointment!)
+          const time = new Date(message.data?.dateAppointment!);
           Toast.show({
             type: 'receiveTaskSuccess',
             text1: `งาน #${message.data?.taskNo}`,
@@ -455,7 +454,9 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
               parseInt(
                 message.data?.dateAppointment.split('T')[0].split('-')[0]!,
               ) + 543
-            } เวลา ${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`,
+            } เวลา ${String(time.getHours()).padStart(2, '0')}:${String(
+              time.getMinutes(),
+            ).padStart(2, '0')}`,
             onPress: () => {
               RootNavigation.navigate('Main', {
                 screen: 'TaskDetailScreen',
@@ -489,14 +490,19 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
           break;
         case 'SECOND_REMIND':
           let date_secondremind = message.data?.dateAppointment.split('T');
-          let timeSecondRemind = new Date(message.data?.dateAppointment!)
+          let timeSecondRemind = new Date(message.data?.dateAppointment!);
           Toast.show({
             type: 'taskWarningContactFarmerTowmorow',
             topOffset: 10,
             position: 'top',
             text1: `วันที่ ${date_secondremind![0].split('-')[2]}/${
               date_secondremind![0].split('-')[1]
-            }/${parseInt(date_secondremind![0].split('-')[0]) + 543} เวลา ${String(timeSecondRemind.getHours()).padStart(2, '0')}:${String(timeSecondRemind.getMinutes()).padStart(2, '0')}น.`,
+            }/${
+              parseInt(date_secondremind![0].split('-')[0]) + 543
+            } เวลา ${String(timeSecondRemind.getHours()).padStart(
+              2,
+              '0',
+            )}:${String(timeSecondRemind.getMinutes()).padStart(2, '0')}น.`,
             onPress() {
               Toast.hide();
             },
@@ -534,14 +540,19 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
           break;
         case 'FORCE_SELECT_DRONER':
           let date_force_select = message.data?.dateAppointment.split('T');
-          let timeForceSelect = new Date(message.data?.dateAppointment!)
+          let timeForceSelect = new Date(message.data?.dateAppointment!);
           Toast.show({
             type: 'taskJobSuccess',
             topOffset: 10,
             text1: `#${message.data?.taskNo}`,
             text2: `วันที่ ${date_force_select![0].split('-')[2]}/${
               date_force_select![0].split('-')[1]
-            }/${parseInt(date_force_select![0].split('-')[0]) + 543} เวลา ${String(timeForceSelect.getHours()).padStart(2, '0')}:${String(timeForceSelect.getMinutes()).padStart(2, '0')}น.`,
+            }/${
+              parseInt(date_force_select![0].split('-')[0]) + 543
+            } เวลา ${String(timeForceSelect.getHours()).padStart(
+              2,
+              '0',
+            )}:${String(timeForceSelect.getMinutes()).padStart(2, '0')}น.`,
             position: 'top',
             onPress() {
               RootNavigation.navigate('Main', {
@@ -643,7 +654,7 @@ const MainTapNavigator: React.FC<any> = ({navigation}) => {
               const jumpAction = TabActions.jumpTo('mission');
               navigation.dispatch(jumpAction);
               Toast.hide();
-            }
+            },
           });
           break;
         default:

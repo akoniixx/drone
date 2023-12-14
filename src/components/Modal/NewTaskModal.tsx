@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import {normalize} from '@rneui/themed';
 import {colors, font, icons} from '../../assets';
 import fonts from '../../assets/fonts';
@@ -124,7 +130,7 @@ export const NewTaskModal = (
       id={props.sheetId}
       useBottomSafeAreaPadding
       gestureEnabled={true}>
-      <View style={styles.task}>
+      <ScrollView style={styles.task}>
         <View style={styles.taskDetail}>
           <View style={styles.title}>
             <Text
@@ -429,14 +435,15 @@ export const NewTaskModal = (
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </ActionSheet>
   );
 };
 
 const styles = StyleSheet.create({
   task: {
-    padding: normalize(14),
+    paddingHorizontal: normalize(14),
+    paddingBottom: normalize(16),
     marginVertical: normalize(-20),
   },
   title: {

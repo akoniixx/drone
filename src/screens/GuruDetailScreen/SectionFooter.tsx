@@ -1,20 +1,52 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import Text from '../../components/Text';
 import {colors, font, icons} from '../../assets';
 import {numberWithCommas} from '../../function/utility';
 import {SheetManager} from 'react-native-actions-sheet';
+import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
+import {useDebounce} from '../../hooks/useDebounce';
+import {GuruKaset} from '../../datasource/GuruDatasource';
+import IframeRenderer, {iframeModel} from '@native-html/iframe-plugin';
+import WebView from 'react-native-webview';
+import {normalize} from '../../function/Normalize';
+const renderers = {
+  iframe: IframeRenderer,
+};
 
+const customHTMLElementModels = {
+  iframe: iframeModel,
+};
 interface Props {
   loveCount: number;
   commentCount: number;
+  description: string;
+  favorite?: boolean;
+  guruId: string;
+  isLoved?: boolean;
+  setIsLoved: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export default function SectionFooter({loveCount, commentCount}: Props) {
-  const isOdd = Math.round(Math.random() * 10) % 2 === 0;
-  const [isLoved, setIsLoved] = React.useState(isOdd);
+export default function SectionFooter({
+  loveCount = 0,
+  commentCount,
+  description,
+  isLoved = false,
+  setIsLoved,
+  guruId,
+}: Props) {
+  console.log('desc', JSON.stringify(description, null, 2));
+  const [isFirst, setIsFirst] = React.useState(true);
   const onPressLove = () => {
     setIsLoved(prev => !prev);
+    setIsFirst(false);
   };
+  const debounceValue = useDebounce(isLoved, 1000);
   const onOpenComment = async () => {
     await SheetManager.show('commentSheet', {
       payload: {
@@ -22,36 +54,41 @@ export default function SectionFooter({loveCount, commentCount}: Props) {
       },
     });
   };
-  const mockText = `
-  “ยาเหลือง” ใช้แล้วติดถังพ่น!! นักบินโดรนสามารถใช้ยาอะไร ทดแทนได้บ้าง!! วันนี้กูรูเกษตรมีคำตอบ ?
+  useEffect(() => {
+    const updateFavorite = async () => {
+      try {
+        await GuruKaset.updateFavoriteGuru({
+          guruId,
+        });
+      } catch (error) {
+        console.log('error_like', error);
+      }
+    };
+    if (!isFirst) {
+      updateFavorite();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounceValue, guruId]);
 
-  “ยาเหลือง” คือ สารเพนดิเมทาลิน 33% EC เป็นสารกำจัดวัชพืช ใช้ในช่วงก่อนวัชพืชงอก และวัชพืชกำลังงอก(pre-emergene & early post-emergene) กำจัดวัชพืชได้ทั้งใบแคบ และวัชพืชใบกว้าง ในนาหว่านข้าวแห้ง และพืชไร่ เช่น อ้อย มันสำปะหลัง ตัวยาจะ
-  ออกฤทธิ์ดูดซึมเข้าทางปลายรากฝอยหรือราก
-  แขนงและทางปลายยอดอ่อนของวัชพืชที่งอก
-  จากเมล็ด สารเพนดิเมทาลิน ลักษณะเนื้อยาจะมีสีเหลือง
-  เข้มถึงแม้จะนำไปเจือจางก่อนนำไปใช้งานก็ยังคงมีสีเหลือง ทำให้ถังเครื่องพ่นยา หรือถังโดรน
-  พ่นยามักจะติดสีเหลืองนี้ไปด้วย ล้างออกยาก หากล้างไม่ดี ไม่สะอาด อาจส่งผลเสียต่อพืชได้
-  กูรูเกษตร ขอแนะนำยาที่สามารถใช้ทดแทน “ยาเหลือง” ดังนี้
-  `;
   return (
     <View style={styles.container}>
       <View style={styles.sectionTop}>
         <TouchableOpacity style={styles.row} onPress={onPressLove}>
           <Image
-            source={isLoved ? icons.loveIcon : icons.loveFill}
+            source={isLoved ? icons.loveFill : icons.loveIcon}
             style={styles.icon}
           />
           <Text style={styles.textMedium}>
-            ถูกใจ
+            ถูกใจได้เลย
             {loveCount > 0 && (
               <Text style={styles.textCount}>{` ${numberWithCommas(
-                loveCount.toString(),
+                loveCount?.toString(),
                 true,
               )}`}</Text>
             )}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.row} onPress={onOpenComment}>
+        {/* <TouchableOpacity style={styles.row} onPress={onOpenComment}>
           <Image source={icons.commentIcon} style={styles.icon} />
           <Text style={styles.textMedium}>
             ความคิดเห็น
@@ -62,10 +99,103 @@ export default function SectionFooter({loveCount, commentCount}: Props) {
               )}`}</Text>
             )}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={styles.content}>
-        <Text style={styles.textContent}>{mockText}</Text>
+        {/* <Text style={styles.textContent}>{}</Text> */}
+        <RenderHTML
+          renderers={renderers}
+          WebView={WebView}
+          // ignoredDomTags={['br']}
+          customHTMLElementModels={customHTMLElementModels}
+          source={{html: description}}
+          defaultTextProps={{
+            allowFontScaling: false,
+            style: styles.textContent,
+          }}
+          renderersProps={{
+            iframe: {
+              scalesPageToFit: true,
+              webViewProps: {
+                width: Dimensions.get('screen').width - 30,
+                height: Dimensions.get('screen').width * 0.3,
+              },
+            },
+          }}
+          contentWidth={Dimensions.get('window').width - 36}
+          tagsStyles={{
+            body: {
+              fontSize: 16,
+              color: colors.fontBlack,
+              fontFamily: font.light,
+            },
+            img: {
+              width: Dimensions.get('screen').width - 30,
+              marginRight: 30,
+              resizeMode: 'contain',
+            },
+            strong: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              fontWeight: '400',
+              lineHeight: 28,
+              fontFamily: font.medium,
+            },
+            em: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              lineHeight: 28,
+              fontStyle: 'italic',
+              fontFamily: font.light,
+            },
+            i: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              fontFamily: font.light,
+              fontStyle: 'italic',
+              lineHeight: 28,
+            },
+            ul: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              fontWeight: '200',
+              lineHeight: 28,
+            },
+            u: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              fontWeight: '200',
+              lineHeight: 28,
+            },
+            p: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              fontWeight: '200',
+              lineHeight: 28,
+              margin: 0,
+              padding: 0,
+            },
+            ol: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              fontWeight: '200',
+              lineHeight: 28,
+            },
+            li: {
+              color: colors.fontGrey,
+              fontSize: normalize(18),
+              fontWeight: '200',
+              lineHeight: 28,
+            },
+          }}
+          systemFonts={[
+            ...defaultSystemFonts,
+            font.light,
+            font.semiBold,
+            font.medium,
+            font.bold,
+          ]}
+        />
       </View>
     </View>
   );

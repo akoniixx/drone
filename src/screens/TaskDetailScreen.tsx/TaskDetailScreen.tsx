@@ -49,9 +49,14 @@ import BadgeStatus from '../../components/BadgeStatus/BadgeStatus';
 import NetworkLost from '../../components/NetworkLost/NetworkLost';
 import {RefreshControl} from 'react-native';
 import {checkDecimal} from '../../function/checkDecimal';
+import {useIsFocused} from '@react-navigation/native';
 
 const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   const taskId = route.params.taskId;
+  const isFinishTask = route.params.isFinishTask;
+  const isFromTaskDetail = route.params.isFromTaskDetail || false;
+  const isFocused = useIsFocused();
+
   const [data, setData] = useState<any>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [dateAppointment, setDateAppointment] = useState<any>();
@@ -114,8 +119,16 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   useEffect(() => {
     getDronerId();
     getTaskDetail();
+    if (isFinishTask) {
+      setTimeout(() => {
+        setTogleModalSuccess(true);
+      }, 1000);
+      setTimeout(() => {
+        setTogleModalSuccess(false);
+      }, 3000);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [taskId, isFocused]);
 
   const onFinishTask = () => {
     setTogleModalReview(false);
@@ -150,10 +163,12 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   };
 
   const onFinishTaskSuccess = () => {
-    mixpanel.track('Task success');
+    // navigation.navigate('FinishTaskScreen', {
+    //   taskId: taskId,
+    //   isFromTaskDetail: true,
+    //   taskAppointment: data.dateAppointment,
+    // });
     setTogleModalSuccess(false);
-    setTimeout(() => getTaskDetail(), 200);
-    getTaskDetail();
   };
 
   const updateTask = (status: string) => {
@@ -192,7 +207,6 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
     TaskDatasource.getTaskDetail(taskId, droner_Id)
       .then(res => {
         if (res.success) {
-          console.log('res', JSON.stringify(res.responseData.data, null, 2));
           setData(res.responseData.data);
           let date = new Date(res.responseData.data.dateAppointment);
           setDateAppointment(date);
@@ -265,13 +279,29 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   const getDronerId = async () => {
     setDronerId((await AsyncStorage.getItem('droner_id')) ?? '');
   };
+  const onPressBack = () => {
+    if (isFromTaskDetail) {
+      navigation.navigate('MainScreen', {
+        screen: 'myTask',
+      });
+    } else {
+      navigation.goBack();
+    }
+  };
 
+  const onPressFinishTask = () => {
+    navigation.navigate('FinishTaskScreen', {
+      taskId: taskId,
+      isFromTaskDetail: true,
+      taskAppointment: data.dateAppointment,
+    });
+  };
   return (
     <View style={{flex: 1}}>
       <CustomHeader
         title="รายละเอียดงาน"
         showBackBtn
-        onPressBack={() => navigation.goBack()}
+        onPressBack={onPressBack}
       />
       <NetworkLost onPress={onRefresh}>
         {data ? (
@@ -866,7 +896,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                 }}
                 isProblem={data.isProblem || false}
                 statusDelay={data.statusDelay || null}
-                mainFunc={() => setTogleModalUpload(true)}
+                mainFunc={onPressFinishTask}
                 togleModal={() =>
                   SheetManager.show('CallingSheet', {
                     payload: {tel: data.farmer.telephoneNo},
@@ -1076,18 +1106,19 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                 color: 'black',
                 marginBottom: normalize(10),
               }}>
-              รีวิวสำเร็จ
+              ส่งงานสำเร็จ
             </Text>
             <Image
               source={image.reviewSuccess}
-              style={{width: normalize(170), height: normalize(168)}}
+              style={{width: normalize(210), height: normalize(168)}}
+              resizeMode="contain"
             />
           </View>
-          <MainButton
+          {/* <MainButton
             label="ตกลง"
             color={colors.orange}
             onPress={onFinishTaskSuccess}
-          />
+          /> */}
         </View>
       </CModal>
       <CModal isVisible={showModalStartTask} backdropOpacity={0.2}>

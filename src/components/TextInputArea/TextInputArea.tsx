@@ -11,9 +11,11 @@ import React from 'react';
 import colors from '../../assets/colors/colors';
 import {normalize} from '../../function/Normalize';
 import {font} from '../../assets';
+import {mixValidator} from '../../function/inputValidate';
 
 interface Props extends TextInputProps {
   label?: string;
+  placeholder?: string;
 }
 export default function TextInputArea({label, ...props}: Props) {
   return (
@@ -43,19 +45,24 @@ export default function TextInputArea({label, ...props}: Props) {
           style={[
             {
               minHeight: Platform.OS === 'ios' ? 4 * 20 : 4 * 20,
-
               width: '100%',
               padding: normalize(5),
-              paddingTop: normalize(10),
+              paddingTop: normalize(12),
               textAlignVertical: 'top',
               borderRadius: 8,
               borderWidth: 1,
               borderColor: colors.grayPlaceholder,
               marginVertical: normalize(10),
+              fontFamily: font.medium,
             },
             props.style,
           ]}
           {...props}
+          onChangeText={text => {
+            const newValue = mixValidator(text);
+
+            props.onChangeText && props.onChangeText(newValue);
+          }}
         />
       </ScrollView>
     </View>
