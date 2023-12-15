@@ -18,7 +18,7 @@ import AsyncButton from '../Button/AsyncButton';
 interface Props {
   visible: boolean;
   onCancel: () => void;
-  onPressLibrary: () => void;
+  onPressLibrary: () => Promise<void>;
   onPressCamera: () => void;
   onFinishedTakePhoto: (v: any) => void;
   onCloseModalSelect: () => void;
@@ -137,7 +137,13 @@ export default function ModalUploadImage({
             onPressLibrary();
           }
         } else {
-          onPressLibrary();
+          onPressLibrary().catch(err => {
+            if (err.message === 'User did not grant library permission.') {
+              onCancel();
+              setShowModalPermission(true);
+            }
+            return;
+          });
         }
       },
       icon: icons.imageStorage,
@@ -262,6 +268,7 @@ export default function ModalUploadImage({
             title="ไว้ภายหลัง"
             type="secondary"
             noBorder
+            transparent
             onPress={() => {
               setShowModalPermission(false);
             }}
