@@ -951,9 +951,7 @@ const EditProfile: React.FC<any> = ({navigation}) => {
             onCancel={() => {
               setShowModalSelectImage(false);
             }}
-            onPressLibrary={() => {
-              onAddImageStorage();
-            }}
+            onPressLibrary={onAddImageStorage}
             onPressCamera={() => {
               onTakeImage();
             }}
