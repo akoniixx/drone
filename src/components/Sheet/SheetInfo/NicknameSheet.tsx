@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   h3: {
     fontSize: 18,
-    fontFamily: font.light,
+    fontFamily: font.regular,
     marginBottom: 16,
     textAlign: 'center',
     lineHeight: 28,

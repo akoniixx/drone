@@ -6,7 +6,7 @@ export default {
   lightOrange: '#FFF7F0',
   fontBlack: '#1F2933',
   gray: '#6B7580',
-  grey2: '#9BA1A8',
+  grey2: '#9299A0',
   grey3: '#B0B8BF',
   greys5: '#F2F3F4',
   grey40: '#8D96A0',

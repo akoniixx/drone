@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     color: colors.fontBlack,
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: (windowHeight * 14) / 812,
     color: colors.gray,
   },

@@ -27,7 +27,7 @@ const DateInputFarmer = ({placeholder}: Props) => {
           <Text
             style={{
               color: colors.fontBlack,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               fontSize: normalize(18),
             }}>
             {momentExtend.toBuddhistYear(date, 'DD/MM/YYYY')}
@@ -67,7 +67,7 @@ const DateInputFarmer = ({placeholder}: Props) => {
               style={{
                 textAlign: 'center',
                 color: colors.fontBlack,
-                fontFamily: font.light,
+                fontFamily: font.regular,
                 fontSize: normalize(18),
                 marginTop: normalize(4),
 

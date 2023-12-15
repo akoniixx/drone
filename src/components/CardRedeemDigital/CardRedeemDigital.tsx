@@ -101,7 +101,7 @@ export default function CardRedeemDigital({
               style={{
                 marginTop: 8,
                 fontSize: 16,
-                fontFamily: font.light,
+                fontFamily: font.regular,
               }}>
               สถานะ :{' '}
               <Text
@@ -160,7 +160,7 @@ export default function CardRedeemDigital({
           <Text
             style={{
               fontSize: 14,
-              fontFamily: font.light,
+              fontFamily: font.regular,
             }}>
             หมดอายุการใช้{' '}
             {momentExtend.toBuddhistYear(expiredUsedDate, 'DD MMM YYYY ')}

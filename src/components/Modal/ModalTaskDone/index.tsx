@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   g19: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(14),
     color: colors.gray,
   },

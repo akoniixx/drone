@@ -19,9 +19,10 @@ const Desc = ({text}: {text: string}) => {
     return {
       body: {
         color: colors.fontBlack,
-        fontSize: 16,
-        fontFamily: font.light,
+        fontSize: 18,
+        fontFamily: font.regular,
         width: Dimensions.get('window').width - 100,
+        lineHeight: 26,
       },
     };
   }, []);
@@ -35,7 +36,7 @@ const Desc = ({text}: {text: string}) => {
       }}
       contentWidth={Dimensions.get('window').width - 64}
       tagsStyles={htmlCss}
-      systemFonts={[font.light, font.semiBold, font.medium, font.bold]}
+      systemFonts={[font.regular, font.semiBold, font.medium, font.bold]}
     />
   );
 };
@@ -110,19 +111,20 @@ export default function ItemContent({navigation, item}: Props) {
 
 const styles = StyleSheet.create({
   image: {
-    width: '100%',
+    width: Dimensions.get('window').width - 32,
+    height: Dimensions.get('window').width - 32,
     borderRadius: 10,
-    height: 350,
   },
   container: {
     marginBottom: 16,
   },
   containerFooter: {
     width: '100%',
-    paddingVertical: 8,
+    paddingTop: 10,
+    paddingBottom: 4,
   },
   textTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: font.semiBold,
     paddingRight: 32,
   },
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   textNormal: {
-    fontSize: 12,
+    fontSize: 13,
     color: colors.grey2,
   },
   separator: {

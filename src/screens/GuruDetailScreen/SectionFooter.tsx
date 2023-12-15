@@ -40,7 +40,6 @@ export default function SectionFooter({
   setIsLoved,
   guruId,
 }: Props) {
-  console.log('desc', JSON.stringify(description, null, 2));
   const [isFirst, setIsFirst] = React.useState(true);
   const onPressLove = () => {
     setIsLoved(prev => !prev);
@@ -78,7 +77,13 @@ export default function SectionFooter({
             source={isLoved ? icons.loveFill : icons.loveIcon}
             style={styles.icon}
           />
-          <Text style={styles.textMedium}>
+          <Text
+            style={[
+              styles.textMedium,
+              {
+                color: isLoved ? colors.orange : colors.fontBlack,
+              },
+            ]}>
             ถูกใจได้เลย
             {loveCount > 0 && (
               <Text style={styles.textCount}>{` ${numberWithCommas(
@@ -127,7 +132,7 @@ export default function SectionFooter({
             body: {
               fontSize: 16,
               color: colors.fontBlack,
-              fontFamily: font.light,
+              fontFamily: font.regular,
             },
             img: {
               width: Dimensions.get('screen').width - 30,
@@ -146,12 +151,12 @@ export default function SectionFooter({
               fontSize: normalize(18),
               lineHeight: 28,
               fontStyle: 'italic',
-              fontFamily: font.light,
+              fontFamily: font.regular,
             },
             i: {
               color: colors.fontGrey,
               fontSize: normalize(18),
-              fontFamily: font.light,
+              fontFamily: font.regular,
               fontStyle: 'italic',
               lineHeight: 28,
             },
@@ -190,7 +195,7 @@ export default function SectionFooter({
           }}
           systemFonts={[
             ...defaultSystemFonts,
-            font.light,
+            font.regular,
             font.semiBold,
             font.medium,
             font.bold,
@@ -236,6 +241,6 @@ const styles = StyleSheet.create({
   },
   textCount: {
     fontSize: 14,
-    color: colors.grey40,
+    color: colors.grey2,
   },
 });

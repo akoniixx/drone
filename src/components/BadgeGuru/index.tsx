@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.80)',
   },
   text: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: font.semiBold,
   },
 });

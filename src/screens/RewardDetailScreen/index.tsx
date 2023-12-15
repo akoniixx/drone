@@ -335,7 +335,7 @@ export default function RewardDetailScreen({navigation, route}: Props) {
                 tagsStyles={{
                   body: {
                     fontSize: 18,
-                    fontFamily: font.light,
+                    fontFamily: font.regular,
                     color: colors.gray,
                     lineHeight: 28,
                   },
@@ -362,7 +362,7 @@ export default function RewardDetailScreen({navigation, route}: Props) {
                 tagsStyles={{
                   body: {
                     fontSize: 18,
-                    fontFamily: font.light,
+                    fontFamily: font.regular,
                     color: colors.gray,
                     lineHeight: 28,
                   },

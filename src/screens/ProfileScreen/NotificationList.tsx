@@ -159,7 +159,7 @@ const NotificationListTile: React.FC<NotificationListTileParams> = ({
           )}
           <Text
             style={{
-              fontFamily: font.light,
+              fontFamily: font.regular,
               color: colors.gray,
             }}>
             {generateNotiTime(currentdate, currentTime)}
@@ -238,7 +238,7 @@ const NotificationListTile: React.FC<NotificationListTileParams> = ({
           )}
           <Text
             style={{
-              fontFamily: font.light,
+              fontFamily: font.regular,
               color: colors.gray,
             }}>
             {generateNotiTime(currentdate, currentTime)}

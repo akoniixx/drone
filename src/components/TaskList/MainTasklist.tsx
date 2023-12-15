@@ -155,7 +155,7 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   </Text>
                   <Text
                     style={{
-                      fontFamily: font.light,
+                      fontFamily: font.regular,
                       fontSize: normalize(12),
                       color: 'black',
                     }}>{` ${momentExtend.toBuddhistYear(

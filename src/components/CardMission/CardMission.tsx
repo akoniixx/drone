@@ -92,7 +92,7 @@ export default function CardMission({
             style={{
               marginTop: 4,
               fontSize: 14,
-              fontFamily: font.light,
+              fontFamily: font.regular,
             }}>
             {isMissionPoint
               ? `รับแต้มจำนวน ${numberWithCommas(

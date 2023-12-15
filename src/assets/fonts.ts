@@ -3,4 +3,5 @@ export default {
   medium: 'Anuphan-Medium',
   semiBold: 'Anuphan-SemiBold',
   bold: 'Anuphan-Bold',
+  regular: 'Anuphan-Regular',
 };

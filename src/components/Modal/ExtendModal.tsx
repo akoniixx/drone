@@ -130,7 +130,7 @@ const ExtendModal = ({
                   </Text>
                   <Text
                     style={{
-                      fontFamily: font.light,
+                      fontFamily: font.regular,
                       fontSize: normalize(12),
                       color: colors.darkOrange,
                       textAlign: 'left',
@@ -139,7 +139,7 @@ const ExtendModal = ({
                   </Text>
                   <Text
                     style={{
-                      fontFamily: font.light,
+                      fontFamily: font.regular,
                       fontSize: normalize(12),
                       color: colors.darkOrange,
                       textAlign: 'left',
@@ -148,7 +148,7 @@ const ExtendModal = ({
                   </Text>
                   <Text
                     style={{
-                      fontFamily: font.light,
+                      fontFamily: font.regular,
                       fontSize: normalize(12),
                       color: colors.darkOrange,
                       textAlign: 'left',

@@ -639,7 +639,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   g19: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(14),
     color: colors.gray,
   },

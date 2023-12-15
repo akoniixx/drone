@@ -217,7 +217,7 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
                   </Text>
                   <Text
                     style={{
-                      fontFamily: font.light,
+                      fontFamily: font.regular,
                       fontSize: normalize(12),
                       color: colors.gray,
                       paddingBottom: normalize(5),
@@ -410,7 +410,7 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
                       style={[
                         styles.listTileTitle,
                         {
-                          fontFamily: font.light,
+                          fontFamily: font.regular,
                           fontSize: 12,
                           color: colors.gray,
                         },
@@ -421,7 +421,7 @@ const ProfileScreen: React.FC<any> = ({navigation, route}) => {
                       style={[
                         styles.listTileTitle,
                         {
-                          fontFamily: font.light,
+                          fontFamily: font.regular,
                           fontSize: 12,
                           color: colors.gray,
                         },

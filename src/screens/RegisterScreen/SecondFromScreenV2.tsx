@@ -458,7 +458,7 @@ const SecondFormScreenV2: React.FC<any> = ({navigation, route}) => {
             </Text>
             <Text
               style={{
-                fontFamily: font.light,
+                fontFamily: font.regular,
                 fontSize: normalize(14),
                 paddingTop: normalize(10),
               }}>
@@ -466,7 +466,7 @@ const SecondFormScreenV2: React.FC<any> = ({navigation, route}) => {
             </Text>
             <Text
               style={{
-                fontFamily: font.light,
+                fontFamily: font.regular,
                 fontSize: normalize(14),
               }}>
               พื้นที่ให้บริการของคุณ
@@ -513,7 +513,7 @@ const styles = StyleSheet.create({
     marginTop: normalize(24),
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(12),
     color: colors.gray,
   },
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     width: normalize(26),
   },
   inputvalue: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     color: colors.fontBlack,
     fontSize: normalize(16),
   },

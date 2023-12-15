@@ -125,7 +125,7 @@ const styles = (isFocused?: boolean, suffix?: boolean) => {
 
       fontSize: isFocused ? 14 : 16,
       color: isFocused ? colors.gray : colors.grey2,
-      fontFamily: font.light,
+      fontFamily: font.regular,
     },
     input: {
       borderWidth: 1,
@@ -136,7 +136,7 @@ const styles = (isFocused?: boolean, suffix?: boolean) => {
       paddingHorizontal: 16,
       fontSize: 16,
       color: colors.fontBlack,
-      fontFamily: font.light,
+      fontFamily: font.regular,
       minHeight: 56,
       width: '100%',
       paddingRight: suffix ? 50 : 16,

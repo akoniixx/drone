@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   textDate: {
     fontSize: normalize(14),
-    fontFamily: font.light,
+    fontFamily: font.regular,
     color: colors.gray,
     lineHeight: 26,
   },

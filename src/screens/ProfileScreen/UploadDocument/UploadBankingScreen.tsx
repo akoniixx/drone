@@ -196,7 +196,7 @@ const UploadBankingScreen: React.FC<PropsParams> = ({navigation, route}) => {
             placeholder="เลือกธนาคาร"
             placeholderStyle={{
               color: colors.grey3,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               fontSize: 16,
             }}
             open={openBankDropdown}
@@ -443,7 +443,7 @@ const UploadBankingScreen: React.FC<PropsParams> = ({navigation, route}) => {
             viewInside={condition}
             title={'หมายเหตุ กรณียื่นบัญชีธนาคารเป็นบุคคลอื่น'}
             titleStyle={{
-              fontFamily: font.light,
+              fontFamily: font.regular,
               fontSize: 14,
               color: '#B26003',
             }}
@@ -618,7 +618,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(16),
     color: colors.gray,
   },

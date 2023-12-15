@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     color: colors.fontBlack,
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(14),
     color: colors.gray,
     marginTop: normalize(24),

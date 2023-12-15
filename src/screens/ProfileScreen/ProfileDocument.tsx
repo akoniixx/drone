@@ -102,7 +102,7 @@ const ProfileDocument: React.FC<any> = ({navigation, route}) => {
               <Text
                 style={{
                   color: StatusObject(profilestate.status).fontColor,
-                  fontFamily: font.light,
+                  fontFamily: font.regular,
                   fontSize: normalize(14),
                 }}>
                 {StatusObject(profilestate.status).status === 'ตรวจสอบแล้ว'
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     color: colors.fontBlack,
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(14),
     color: colors.gray,
   },

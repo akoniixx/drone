@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
     marginTop: normalize(24),
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(14),
     color: colors.gray,
   },

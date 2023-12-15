@@ -132,7 +132,7 @@ export default function CollapseItem({navigation, mission}: Props) {
               </View>
               <Text
                 style={{
-                  fontFamily: font.light,
+                  fontFamily: font.regular,
                   fontSize: 10,
                   marginTop: 4,
                 }}>

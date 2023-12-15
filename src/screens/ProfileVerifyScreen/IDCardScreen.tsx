@@ -93,21 +93,21 @@ const IDCardScreen: React.FC<any> = ({navigation}) => {
               <Text
                 style={[
                   styles.text,
-                  {fontFamily: font.light, alignContent: 'center'},
+                  {fontFamily: font.regular, alignContent: 'center'},
                 ]}>
                 กรุณาถ่ายหน้าตรง
               </Text>
               <Text
                 style={[
                   styles.text,
-                  {fontFamily: font.light, alignContent: 'center'},
+                  {fontFamily: font.regular, alignContent: 'center'},
                 ]}>
                 พร้อมถือบัตรประชาชนของคุณโดยให้เห็นใบหน้า
               </Text>
               <Text
                 style={[
                   styles.text,
-                  {fontFamily: font.light, alignContent: 'center'},
+                  {fontFamily: font.regular, alignContent: 'center'},
                 ]}>
                 และบัตรประชาชนอย่างชัดเจน
               </Text>
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: normalize(10),
     color: colors.fontBlack,
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(16),
   },
 });

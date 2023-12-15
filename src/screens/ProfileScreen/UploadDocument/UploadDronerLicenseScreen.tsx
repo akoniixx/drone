@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(16),
     color: colors.fontBlack,
   },

@@ -104,7 +104,7 @@ export default function Modal({
               <Text
                 style={{
                   fontSize: 14,
-                  fontFamily: font.light,
+                  fontFamily: font.regular,
                   color: colors.inkLight,
                   marginTop: 8,
                 }}>

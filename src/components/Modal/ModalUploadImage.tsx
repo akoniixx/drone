@@ -285,6 +285,6 @@ const styles = StyleSheet.create({
   },
   desc: {
     fontSize: 16,
-    fontFamily: font.light,
+    fontFamily: font.regular,
   },
 });

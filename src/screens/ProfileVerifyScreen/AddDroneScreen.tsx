@@ -287,7 +287,7 @@ const AddDroneScreen: React.FC<any> = ({navigation}) => {
                         placeholder="เลือกยี่ห้อโดรน"
                         placeholderStyle={{
                           color: colors.gray,
-                          fontFamily: font.light,
+                          fontFamily: font.regular,
                         }}
                         open={open}
                         value={value}
@@ -318,7 +318,7 @@ const AddDroneScreen: React.FC<any> = ({navigation}) => {
                         placeholder="รุ่น"
                         placeholderStyle={{
                           color: colors.gray,
-                          fontFamily: font.light,
+                          fontFamily: font.regular,
                         }}
                         open={opentype}
                         value={valuetype}
@@ -409,6 +409,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: normalize(10),
     color: colors.fontBlack,
-    fontFamily: font.light,
+    fontFamily: font.regular,
   },
 });

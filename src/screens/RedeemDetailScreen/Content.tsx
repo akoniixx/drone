@@ -127,7 +127,7 @@ export default function Content({redeemDetail}: Props) {
             <Text
               style={{
                 fontSize: 16,
-                fontFamily: font.light,
+                fontFamily: font.regular,
                 color: colors.gray,
               }}>
               บริษัทจะจัดส่งสินค้า/ของรางวัลให้ท่านภายใน 14 วันทำการ
@@ -166,7 +166,7 @@ export default function Content({redeemDetail}: Props) {
               <Text
                 style={{
                   fontSize: 16,
-                  fontFamily: font.light,
+                  fontFamily: font.regular,
                   color: colors.fontBlack,
                   lineHeight: 28,
                 }}>
@@ -199,7 +199,7 @@ export default function Content({redeemDetail}: Props) {
             <Text
               style={{
                 fontSize: 16,
-                fontFamily: font.light,
+                fontFamily: font.regular,
 
                 color: colors.fontBlack,
                 lineHeight: 28,
@@ -224,7 +224,7 @@ export default function Content({redeemDetail}: Props) {
             <Text
               style={{
                 fontSize: 16,
-                fontFamily: font.light,
+                fontFamily: font.regular,
 
                 color: colors.fontBlack,
                 lineHeight: 28,
@@ -235,7 +235,7 @@ export default function Content({redeemDetail}: Props) {
           <Text
             style={{
               fontSize: 16,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               color: colors.gray,
             }}>
             บริษัทจะจัดส่งสินค้า/ของรางวัลให้ท่านภายใน 14 วันทำการ
@@ -266,7 +266,7 @@ export default function Content({redeemDetail}: Props) {
             <Text
               style={{
                 fontSize: 16,
-                fontFamily: font.light,
+                fontFamily: font.regular,
 
                 color: colors.fontBlack,
                 lineHeight: 28,
@@ -400,7 +400,7 @@ export default function Content({redeemDetail}: Props) {
         <Text
           style={{
             fontSize: 16,
-            fontFamily: font.light,
+            fontFamily: font.regular,
             color: colors.gray,
             marginVertical: 4,
           }}>
@@ -410,7 +410,7 @@ export default function Content({redeemDetail}: Props) {
         <Text
           style={{
             fontSize: 16,
-            fontFamily: font.light,
+            fontFamily: font.regular,
             color: colors.gray,
             marginVertical: 4,
           }}>
@@ -419,7 +419,7 @@ export default function Content({redeemDetail}: Props) {
         <Text
           style={{
             fontSize: 16,
-            fontFamily: font.light,
+            fontFamily: font.regular,
             color: colors.gray,
             marginVertical: 4,
             alignSelf: 'flex-start',

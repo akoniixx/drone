@@ -125,7 +125,7 @@ export default function StepThree({
                   position: 'absolute',
                   top: 14,
                   left: 10,
-                  fontFamily: font.light,
+                  fontFamily: font.regular,
                   color: colors.grey40,
                   fontSize: 14,
                 }}>
