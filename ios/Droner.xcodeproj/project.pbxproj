@@ -29,6 +29,7 @@
 		E138B9A82A70D31B000A08B8 /* newtaskcoming.wav in Resources */ = {isa = PBXBuildFile; fileRef = E138B9A72A70D31B000A08B8 /* newtaskcoming.wav */; };
 		E1A3492B2A8CA13B009F1468 /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1A3492A2A8CA13B009F1468 /* hermes.xcframework */; };
 		E1C27E732AD00C5D0091ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E1C27E722AD00C5D0091ECFE /* GoogleService-Info.plist */; };
+		E64C40523647423896F4E0DE /* Anuphan-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0DC4FAE1923417FBED88FB3 /* Anuphan-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		E1A3492A2A8CA13B009F1468 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
 		E1C27E722AD00C5D0091ECFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Droner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		E0DC4FAE1923417FBED88FB3 /* Anuphan-Regular.ttf */ = {isa = PBXFileReference; name = "Anuphan-Regular.ttf"; path = "../src/assets/fonts/Anuphan-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 				772F96D02BEA4F9FB73501EB /* Anuphan-SemiBold.ttf */,
 				3AC8316315F741419A8CA58B /* iconkaset.wav */,
 				85014E51942745C88FFA147C /* newtaskcoming.wav */,
+				E0DC4FAE1923417FBED88FB3 /* Anuphan-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				15B5C69CB9394B9689A6AE7A /* Anuphan-SemiBold.ttf in Resources */,
 				918909FD190F4924955FC49B /* iconkaset.wav in Resources */,
 				4B38A4CB68704964A3F5B7F0 /* newtaskcoming.wav in Resources */,
+				E64C40523647423896F4E0DE /* Anuphan-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
