@@ -62,4 +62,6 @@ export default {
   previewController: require('./previewController.png'),
   lineChat: require('./LineChat.png'),
   imageUploading: require('./imageUploading.json'),
+  createTaskBg: require('./createTaskBg.png'),
+  emptyFarmerList: require('./emptyFarmerList.png'),
 };

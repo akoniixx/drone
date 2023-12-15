@@ -104,4 +104,8 @@ export default {
   loveIcon: require('./loveIcon.png'),
   loveFill: require('./loveFill.png'),
   showBrown: require('./showBrown.png'),
+  plusWhite: require('./plusWhite.png'),
+  searchGrey: require('./searchGrey.png'),
+  callingGrey: require('./callingGrey.png'),
+  locationGrey: require('./locationGrey.png'),
 };

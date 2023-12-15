@@ -48,6 +48,9 @@ import GuruScreen from '../screens/GuruScreen';
 import MissionScreen from '../screens/MissionScreen';
 import GuruDetailScreen from '../screens/GuruDetailScreen';
 import FinishTaskScreen from '../screens/FinishTaskScreen';
+import AllFarmerListScreen from '../screens/AllFarmerListScreen';
+import SelectFarmerScreen from '../screens/SelectFarmerScreen';
+import CreateTaskScreen from '../screens/CreateTaskScreen';
 
 // import DeleteSuccess from '../screens/ProfileScreen/DeleteProfile/DeleteSuccess';
 
@@ -157,6 +160,11 @@ export type StackParamList = {
     taskId: string;
     taskAppointment: string;
     isFromTaskDetail: boolean;
+  };
+  SelectFarmerScreen: undefined;
+  AllFarmerListScreen: undefined;
+  CreateTaskScreen: {
+    farmerId: string;
   };
 
   // DeleteSuccess: {
@@ -274,6 +282,17 @@ const MainNavigator: React.FC<any> = () => {
           isFromTaskDetail: false,
         }}
       />
+      <Stack.Group>
+        <Stack.Screen
+          name="SelectFarmerScreen"
+          component={SelectFarmerScreen}
+        />
+        <Stack.Screen
+          name="AllFarmerListScreen"
+          component={AllFarmerListScreen}
+        />
+        <Stack.Screen name="CreateTaskScreen" component={CreateTaskScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };
