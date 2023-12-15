@@ -55,9 +55,11 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
 
   return (
     <SafeAreaView
+      edges={['right', 'top', 'left']}
       style={{
         flex: 1,
         backgroundColor: colors.white,
+        paddingBottom: 16,
       }}>
       <CustomHeader title="สร้างงาน" showBackBtn onPressBack={onPressBack} />
       <ScrollView
