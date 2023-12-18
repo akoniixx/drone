@@ -16,6 +16,9 @@ import {BASE_URL, httpClient} from '../../config/develop-config';
 import Text from '../../components/Text';
 import CardRedeemDigital from '../../components/CardRedeemDigital/CardRedeemDigital';
 import moment from 'moment';
+import Modal from '../../components/Modal/Modal';
+import {rewardDatasource} from '../../datasource/RewardDatasource';
+import AsyncButton from '../../components/Button/AsyncButton';
 
 interface Props {
   navigation: any;
@@ -29,14 +32,31 @@ interface Branch {
   nameEn: string | null;
   updatedAt: string;
 }
+interface CompanyData {
+  id: string;
+  name: string;
+  companyCode: string;
+  createdAt: string;
+  isActive: boolean;
+  nameEn: string | null;
+  imagePath: string;
+}
 
 export default function RedeemScreen({navigation, route}: Props) {
   const {data, imagePath, expiredUsedDate} = route.params;
   const [selectedArea, setSelectedArea] = React.useState<any>(null);
+  const [companyData, setCompanyData] = React.useState<{
+    data: CompanyData[];
+    count: number;
+  }>({
+    data: [],
+    count: 0,
+  });
   const isExpired = React.useMemo(() => {
     return moment(expiredUsedDate).isBefore(moment());
   }, [expiredUsedDate]);
   const [dataBranch, setDataBranch] = React.useState<Branch[]>([]);
+  const [showBrandModal, setShowBrandModal] = React.useState(false);
   useEffect(() => {
     const getBranch = async () => {
       try {
@@ -48,6 +68,30 @@ export default function RedeemScreen({navigation, route}: Props) {
     };
     getBranch();
   }, []);
+  const onSelectedBrand = async () => {
+    const result: {
+      selected: any;
+    } = await SheetManager.show('selectArea', {
+      payload: {
+        selected: selectedArea,
+        data: dataBranch,
+        dronerTransactionId: data.dronerTransaction.id,
+        navigation,
+      },
+    });
+    if (result?.selected) {
+      setSelectedArea(result.selected);
+    }
+  };
+  const onShowBrand = async () => {
+    setShowBrandModal(true);
+    try {
+      const result = await rewardDatasource.getAllCompany();
+      setCompanyData(result);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -119,21 +163,7 @@ export default function RedeemScreen({navigation, route}: Props) {
               }}>
               <TouchableOpacity
                 style={styles.buttonPrimary}
-                onPress={async () => {
-                  const result: {
-                    selected: any;
-                  } = await SheetManager.show('selectArea', {
-                    payload: {
-                      selected: selectedArea,
-                      data: dataBranch,
-                      dronerTransactionId: data.dronerTransaction.id,
-                      navigation,
-                    },
-                  });
-                  if (result?.selected) {
-                    setSelectedArea(result.selected);
-                  }
-                }}>
+                onPress={onShowBrand}>
                 <Text
                   style={{
                     color: colors.white,
@@ -147,10 +177,39 @@ export default function RedeemScreen({navigation, route}: Props) {
           )}
         </View>
       </ScrollView>
+      <Modal visible={showBrandModal}>
+        <View style={styles.containerBrand}>
+          <Text style={styles.titleModal}>เลือกบริษัทที่ใช้สิทธิ์</Text>
+          <Text style={styles.desc}>เลือกบริษัทที่ใช้สิทธิ์</Text>
+          <AsyncButton
+            title="close"
+            onPress={() => {
+              setShowBrandModal(false);
+            }}
+          />
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
+  desc: {
+    fontSize: 16,
+    fontFamily: font.light,
+    color: colors.fontBlack,
+  },
+  titleModal: {
+    fontSize: 20,
+    fontFamily: font.semiBold,
+  },
+  containerBrand: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    borderRadius: 8,
+    width: '100%',
+    backgroundColor: colors.white,
+  },
   card: {
     backgroundColor: 'white',
     padding: 16,
