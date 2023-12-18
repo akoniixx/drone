@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+  FlatList,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import CustomHeader from '../../components/CustomHeader';
@@ -19,6 +20,7 @@ import moment from 'moment';
 import Modal from '../../components/Modal/Modal';
 import {rewardDatasource} from '../../datasource/RewardDatasource';
 import AsyncButton from '../../components/Button/AsyncButton';
+import FastImage from 'react-native-fast-image';
 
 interface Props {
   navigation: any;
@@ -55,44 +57,56 @@ export default function RedeemScreen({navigation, route}: Props) {
   const isExpired = React.useMemo(() => {
     return moment(expiredUsedDate).isBefore(moment());
   }, [expiredUsedDate]);
+  const [companyId, setCompanyId] = React.useState<string>('');
   const [dataBranch, setDataBranch] = React.useState<Branch[]>([]);
   const [showBrandModal, setShowBrandModal] = React.useState(false);
-  useEffect(() => {
-    const getBranch = async () => {
-      try {
-        const result = await httpClient.get(BASE_URL + '/branch');
-        setDataBranch(result.data.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getBranch();
-  }, []);
-  const onSelectedBrand = async () => {
-    const result: {
-      selected: any;
-    } = await SheetManager.show('selectArea', {
-      payload: {
-        selected: selectedArea,
-        data: dataBranch,
-        dronerTransactionId: data.dronerTransaction.id,
-        navigation,
-      },
-    });
-    if (result?.selected) {
-      setSelectedArea(result.selected);
-    }
-  };
+
   const onShowBrand = async () => {
-    setShowBrandModal(true);
     try {
+      setShowBrandModal(true);
       const result = await rewardDatasource.getAllCompany();
       setCompanyData(result);
     } catch (e) {
       console.log(e);
     }
   };
-
+  const getBranch = async (companyId: string) => {
+    try {
+      const result = await httpClient.get(
+        BASE_URL + '/branch?isActive=true&companyId=' + companyId,
+      );
+      setDataBranch(result.data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onPressCompany = async (item: CompanyData) => {
+    await getBranch(item.id);
+    setCompanyId(item.id);
+    setShowBrandModal(false);
+  };
+  useEffect(() => {
+    const onSelectedBrand = async () => {
+      const result: {
+        selected: any;
+      } = await SheetManager.show('selectArea', {
+        payload: {
+          selected: selectedArea,
+          data: dataBranch,
+          dronerTransactionId: data.dronerTransaction.id,
+          navigation,
+        },
+      });
+      if (result?.selected) {
+        setSelectedArea(result.selected);
+      }
+    };
+    if (dataBranch.length > 0) {
+      setTimeout(() => {
+        onSelectedBrand();
+      }, 500);
+    }
+  }, [dataBranch, navigation, data.dronerTransaction.id, selectedArea]);
   return (
     <SafeAreaView
       style={{
@@ -179,33 +193,115 @@ export default function RedeemScreen({navigation, route}: Props) {
       </ScrollView>
       <Modal visible={showBrandModal}>
         <View style={styles.containerBrand}>
-          <Text style={styles.titleModal}>เลือกบริษัทที่ใช้สิทธิ์</Text>
-          <Text style={styles.desc}>เลือกบริษัทที่ใช้สิทธิ์</Text>
-          <AsyncButton
-            title="close"
-            onPress={() => {
-              setShowBrandModal(false);
+          <FlatList
+            ListHeaderComponent={
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={styles.titleModal}>เลือกบริษัทที่ใช้สิทธิ์</Text>
+                <Text style={styles.desc}>
+                  กรุณาเลือกบริษัทให้ตรงกับคูปองที่ใช้งาน
+                </Text>
+                <Text style={styles.desc}>
+                  หากเลือกใช้ผิด กรุณาติดต่อเจ้าหน้าที่
+                </Text>
+              </View>
+            }
+            style={{
+              width: '100%',
+            }}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              width: '100%',
+            }}
+            data={companyData.data || []}
+            renderItem={({item}) => {
+              const isLastIndex =
+                companyData.data.indexOf(item) === companyData.data.length - 1;
+              return (
+                <TouchableOpacity
+                  onPress={() => onPressCompany(item)}
+                  style={[
+                    styles.listCompany,
+                    !isLastIndex && {
+                      borderBottomWidth: 1,
+                      borderBottomColor: colors.disable,
+                    },
+                  ]}>
+                  <FastImage
+                    source={{
+                      uri: item.imagePath,
+                    }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      marginRight: 16,
+                      borderWidth: 1,
+                      borderColor: colors.grey3,
+                    }}
+                    resizeMode="contain"
+                  />
+                  <Text>{item.name}</Text>
+                </TouchableOpacity>
+              );
             }}
           />
+          <View
+            style={{
+              width: '100%',
+              height: 1,
+              backgroundColor: colors.disable,
+              marginBottom: 16,
+            }}
+          />
+          <TouchableOpacity
+            style={{
+              padding: 8,
+              width: '100%',
+              alignItems: 'center',
+              height: 54,
+            }}
+            onPress={() => {
+              setShowBrandModal(false);
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: font.regular,
+              }}>
+              ยกเลิก
+            </Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
+  listCompany: {
+    paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
   desc: {
     fontSize: 16,
-    fontFamily: font.light,
-    color: colors.fontBlack,
+    fontFamily: font.regular,
+    color: colors.decreasePoint,
+    marginBottom: 2,
   },
   titleModal: {
     fontSize: 20,
     fontFamily: font.semiBold,
+    marginBottom: 8,
   },
   containerBrand: {
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 20,
+    paddingVertical: 16,
     borderRadius: 8,
     width: '100%',
     backgroundColor: colors.white,
