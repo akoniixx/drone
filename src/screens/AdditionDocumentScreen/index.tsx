@@ -69,7 +69,7 @@ export default function AdditionDocumentScreen({navigation}: Props) {
                 </Text>
                 <Text
                   style={{
-                    fontFamily: font.light,
+                    fontFamily: font.regular,
                     fontSize: 14,
                   }}>
                   {el.desc}

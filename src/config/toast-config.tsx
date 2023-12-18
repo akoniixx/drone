@@ -26,7 +26,7 @@ const text1Style = {
 
 const text2Style = {
   color: '#FFFFFF',
-  fontFamily: font.light,
+  fontFamily: font.regular,
   fontSize: normalize(16),
   paddignLeft: 10,
 };
@@ -65,8 +65,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -137,8 +137,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -155,9 +155,7 @@ export const toastConfig = {
           style={{
             flexDirection: 'row',
           }}>
-          <Image
-            source={icons.closecircle2}
-          />
+          <Image source={icons.closecircle2} />
           <View
             style={{
               paddingLeft: normalize(12),
@@ -174,8 +172,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -214,8 +212,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -258,8 +256,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -301,8 +299,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -340,8 +338,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -379,8 +377,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -419,8 +417,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -465,8 +463,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -504,8 +502,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -550,8 +548,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -595,8 +593,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -638,8 +636,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -700,8 +698,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -762,8 +760,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -801,8 +799,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -904,8 +902,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -943,8 +941,8 @@ export const toastConfig = {
             }}>
             <Image
               style={{
-                width : responsiveWidth(20),
-                height : responsiveWidth(20)
+                width: responsiveWidth(20),
+                height: responsiveWidth(20),
               }}
               source={icons.closewhite}
             />
@@ -983,8 +981,8 @@ export const toastConfig = {
               }}>
               <Image
                 style={{
-                  width : responsiveWidth(20),
-                  height : responsiveWidth(20)
+                  width: responsiveWidth(20),
+                  height: responsiveWidth(20),
                 }}
                 source={icons.closewhite}
               />
@@ -994,7 +992,7 @@ export const toastConfig = {
       </TouchableOpacity>
     );
   },
-  missionOpening :({onPress, text1, text2, props}: any) => {
+  missionOpening: ({onPress, text1, text2, props}: any) => {
     return (
       <TouchableOpacity onPress={onPress}>
         <View style={styles.modalBgBlue}>
@@ -1026,8 +1024,8 @@ export const toastConfig = {
               <Image
                 source={icons.closewhite}
                 style={{
-                  width : responsiveWidth(20),
-                  height : responsiveWidth(20)
+                  width: responsiveWidth(20),
+                  height: responsiveWidth(20),
                 }}
               />
             </TouchableOpacity>
@@ -1035,7 +1033,7 @@ export const toastConfig = {
         </View>
       </TouchableOpacity>
     );
-  }
+  },
 };
 
 const styles = StyleSheet.create({

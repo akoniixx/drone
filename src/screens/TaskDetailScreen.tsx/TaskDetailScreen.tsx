@@ -332,7 +332,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                       </Text>
                       <Text
                         style={{
-                          fontFamily: font.light,
+                          fontFamily: font.regular,
                           fontSize: normalize(12),
                           color: 'white',
                         }}>
@@ -545,7 +545,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                     </Text>
                     <Text
                       style={{
-                        fontFamily: font.light,
+                        fontFamily: font.regular,
                         color: colors.gray,
                         fontSize: normalize(13),
                       }}>
@@ -797,7 +797,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                     />
                     <Text
                       style={{
-                        fontFamily: font.light,
+                        fontFamily: font.regular,
                         fontSize: normalize(14),
                         color: colors.gray,
                         flexShrink: 1,
@@ -1243,12 +1243,12 @@ const styles = StyleSheet.create({
     color: colors.fontBlack,
   },
   label: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(14),
     color: colors.gray,
   },
   g19: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(14),
     color: colors.gray,
   },

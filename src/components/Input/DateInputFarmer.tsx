@@ -1,4 +1,4 @@
-import {View, Modal, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Modal, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import React from 'react';
 import {colors, font} from '../../assets';
 import {normalize} from '../../function/Normalize';
@@ -7,6 +7,7 @@ import moment from 'moment';
 import DatePickerCustom from '../DatePickerCustom/DatePickerCustom';
 import AsyncButton from '../Button/AsyncButton';
 import {momentExtend} from '../../function/utility';
+import icons from '../../assets/icons/icons';
 
 type Props = {
   placeholder?: string;
@@ -26,7 +27,7 @@ const DateInputFarmer = ({placeholder}: Props) => {
           <Text
             style={{
               color: colors.fontBlack,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               fontSize: normalize(18),
             }}>
             {momentExtend.toBuddhistYear(date, 'DD/MM/YYYY')}
@@ -34,6 +35,7 @@ const DateInputFarmer = ({placeholder}: Props) => {
         ) : (
           <Text>{placeholder}</Text>
         )}
+        {/* <Image source={icons.cal} /> */}
       </TouchableOpacity>
       <Modal transparent={true} visible={openCalendar} animationType="fade">
         <View
@@ -65,7 +67,7 @@ const DateInputFarmer = ({placeholder}: Props) => {
               style={{
                 textAlign: 'center',
                 color: colors.fontBlack,
-                fontFamily: font.light,
+                fontFamily: font.regular,
                 fontSize: normalize(18),
                 marginTop: normalize(4),
 

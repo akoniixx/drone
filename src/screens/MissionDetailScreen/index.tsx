@@ -331,7 +331,7 @@ export default function MissionDetailScreen({navigation, route}: Props) {
               </Text>
               <Text
                 style={{
-                  fontFamily: font.light,
+                  fontFamily: font.regular,
                   color: colors.gray,
                 }}>
                 {data?.missionPointDetail
@@ -353,7 +353,7 @@ export default function MissionDetailScreen({navigation, route}: Props) {
               </Text>
               <Text
                 style={{
-                  fontFamily: font.light,
+                  fontFamily: font.regular,
                   color: colors.gray,
                 }}>
                 {data?.missionPointDetail

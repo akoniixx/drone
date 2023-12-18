@@ -282,7 +282,7 @@ const NewsScreen: React.FC<any> = ({navigation}) => {
                       <Text
                         style={{
                           fontSize: 20,
-                          fontFamily: font.light,
+                          fontFamily: font.regular,
                           color: colors.fontBlack,
                         }}>
                         {el.title}

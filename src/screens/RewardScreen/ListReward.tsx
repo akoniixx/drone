@@ -159,7 +159,7 @@ export default function ListReward({
                 {numberWithCommas((item.score || 0).toString(), true)}{' '}
                 <Text
                   style={{
-                    fontFamily: font.light,
+                    fontFamily: font.regular,
                     fontSize: 14,
                     color: colors.fontBlack,
                   }}>
@@ -169,7 +169,7 @@ export default function ListReward({
               {isExpired && (
                 <Text
                   style={{
-                    fontFamily: font.light,
+                    fontFamily: font.regular,
                     fontSize: 14,
                   }}>
                   หมดอายุอีก {dateDiff}

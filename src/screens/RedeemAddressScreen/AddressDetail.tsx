@@ -238,7 +238,7 @@ export default function AddressDetail({
           <Text
             style={{
               color: colors.fontBlack,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               fontSize: 16,
               marginTop: 8,
               marginLeft: 8,
@@ -278,7 +278,7 @@ export default function AddressDetail({
           <Text
             style={{
               color: colors.fontBlack,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               fontSize: 16,
               marginTop: 8,
               marginLeft: 8,
@@ -465,7 +465,7 @@ export default function AddressDetail({
           <Text
             style={{
               fontSize: 14,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               color: colors.inkLight,
               marginTop: 8,
             }}>
@@ -474,7 +474,7 @@ export default function AddressDetail({
           <Text
             style={{
               fontSize: 14,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               color: colors.inkLight,
             }}>
             จะไม่สามารถแลกแต้มคืนได้
@@ -524,7 +524,7 @@ export default function AddressDetail({
           <Text
             style={{
               fontSize: 14,
-              fontFamily: font.light,
+              fontFamily: font.regular,
               color: colors.inkLight,
               marginTop: 8,
             }}>

@@ -22,7 +22,7 @@ export default function RenderHTML(props: Props) {
       defaultTextProps={{
         allowFontScaling: false,
       }}
-      systemFonts={[font.light, font.semiBold, font.medium, font.bold]}
+      systemFonts={[font.regular, font.semiBold, font.medium, font.bold]}
     />
   );
 }

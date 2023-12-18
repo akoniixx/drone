@@ -20,7 +20,7 @@ export default Text;
 const styles = ({...rest}: Props) => {
   return StyleSheet.create({
     text: {
-      fontFamily: rest.title ? font.semiBold : font.light,
+      fontFamily: rest.title ? font.semiBold : font.regular,
       color: colors.fontBlack,
       fontSize: rest.title ? 24 : 16,
     },

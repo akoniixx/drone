@@ -78,7 +78,9 @@ const GuruDetailScreen: React.FC<Props> = ({navigation, route}) => {
   }, [guruId, isFocused]);
 
   return (
-    <SafeAreaView style={{flex: 1}} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={{flex: 1, backgroundColor: colors.white}}
+      edges={['top', 'left', 'right']}>
       <CustomHeader
         styleWrapper={{
           height: 50,
@@ -192,8 +194,8 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   imageHeader: {
-    width: '100%',
-    height: '100%',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').width,
   },
   textTitle: {
     fontSize: 20,

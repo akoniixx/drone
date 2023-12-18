@@ -173,7 +173,7 @@ export default function Dropdown({
             nestedScrollEnabled: true,
           }}
           textStyle={{
-            fontFamily: font.light,
+            fontFamily: font.regular,
             fontSize: 16,
           }}
           zIndex={3000}
@@ -193,7 +193,7 @@ export default function Dropdown({
           placeholder={placeholder}
           placeholderStyle={{
             color: colors.grey2,
-            fontFamily: font.light,
+            fontFamily: font.regular,
             fontSize: 16,
           }}
           containerStyle={{

@@ -84,108 +84,116 @@ export default function StepOne({
 
   const [showModalSelectImage, setShowModalSelectImage] = React.useState(false);
   const onAddImageController = async () => {
-    const result = await ImageCropPicker.openPicker({
-      mediaType: 'photo',
-      compressImageMaxWidth: 1000,
-      compressImageMaxHeight: 1000,
-      compressImageQuality: 0.8,
-      forceJpg: true,
-      multiple: true,
-      maxFiles: limitPhoto - imageData.assets.length,
-      minFiles: 1,
-    });
-    if (result && result.length > 0) {
-      const hashMap: {[key: string]: boolean} = {};
-      const format: any = imageData.assets.map(el => {
-        return {
-          path: el.uri,
-          size: el.fileSize,
-          mime: el.type,
-          filename: el.fileName,
-        };
+    try {
+      const result = await ImageCropPicker.openPicker({
+        mediaType: 'photo',
+        compressImageMaxWidth: 1000,
+        compressImageMaxHeight: 1000,
+        compressImageQuality: 0.8,
+        forceJpg: true,
+        multiple: true,
+        maxFiles: limitPhoto - imageData.assets.length,
+        minFiles: 1,
       });
-      const newResult = [...format, ...result];
 
-      const array = newResult.map(async (item: ImageType) => {
-        const fileData = await RNFS.readFile(item.path, 'base64');
-        const convertSha = SHA256(fileData).toString();
-        const errorMessages = [];
-        const errorTypeList = [];
-        const isDupImage = !!hashMap[convertSha];
-        if (isDupImage) {
-          errorMessages.push('ซ้ำ');
-          errorTypeList.push('isDuplicate');
-        } else {
-          hashMap[convertSha] = true; // Add to hash map
-        }
-        const modifedDate =
-          (Platform.OS === 'ios' ? item.creationDate : item.modificationDate) ||
-          moment().unix();
-        const date = item?.modificationDate
-          ? moment(moment.unix(+modifedDate))
-          : moment();
-        const isDateBefore48Hours = moment()
-          .subtract(48, 'hours')
-          .isAfter(date);
-        const isDateAfter48Hours = moment(taskAppointment)
-          .add(48, 'hours')
-          .isBefore(date);
+      if (result && result.length > 0) {
+        const hashMap: {[key: string]: boolean} = {};
+        const format: any = imageData.assets.map(el => {
+          return {
+            path: el.uri,
+            size: el.fileSize,
+            mime: el.type,
+            filename: el.fileName,
+          };
+        });
+        const newResult = [...format, ...result];
 
-        // if (isDateBefore48Hours) {
-        //   errorMessages.push('เกินเวลา');
-        //   errorTypeList.push('isAfter');
-        // }
-        // if (isDateAfter48Hours) {
-        //   errorMessages.push('เกินเวลา');
-        //   errorTypeList.push('isBefore');
-        // }
-
-        if (item?.size) {
-          const isFileMoreThan20MB = item.size > 20 * 1024 * 1024;
-          if (isFileMoreThan20MB) {
-            errorMessages.push('เกินขนาด');
-            errorTypeList.push('isSize');
+        const array = newResult.map(async (item: ImageType) => {
+          const fileData = await RNFS.readFile(item.path, 'base64');
+          const convertSha = SHA256(fileData).toString();
+          const errorMessages = [];
+          const errorTypeList = [];
+          const isDupImage = !!hashMap[convertSha];
+          if (isDupImage) {
+            errorMessages.push('ซ้ำ');
+            errorTypeList.push('isDuplicate');
+          } else {
+            hashMap[convertSha] = true; // Add to hash map
           }
+          const modifedDate =
+            (Platform.OS === 'ios'
+              ? item.creationDate
+              : item.modificationDate) || moment().unix();
+          const date = item?.modificationDate
+            ? moment(moment.unix(+modifedDate))
+            : moment();
+          const isDateBefore48Hours = moment()
+            .subtract(48, 'hours')
+            .isAfter(date);
+          const isDateAfter48Hours = moment(taskAppointment)
+            .add(48, 'hours')
+            .isBefore(date);
+
+          // if (isDateBefore48Hours) {
+          //   errorMessages.push('เกินเวลา');
+          //   errorTypeList.push('isAfter');
+          // }
+          // if (isDateAfter48Hours) {
+          //   errorMessages.push('เกินเวลา');
+          //   errorTypeList.push('isBefore');
+          // }
+
+          if (item?.size) {
+            const isFileMoreThan20MB = item.size > 20 * 1024 * 1024;
+            if (isFileMoreThan20MB) {
+              errorMessages.push('เกินขนาด');
+              errorTypeList.push('isSize');
+            }
+          }
+
+          return {
+            fileSize: item.size,
+            type: item.mime,
+            fileName: item?.filename,
+            uri: item.path,
+            //   fileData: fileData,
+            errorMessage: errorMessages,
+            isError: errorMessages.length > 0,
+            errorTypeList,
+          };
+        });
+        const currentListPhoto = [...array];
+
+        setShowModalSelectImage(false);
+        setLoading(true);
+        if (currentListPhoto.length > 5) {
+          currentListPhoto.splice(5, currentListPhoto.length - 5);
         }
 
-        return {
-          fileSize: item.size,
-          type: item.mime,
-          fileName: item?.filename,
-          uri: item.path,
-          //   fileData: fileData,
-          errorMessage: errorMessages,
-          isError: errorMessages.length > 0,
-          errorTypeList,
+        const newAssets = await Promise.all([...currentListPhoto]).finally(
+          () => {
+            setLoading(false);
+          },
+        );
+        //   console.log('newAssets :>> ', JSON.stringify(newAssets, null, 2));
+        const errorTypeList = newAssets.reduce((acc: any, item: any) => {
+          if (item.errorTypeList) {
+            return [...acc, ...item.errorTypeList];
+          }
+          return acc;
+        }, []);
+        const uniqueErrorTypeList: any = [...new Set(errorTypeList)];
+        const mutateResult = {
+          isError: uniqueErrorTypeList.length > 0,
+          assets: newAssets,
+          errorMessage: convertErrorMessage(uniqueErrorTypeList),
         };
-      });
-      const currentListPhoto = [...array];
-
-      setShowModalSelectImage(false);
-      setLoading(true);
-      if (currentListPhoto.length > 5) {
-        currentListPhoto.splice(5, currentListPhoto.length - 5);
+        setImageData(mutateResult as any);
       }
-
-      const newAssets = await Promise.all([...currentListPhoto]).finally(() => {
-        setLoading(false);
-      });
-      //   console.log('newAssets :>> ', JSON.stringify(newAssets, null, 2));
-      const errorTypeList = newAssets.reduce((acc: any, item: any) => {
-        if (item.errorTypeList) {
-          return [...acc, ...item.errorTypeList];
-        }
-        return acc;
-      }, []);
-      const uniqueErrorTypeList: any = [...new Set(errorTypeList)];
-      const mutateResult = {
-        isError: uniqueErrorTypeList.length > 0,
-        assets: newAssets,
-        errorMessage: convertErrorMessage(uniqueErrorTypeList),
-      };
-      setImageData(mutateResult as any);
+      return;
+    } catch (err) {
+      throw err;
     }
-    return;
   };
   const onTakeImageController = async () => {
     const result = await ImageCropPicker.openCamera({
@@ -524,9 +532,7 @@ export default function StepOne({
         onCancel={() => {
           setShowModalSelectImage(false);
         }}
-        onPressLibrary={() => {
-          onAddImageController();
-        }}
+        onPressLibrary={onAddImageController}
         onPressCamera={() => {
           onTakeImageController();
         }}

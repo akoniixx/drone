@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   textDate: {
     fontSize: 16,
-    fontFamily: font.light,
+    fontFamily: font.regular,
     color: colors.fontBlack,
     lineHeight: 24,
   },

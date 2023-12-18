@@ -127,7 +127,7 @@ export default function Example({visible, onPressBack}: Props) {
         <Text
           style={{
             textAlign: 'center',
-            fontFamily: font.light,
+            fontFamily: font.regular,
             color: colors.darkOrange2,
             marginTop: 8,
             marginBottom: 16,

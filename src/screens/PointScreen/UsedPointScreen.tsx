@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     paddingVertical: '50%',
   },
   textEmpty: {
-    fontFamily: font.light,
+    fontFamily: font.regular,
     fontSize: normalize(18),
     lineHeight: normalize(30),
     textAlign: 'center',

@@ -77,7 +77,12 @@ interface GuruKasetData {
 }
 const initialPage = 1;
 export default function GuruScreen({navigation}: Props) {
-  const [listsHeader, setListsHeader] = React.useState([]);
+  const [listsHeader, setListsHeader] = React.useState<
+    {
+      title: string;
+      value: string;
+    }[]
+  >([]);
   const isFocused = useIsFocused();
   const [loading, setLoading] = React.useState(false);
   const [page, setPage] = React.useState(initialPage);
@@ -121,7 +126,7 @@ export default function GuruScreen({navigation}: Props) {
       try {
         const resultGroup = await GuruKaset.getGroupGuru({
           page: 1,
-          take: 20,
+          take: 99,
         });
         const formatGroupGuru = (resultGroup.data || []).map((item: any) => {
           return {
@@ -129,8 +134,12 @@ export default function GuruScreen({navigation}: Props) {
             value: item._id,
           };
         });
+        const all = {
+          title: 'ทั้งหมด',
+          value: 'all',
+        };
 
-        setListsHeader(formatGroupGuru);
+        setListsHeader([all, ...formatGroupGuru]);
       } catch (e) {
         console.log(e);
       }
@@ -377,10 +386,9 @@ const HeaderFlatList = ({lists = [], onChange, value}: HeaderFlatListProps) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{
-          paddingVertical: 8,
+          paddingVertical: 14,
           paddingHorizontal: 16,
           height: 'auto',
-          marginBottom: 16,
         }}>
         {lists.map((item, index) => {
           const isActive = value === item.value;

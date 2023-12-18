@@ -92,7 +92,7 @@ export default function ForceUpdateScreen({route}: any) {
           <Text
             style={{
               textAlign: 'center',
-              fontFamily: font.light,
+              fontFamily: font.regular,
               color: colors.gray,
             }}>
             แอปฯ ไอคอนเกษตรนักบินโดรน พร้อมให้คุณได้อัปเดตแล้ว

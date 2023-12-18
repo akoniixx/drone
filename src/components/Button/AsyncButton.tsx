@@ -23,6 +23,7 @@ interface Props extends TouchableOpacityProps {
   isLoading?: boolean;
   styleText?: TextStyle;
   disabled?: boolean;
+  transparent?: boolean;
 }
 export default function AsyncButton({
   title,
@@ -32,6 +33,7 @@ export default function AsyncButton({
   noBorder = false,
   isLoading = false,
   styleText,
+  transparent = false,
   ...props
 }: Props) {
   const mappingText = {
@@ -46,6 +48,7 @@ export default function AsyncButton({
       style={[
         styles({noBorder, disabled: props.disabled})[type as keyof TypeButton],
         style,
+        transparent && {backgroundColor: 'transparent'},
       ]}>
       <View
         style={{
