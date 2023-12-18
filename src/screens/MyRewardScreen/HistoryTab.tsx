@@ -54,7 +54,6 @@ export default function HistoryTab({navigation}: {navigation: any}) {
   const [doneData, setDoneData] = React.useState<RedemptionTransaction[]>([]);
   const [total, setTotal] = React.useState(0);
   const [refreshing, setRefreshing] = React.useState(false);
-
   const getHistoryReward = useCallback(async () => {
     try {
       const dronerId = await AsyncStorage.getItem('droner_id');

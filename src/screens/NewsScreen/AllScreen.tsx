@@ -160,7 +160,7 @@ const NewsScreen: React.FC<any> = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <CustomHeader
-        title="กูรูเกษตร"
+        title="ข่าวสาร"
         showBackBtn
         onPressBack={() => {
           mixpanel.track('กดย้อนกลับจากหน้ารวมข่าวสารกูรูเกษตร');

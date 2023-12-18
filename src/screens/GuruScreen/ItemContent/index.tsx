@@ -5,7 +5,7 @@ import {Image} from 'react-native';
 import BadgeGuru from '../../../components/BadgeGuru';
 import {colors, font, icons} from '../../../assets';
 import moment from 'moment';
-import {numberWithCommas} from '../../../function/utility';
+import {momentExtend, numberWithCommas} from '../../../function/utility';
 import RenderHTML from 'react-native-render-html';
 import FastImage from 'react-native-fast-image';
 import {GuruData} from '..';
@@ -46,6 +46,11 @@ export default function ItemContent({navigation, item}: Props) {
   // const commentCount =  item.commentCount;
   const readCount = item.view;
   const dateCreate = moment(item.createdAt);
+  const isMoreThanOneDay = moment().diff(dateCreate, 'days') > 0;
+  const dateFormat = momentExtend.toBuddhistYear(
+    dateCreate.toDate(),
+    'DD MMMM YYYY',
+  );
 
   const onNavigateToDetail = () => {
     navigation.navigate('GuruDetailScreen', {
@@ -93,7 +98,9 @@ export default function ItemContent({navigation, item}: Props) {
             </View> */}
           </View>
           <View style={styles.row}>
-            <Text style={styles.textNormal}>{dateCreate.fromNow()}</Text>
+            <Text style={styles.textNormal}>
+              {isMoreThanOneDay ? dateFormat : dateCreate.fromNow()}
+            </Text>
             <Text style={styles.textNormal}>・</Text>
             <View style={[styles.row, {marginRight: 0}]}>
               <Image source={icons.showReadIcon} style={styles.icon} />

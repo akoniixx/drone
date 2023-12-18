@@ -1,11 +1,11 @@
-import {Dimensions, Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import React, {useEffect} from 'react';
 import Text from '../../components/Text';
 import CustomHeader from '../../components/CustomHeader';
 import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import {colors, font} from '../../assets';
-import {numberWithCommas} from '../../function/utility';
+import {momentExtend, numberWithCommas} from '../../function/utility';
 import moment from 'moment';
 import BadgeGuru from '../../components/BadgeGuru';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -14,6 +14,7 @@ import {StackParamList} from '../../navigations/MainNavigator';
 import {GuruKaset} from '../../datasource/GuruDatasource';
 import ProgressiveImage from '../../components/ProgressingImage/ProgressingImage';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import FastImage from 'react-native-fast-image';
 
 interface Props {
   navigation: StackNavigationProp<StackParamList, 'GuruDetailScreen'>;
@@ -55,6 +56,11 @@ const GuruDetailScreen: React.FC<Props> = ({navigation, route}) => {
   const commentCount = guruDetail.commentCount;
   const readCount = guruDetail.view;
   const dateCreate = moment(guruDetail.createdAt);
+  const isMoreThanOneDay = moment().diff(dateCreate, 'days') > 0;
+  const dateFormat = momentExtend.toBuddhistYear(
+    dateCreate.toDate(),
+    'DD MMMM YYYY',
+  );
   const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
@@ -97,8 +103,7 @@ const GuruDetailScreen: React.FC<Props> = ({navigation, route}) => {
           right: 1,
         }}>
         <View style={styles.containerHeader}>
-          <ProgressiveImage
-            borderRadius={0}
+          <FastImage
             source={{
               uri: guruDetail.image,
             }}
@@ -146,7 +151,9 @@ const GuruDetailScreen: React.FC<Props> = ({navigation, route}) => {
               {guruDetail.name}
             </Text>
             <View style={[styles.row, {marginTop: 8}]}>
-              <Text style={styles.textNormal}>{dateCreate.fromNow()}</Text>
+              <Text style={styles.textNormal}>
+                {isMoreThanOneDay ? dateFormat : dateCreate.fromNow()}
+              </Text>
               <View style={[styles.row, {marginLeft: 16}]}>
                 <Text style={styles.textNormal}>
                   {`อ่านแล้ว ${numberWithCommas(

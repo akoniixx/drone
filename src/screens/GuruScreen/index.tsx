@@ -267,14 +267,6 @@ export default function GuruScreen({navigation}: Props) {
             paddingHorizontal: 16,
           }}
           keyExtractor={(item, index) => `${item?._id}-${index}`}
-          // ListHeaderComponent={() => {
-          //   return (
-          //     <Animated.View
-          //       style={{
-          //         transform: [{translateY: headerTranslateY}],
-          //       }}></Animated.View>
-          //   );
-          // }}
           renderItem={({item, index}) => {
             if (loading) {
               return (

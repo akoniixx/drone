@@ -201,7 +201,7 @@ export default function HeaderMainScreen({
             color: colors.fontBlack,
             paddingHorizontal: 20,
           }}>
-          กูรูเกษตร
+          ข่าวสาร
         </Text>
         <TouchableOpacity
           onPress={() => {
