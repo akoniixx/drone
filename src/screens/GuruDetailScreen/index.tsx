@@ -12,7 +12,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SectionFooter from './SectionFooter';
 import {StackParamList} from '../../navigations/MainNavigator';
 import {GuruKaset} from '../../datasource/GuruDatasource';
-import ProgressiveImage from '../../components/ProgressingImage/ProgressingImage';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
 
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
   },
   textNormal: {
     fontSize: 14,
-    color: colors.grey40,
+    color: colors.grey2,
   },
   row: {
     flexDirection: 'row',
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   containerFooter: {
-    paddingVertical: 10,
+    paddingBottom: 8,
     paddingHorizontal: 20,
     width: '100%',
     backgroundColor: colors.white,
