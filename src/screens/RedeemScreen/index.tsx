@@ -95,6 +95,7 @@ export default function RedeemScreen({navigation, route}: Props) {
           data: dataBranch,
           dronerTransactionId: data.dronerTransaction.id,
           navigation,
+          companyId,
         },
       });
       if (result?.selected) {
