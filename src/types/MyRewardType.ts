@@ -15,5 +15,8 @@ interface RedeemDetail {
   rewardType: string;
   trackingNo: string;
   redeemStatus: string;
-  deliveryCompany: string;
+  deliveryCompany: {
+    isRedeem: boolean;
+    redeemCode: string;
+  };
 }

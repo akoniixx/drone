@@ -5,6 +5,7 @@ import {
   Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   Pressable,
   RefreshControl,
   SafeAreaView,
@@ -267,14 +268,6 @@ export default function GuruScreen({navigation}: Props) {
             paddingHorizontal: 16,
           }}
           keyExtractor={(item, index) => `${item?._id}-${index}`}
-          // ListHeaderComponent={() => {
-          //   return (
-          //     <Animated.View
-          //       style={{
-          //         transform: [{translateY: headerTranslateY}],
-          //       }}></Animated.View>
-          //   );
-          // }}
           renderItem={({item, index}) => {
             if (loading) {
               return (
@@ -392,40 +385,43 @@ const HeaderFlatList = ({lists = [], onChange, value}: HeaderFlatListProps) => {
         }}>
         {lists.map((item, index) => {
           const isActive = value === item.value;
+          const isLast = index === lists.length - 1;
 
           return (
-            // <Animated.View
-            //   key={index}
-            //   style={{
-            //     transform: [{scale: isActive ? scaleAnim : 1}],
-            //     height: 'auto',
-            //   }}>
-            <Pressable
-              key={index}
-              onPress={() => {
-                handlePress(item.value);
-              }}
-              style={{
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 16,
-                borderWidth: 1,
-                borderColor: isActive ? colors.darkOrange2 : colors.disable,
-                marginRight: 8,
-                height: 32,
-                backgroundColor: isActive
-                  ? colors.darkOrange2
-                  : colors.softGrey2,
-              }}>
-              <Text
+            <>
+              <Pressable
+                key={index}
+                onPress={() => {
+                  handlePress(item.value);
+                }}
                 style={{
-                  color: isActive ? colors.white : colors.gray,
-                  fontFamily: font.semiBold,
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  borderRadius: 16,
+                  borderWidth: 1,
+                  borderColor: isActive ? colors.darkOrange2 : colors.disable,
+                  marginRight: 8,
+                  height: Platform.OS === 'android' ? 36 : 32,
+                  backgroundColor: isActive
+                    ? colors.darkOrange2
+                    : colors.softGrey2,
                 }}>
-                {item.title}
-              </Text>
-            </Pressable>
-            // </Animated.View>
+                <Text
+                  style={{
+                    color: isActive ? colors.white : colors.gray,
+                    fontFamily: font.semiBold,
+                  }}>
+                  {item.title}
+                </Text>
+              </Pressable>
+              {isLast && (
+                <View
+                  style={{
+                    width: 32,
+                  }}
+                />
+              )}
+            </>
           );
         })}
       </ScrollView>
