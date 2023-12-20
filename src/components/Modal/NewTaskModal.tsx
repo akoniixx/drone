@@ -169,7 +169,7 @@ export const NewTaskModal = (
                 fontSize: normalize(19),
                 color: colors.fontBlack,
               }}>
-              {` (${data?.farmerPlot.plantName}) | ${data?.farmAreaAmount} ไร่`}
+              {`${data?.purposeSpray.purposeSprayName} (${data?.farmerPlot.plantName}) | ${data?.farmAreaAmount} ไร่`}
             </Text>
             <Text
               style={{

@@ -63,6 +63,9 @@ export interface FarmerResponse {
   updateBy: string;
   createBy: string | null;
   profileImage: string | null;
+  province: string;
+  district: string;
+  subdistrict: string;
 }
 
 export interface InjectionTime {

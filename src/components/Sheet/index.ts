@@ -8,5 +8,6 @@ registerSheet('selectArea', SheetSelectArea);
 registerSheet('nicknameSheet', SheetInfo);
 registerSheet('commentSheet', SheetComment);
 registerSheet('selectPlot', SheetSelectPlot);
+registerSheet('selectTargetSpray', SheetSelectPlot);
 
 export {};

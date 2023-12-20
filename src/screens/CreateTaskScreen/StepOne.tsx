@@ -92,7 +92,16 @@ const StepOne = ({
           });
         }}
       />
-      <RaiInput placeholder="ระบุจำนวนไร่ที่เกษตรกรต้องการ" />
+      <RaiInput
+        placeholder="ระบุจำนวนไร่ที่เกษตรกรต้องการ"
+        onChangeText={v => {
+          setTaskData({
+            ...taskData,
+            raiAmount: v,
+          });
+        }}
+        value={taskData.raiAmount}
+      />
     </View>
   );
 };

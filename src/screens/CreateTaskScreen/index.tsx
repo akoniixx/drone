@@ -36,7 +36,7 @@ export interface InputData {
     plotId: string;
     plotName: string;
   };
-  raiAmount?: number;
+  raiAmount?: string;
 }
 const stepData = ['รายละเอียดงาน', 'เตรียมยา', 'สรุปงาน'];
 const CreateTaskScreen = ({route, navigation}: Props) => {

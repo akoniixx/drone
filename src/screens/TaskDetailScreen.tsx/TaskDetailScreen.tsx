@@ -400,7 +400,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                       color: colors.fontBlack,
                       width: '75%',
                     }}>
-                    {`${data.purposeSpray.purposeSprayName} ${data.purposeSpray.purposeSprayName} (${data.farmerPlot.plantName})`}
+                    {`${data.purposeSpray.purposeSprayName}  (${data.farmerPlot.plantName})`}
                   </Text>
                   <Text
                     style={{

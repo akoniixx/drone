@@ -9,9 +9,23 @@ import {FarmerPlot} from '../../entities/FarmerInterface';
 import {Image} from 'react-native';
 import {colors, font, icons} from '../../assets';
 
-export default function SheetTargetSpray({sheetId, payload}: SheetProps) {
-  const [currentValue, setCurrentValue] = React.useState();
-  const [targetSprayList, setTargetSprayList] = React.useState<FarmerPlot[]>();
+export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
+  const [currentValue, setCurrentValue] = React.useState<{
+    plotId: string;
+    plotName: string;
+  }>({
+    plotId: '',
+    plotName: '',
+  });
+  const [farmerPlot, setFarmerPlot] = React.useState<FarmerPlot[]>([]);
+  React.useEffect(() => {
+    if (payload?.currentValue) {
+      setCurrentValue(payload?.currentValue);
+    }
+    if (payload?.farmerPlot) {
+      setFarmerPlot(payload?.farmerPlot);
+    }
+  }, [payload]);
 
   return (
     <ActionSheet

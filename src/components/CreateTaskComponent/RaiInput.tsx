@@ -12,7 +12,7 @@ import React from 'react';
 import colors from '../../assets/colors/colors';
 import {font, icons} from '../../assets';
 import fonts from '../../assets/fonts';
-import {mixValidator} from '../../function/inputValidate';
+import {mixValidator, validatorDecimal} from '../../function/inputValidate';
 import Text from '../Text';
 import {normalize} from '../../function/Normalize';
 
@@ -37,7 +37,7 @@ const RaiInput = ({
   onChangeText,
   placeholder,
   allowClear = true,
-  maxLength,
+  maxLength = 8,
   label,
   ...props
 }: Props) => {
@@ -81,6 +81,7 @@ const RaiInput = ({
           keyboardType={'numeric'}
           allowFontScaling={false}
           onFocus={onFocus}
+          contextMenuHidden={true} // disable copy paste
           maxLength={maxLength}
           onBlur={() => {
             setIsFocus(false);
@@ -90,7 +91,7 @@ const RaiInput = ({
           ref={refTextInput}
           style={styles(props).textInput}
           onChangeText={text => {
-            const newText = mixValidator(text);
+            const newText = validatorDecimal(text);
             onChangeText && onChangeText(newText);
           }}
           value={value}

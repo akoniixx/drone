@@ -99,7 +99,7 @@ const CardFarmer = ({
                 marginRight: 4,
               }}
             />
-            {/* <Text style={styles.textTel}>{item.address.}</Text> */}
+            <Text style={styles.textTel}>{item?.province}</Text>
           </View>
         </View>
       </View>
