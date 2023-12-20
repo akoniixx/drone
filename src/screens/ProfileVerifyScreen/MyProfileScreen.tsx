@@ -193,7 +193,7 @@ const MyProfileScreen: React.FC<any> = ({navigation}) => {
             </Text>
             <Text
               style={{
-                fontFamily: fonts.light,
+                fontFamily: fonts.regular,
                 fontSize: 18,
                 textAlign: 'center',
                 paddingBottom: 2,
@@ -203,7 +203,7 @@ const MyProfileScreen: React.FC<any> = ({navigation}) => {
             </Text>
             <Text
               style={{
-                fontFamily: fonts.light,
+                fontFamily: fonts.regular,
                 fontSize: 18,
                 textAlign: 'center',
                 paddingBottom: 20,

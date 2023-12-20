@@ -122,6 +122,7 @@ export const NewTaskModal = (
     socket.removeListener(`unsend-task-${dronerId!}`);
   };
 
+  console.log(JSON.stringify(data, null, 2));
   return (
     <ActionSheet
       containerStyle={{
@@ -168,7 +169,7 @@ export const NewTaskModal = (
                 fontSize: normalize(19),
                 color: colors.fontBlack,
               }}>
-              {`${data?.farmerPlot.plantName} | ${data?.farmAreaAmount} ไร่`}
+              {` (${data?.farmerPlot.plantName}) | ${data?.farmAreaAmount} ไร่`}
             </Text>
             <Text
               style={{

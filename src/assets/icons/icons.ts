@@ -108,4 +108,8 @@ export default {
   searchGrey: require('./searchGrey.png'),
   callingGrey: require('./callingGrey.png'),
   locationGrey: require('./locationGrey.png'),
+  CalendarGrey: require('./CalendarGrey.png'),
+  timeGrey: require('./timeGrey.png'),
+  plotsGrey: require('./plotsGrey.png'),
+  closeGreyX: require('./closeGreyX.png'),
 };

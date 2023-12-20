@@ -151,7 +151,6 @@ export default function AddressDetail({
           tel: user?.telephoneNo || '',
         },
       };
-
       const result = await rewardDatasource.redeemReward(payload);
       await getCurrentPoint();
       mixpanel.track('RedeemAddressScreen_ConfirmRedeem_pressed', {
@@ -168,6 +167,8 @@ export default function AddressDetail({
       }, 400);
     } catch (e) {
       console.log(e);
+    } finally {
+      setDisabled(false);
     }
   };
 

@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   Image,
   ScrollView,
@@ -21,6 +20,7 @@ import Modal from '../../components/Modal/Modal';
 import {rewardDatasource} from '../../datasource/RewardDatasource';
 import AsyncButton from '../../components/Button/AsyncButton';
 import FastImage from 'react-native-fast-image';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface Props {
   navigation: any;
@@ -57,7 +57,10 @@ export default function RedeemScreen({navigation, route}: Props) {
   const isExpired = React.useMemo(() => {
     return moment(expiredUsedDate).isBefore(moment());
   }, [expiredUsedDate]);
-  const [companyId, setCompanyId] = React.useState<string>('');
+  const [companyItem, setCompanyItem] = React.useState<CompanyData>({
+    name: '',
+    id: '',
+  } as CompanyData);
   const [dataBranch, setDataBranch] = React.useState<Branch[]>([]);
   const [showBrandModal, setShowBrandModal] = React.useState(false);
 
@@ -81,9 +84,13 @@ export default function RedeemScreen({navigation, route}: Props) {
     }
   };
   const onPressCompany = async (item: CompanyData) => {
-    await getBranch(item.id);
-    setCompanyId(item.id);
-    setShowBrandModal(false);
+    try {
+      await getBranch(item.id);
+      setCompanyItem(item);
+      setShowBrandModal(false);
+    } catch (e) {
+      console.log(e);
+    }
   };
   useEffect(() => {
     const onSelectedBrand = async () => {
@@ -95,7 +102,7 @@ export default function RedeemScreen({navigation, route}: Props) {
           data: dataBranch,
           dronerTransactionId: data.dronerTransaction.id,
           navigation,
-          companyId,
+          companyItem,
         },
       });
       if (result?.selected) {
@@ -107,13 +114,24 @@ export default function RedeemScreen({navigation, route}: Props) {
         onSelectedBrand();
       }, 500);
     }
-  }, [dataBranch, navigation, data.dronerTransaction.id, selectedArea]);
+  }, [
+    dataBranch,
+    navigation,
+    data.dronerTransaction.id,
+    selectedArea,
+    companyItem,
+  ]);
   return (
     <SafeAreaView
+      edges={['right', 'top', 'left']}
       style={{
         flex: 1,
+        backgroundColor: colors.white,
       }}>
       <CustomHeader
+        styleWrapper={{
+          height: 56,
+        }}
         headerRight={() => {
           return (
             <TouchableOpacity
@@ -122,10 +140,10 @@ export default function RedeemScreen({navigation, route}: Props) {
                 padding: 16,
               }}>
               <Image
-                source={icons.closeBlack}
+                source={icons.closeGreyX}
                 style={{
-                  width: 20,
-                  height: 20,
+                  width: 30,
+                  height: 30,
                   resizeMode: 'contain',
                 }}
               />
@@ -134,7 +152,12 @@ export default function RedeemScreen({navigation, route}: Props) {
         }}
       />
 
-      <ScrollView contentContainerStyle={{flexGrow: 1, padding: 16}}>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          padding: 16,
+          backgroundColor: '#f9fafd',
+        }}>
         <View
           style={{
             flex: 1,
@@ -174,7 +197,8 @@ export default function RedeemScreen({navigation, route}: Props) {
           {!isExpired && (
             <View
               style={{
-                marginVertical: 16,
+                marginTop: 16,
+                marginBottom: 32,
               }}>
               <TouchableOpacity
                 style={styles.buttonPrimary}

@@ -1,46 +1,59 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-import {colors} from '../../assets';
+import React, {useMemo} from 'react';
+import {colors, image} from '../../assets';
 import ProgressiveImage from '../ProgressingImage/ProgressingImage';
 import fonts from '../../assets/fonts';
 import icons from '../../assets/icons/icons';
-import {Farmer} from '../../screens/SelectFarmerScreen/FooterFarmerList';
+import {FarmerResponse} from '../../entities/FarmerInterface';
 
 type Props = {
-  item: Farmer;
+  item: FarmerResponse;
   navigation?: any;
   isSelected?: boolean;
+  imageURL?: string;
 };
 
-const CardFarmer = ({item, navigation, isSelected = false}: Props) => {
+const CardFarmer = ({
+  item,
+  navigation,
+  isSelected = false,
+  imageURL = '',
+}: Props) => {
   const onPress = () => {
     navigation.navigate('CreateTaskScreen', {
       farmerId: item.id,
     });
   };
+
   return (
     <TouchableOpacity
       disabled={isSelected}
       style={isSelected ? styles.cardContainerSoftOrange : styles.cardContainer}
       onPress={isSelected ? () => undefined : onPress}>
-      <ProgressiveImage
-        source={{
-          uri: item.image,
-        }}
-        borderRadius={30}
+      <View
         style={{
-          width: 60,
-          height: 60,
-          borderRadius: 30,
-          marginRight: 10,
-        }}
-      />
+          marginRight: 16,
+        }}>
+        <ProgressiveImage
+          source={{
+            uri: imageURL,
+          }}
+          borderRadius={30}
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+          }}
+        />
+      </View>
+
       <View
         style={{
           width: '100%',
           flex: 1,
         }}>
-        <Text style={styles.textName}>{item.name}</Text>
+        <Text
+          style={styles.textName}>{`${item.firstname} ${item.lastname}`}</Text>
         {item.nickname && (
           <Text style={styles.textNickname}>{item.nickname}</Text>
         )}
@@ -66,7 +79,7 @@ const CardFarmer = ({item, navigation, isSelected = false}: Props) => {
                 marginRight: 4,
               }}
             />
-            <Text style={styles.textTel}>{item.tel}</Text>
+            <Text style={styles.textTel}>{item.telephoneNo}</Text>
           </View>
           <View
             style={{
@@ -86,7 +99,7 @@ const CardFarmer = ({item, navigation, isSelected = false}: Props) => {
                 marginRight: 4,
               }}
             />
-            <Text style={styles.textTel}>{item.address.province}</Text>
+            {/* <Text style={styles.textTel}>{item.address.}</Text> */}
           </View>
         </View>
       </View>
@@ -126,11 +139,11 @@ const styles = StyleSheet.create({
   },
   textNickname: {
     fontSize: 16,
-    fontFamily: fonts.semiBold,
+    fontFamily: fonts.medium,
   },
   textTel: {
     fontSize: 16,
-    fontFamily: fonts.light,
+    fontFamily: fonts.regular,
     color: colors.gray,
   },
 });

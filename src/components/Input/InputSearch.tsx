@@ -27,6 +27,7 @@ type Props = {
   onChangeText?: (text: string) => void;
   allowClear?: boolean;
   keyboardType?: 'default' | 'number-pad';
+  maxLength?: number;
 };
 
 type StyleProps = {
@@ -41,6 +42,7 @@ const InputSearch = ({
   onPressButton,
   titleButton = 'ค้นหา',
   allowClear = true,
+  maxLength,
   ...props
 }: Props) => {
   const [isFocus, setIsFocus] = React.useState(false);
@@ -72,6 +74,7 @@ const InputSearch = ({
         keyboardType={props.keyboardType || 'default'}
         allowFontScaling={false}
         onFocus={onFocus}
+        maxLength={maxLength}
         onBlur={() => {
           setIsFocus(false);
           refTextInput.current?.blur();
@@ -146,13 +149,13 @@ const styles = ({isError, isFocus}: StyleProps) =>
       marginRight: 8,
     },
     textInput: {
-      fontFamily: fonts.light,
+      fontFamily: fonts.regular,
       fontSize: 16,
       color: colors.fontBlack,
       flex: 1,
     },
     placeholder: {
-      fontFamily: fonts.light,
+      fontFamily: fonts.regular,
       color: colors.grey40,
       fontSize: 16,
       position: 'absolute',

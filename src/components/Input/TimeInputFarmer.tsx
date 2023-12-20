@@ -1,23 +1,30 @@
 import {View, Modal, TouchableOpacity, StyleSheet, Image} from 'react-native';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {colors, font} from '../../assets';
 import {normalize} from '../../function/Normalize';
 import Text from '../Text';
 import moment from 'moment';
-import DatePickerCustom from '../DatePickerCustom/DatePickerCustom';
 import AsyncButton from '../Button/AsyncButton';
-import {momentExtend} from '../../function/utility';
 import icons from '../../assets/icons/icons';
+import TimePicker from '../TimePicker/TimePicker';
 
 type Props = {
   placeholder?: string;
-  date: Date | undefined;
-  setDate: (v: Date) => void;
   label?: string;
+  onChange: (v: {hour: number; minute: number}) => void;
+  value: {hour: number; minute: number};
 };
 
-const DateInputFarmer = ({placeholder, date, setDate, label}: Props) => {
+const TimeInputFarmer = ({placeholder, onChange, value, label}: Props) => {
   const [openCalendar, setOpenCalendar] = React.useState(false);
+
+  const timeFormat = useMemo(() => {
+    if (!value) {
+      return;
+    }
+    return moment().hour(value.hour).minute(value.minute).format('HH:mm');
+  }, [value]);
+
   return (
     <>
       {label && (
@@ -35,20 +42,20 @@ const DateInputFarmer = ({placeholder, date, setDate, label}: Props) => {
         onPress={() => {
           setOpenCalendar(true);
         }}>
-        {date ? (
+        {timeFormat ? (
           <Text
             style={{
               color: colors.fontBlack,
               fontFamily: font.regular,
               fontSize: normalize(16),
             }}>
-            {momentExtend.toBuddhistYear(date, 'DD/MM/YYYY')}
+            {timeFormat}
           </Text>
         ) : (
           <Text>{placeholder}</Text>
         )}
         <Image
-          source={icons.CalendarGrey}
+          source={icons.timeGrey}
           style={{
             width: normalize(24),
             height: normalize(24),
@@ -81,17 +88,18 @@ const DateInputFarmer = ({placeholder, date, setDate, label}: Props) => {
                   fontFamily: font.bold,
                 },
               ]}>
-              วันนัดหมาย
+              เวลานัดหมาย
             </Text>
 
             <View>
-              <DatePickerCustom
-                value={date}
-                startDate={moment().add(0, 'days').startOf('day').toDate()}
-                startYear={moment().get('year') + 543}
-                endYear={moment().add(1, 'year').get('year') + 543}
-                onHandleChange={(d: Date) => {
-                  setDate(d);
+              <TimePicker
+                hour={value.hour}
+                minute={value.minute}
+                setHour={hour => {
+                  onChange({...value, hour: hour});
+                }}
+                setMinute={minute => {
+                  onChange({...value, minute: minute});
                 }}
               />
             </View>
@@ -146,4 +154,4 @@ const styles = StyleSheet.create({
     marginBottom: normalize(16),
   },
 });
-export default DateInputFarmer;
+export default TimeInputFarmer;

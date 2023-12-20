@@ -105,7 +105,7 @@ const PopUpMaintenance: React.FC<MaintenanceEntity> = ({
                 style={{marginTop: 20, alignItems: 'center', width: '100%'}}>
                 <Text
                   style={{
-                    fontFamily: fonts.light,
+                    fontFamily: fonts.regular,
                     fontSize: normalize(16),
                     color: colors.fontBlack,
                     lineHeight: 30,
@@ -116,7 +116,7 @@ const PopUpMaintenance: React.FC<MaintenanceEntity> = ({
                 </Text>
                 <Text
                   style={{
-                    fontFamily: fonts.light,
+                    fontFamily: fonts.regular,
                     fontSize: normalize(16),
                     color: colors.fontBlack,
                     lineHeight: 30,
@@ -174,7 +174,7 @@ const PopUpMaintenance: React.FC<MaintenanceEntity> = ({
                 style={{marginTop: 20, alignItems: 'center', width: '100%'}}>
                 <Text
                   style={{
-                    fontFamily: fonts.light,
+                    fontFamily: fonts.regular,
                     fontSize: normalize(16),
                     color: colors.fontBlack,
                     lineHeight: 30,
@@ -185,7 +185,7 @@ const PopUpMaintenance: React.FC<MaintenanceEntity> = ({
                 </Text>
                 <Text
                   style={{
-                    fontFamily: fonts.light,
+                    fontFamily: fonts.regular,
                     fontSize: normalize(16),
                     color: colors.fontBlack,
                     lineHeight: 30,

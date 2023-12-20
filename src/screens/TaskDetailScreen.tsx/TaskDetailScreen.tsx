@@ -393,18 +393,21 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                 </View>
                 <View style={styles.listTile}>
                   <Text
+                    numberOfLines={2}
                     style={{
                       fontFamily: fonts.medium,
                       fontSize: normalize(19),
                       color: colors.fontBlack,
+                      width: '75%',
                     }}>
-                    {data.farmerPlot.plantName}
+                    {`${data.purposeSpray.purposeSprayName} ${data.purposeSpray.purposeSprayName} (${data.farmerPlot.plantName})`}
                   </Text>
                   <Text
                     style={{
                       fontFamily: fonts.medium,
                       color: '#2EC66E',
                       fontSize: normalize(17),
+                      marginTop: 2,
                     }}>
                     ฿{' '}
                     {numberWithCommas(
@@ -1184,7 +1187,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 5,
   },
   font16: {

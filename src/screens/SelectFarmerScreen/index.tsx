@@ -18,15 +18,46 @@ import {font, image} from '../../assets';
 import {callcenterNumber} from '../../definitions/callCenterNumber';
 import InputSearch from '../../components/Input/InputSearch';
 import FooterFarmerList from './FooterFarmerList';
+import {createTaskDatasource} from '../../datasource/CreateTaskDatasource';
 
 type Props = {
   navigation: StackNavigationProp<StackParamList, 'SelectFarmerScreen'>;
 };
+const mappingError = {
+  NONE: 'ไม่พบเบอร์เกษตรกรในระบบ กรุณาลองอีกครั้ง หากต้องการเพิ่มเกษตรกรใหม่',
+  PENDING: 'เบอร์เกษตรกรที่ระบุ ยังไม่ได้ถูกอนุมัติการใช้งานจากเจ้าหน้าที่',
+};
 
 const SelectFarmerScreen = ({navigation}: Props) => {
   const [searchValue, setSearchValue] = React.useState('');
+  const [error, setError] = React.useState('');
   const onPressBack = () => {
     navigation.goBack();
+  };
+  const onPressCreate = async () => {
+    try {
+      setError('');
+      const result = await createTaskDatasource.findFarmerByTel(searchValue);
+      if (result) {
+        switch (result.status) {
+          case 'PENDING': {
+            setError(mappingError[result.status as keyof typeof mappingError]);
+            break;
+          }
+          case 'NONE': {
+            setError(mappingError[result.status as keyof typeof mappingError]);
+            break;
+          }
+          default: {
+            navigation.navigate('CreateTaskScreen', {
+              farmerId: result.id,
+            });
+          }
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
   const onPressTel = () => {
     Linking.openURL(`tel:${callcenterNumber}`);
@@ -64,12 +95,14 @@ const SelectFarmerScreen = ({navigation}: Props) => {
             </Text>
             <View style={{marginTop: 16, paddingHorizontal: 16}}>
               <InputSearch
+                maxLength={10}
                 placeholder={'ระบุเบอร์โทรศัพท์เกษตรกร'}
                 onChangeText={text => {
                   setSearchValue(text);
                 }}
                 keyboardType="number-pad"
                 titleButton="สร้าง"
+                onPressButton={onPressCreate}
                 value={searchValue}
                 showButton
               />

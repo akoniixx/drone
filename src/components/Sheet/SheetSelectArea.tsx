@@ -49,9 +49,8 @@ export default function SheetSelectArea(props: SheetProps) {
         branchCode: selectedArea.branchCode,
         branchName: selectedArea.name,
         updateBy: `${user?.firstname} ${user?.lastname}`,
-        companyId: props.payload.companyId,
+        companyName: props.payload.companyItem.name,
       };
-
       const result = await rewardDatasource.useRedeemCode(payload);
       if (result) {
         setLoading(false);

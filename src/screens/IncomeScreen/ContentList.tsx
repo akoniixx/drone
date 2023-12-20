@@ -295,7 +295,7 @@ const styles = ({isFocus = false}: Styles) =>
       color: colors.greenDark,
     },
     textSmall: {
-      fontFamily: fonts.light,
+      fontFamily: fonts.regular,
       fontSize: normalize(14),
       color: colors.gray,
     },
