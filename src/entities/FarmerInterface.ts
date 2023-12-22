@@ -28,6 +28,12 @@ export interface FarmerPlot {
   status: string;
   comment: string | null;
   reason: string | null;
+  plotArea: {
+    subdistrictName: string;
+    districtName: string;
+    provinceName: string;
+    postcode: string;
+  };
 }
 
 interface File {
@@ -72,4 +78,36 @@ export interface InjectionTime {
   cropId: string;
   id: string;
   purposeSprayName: string;
+}
+interface TaskDronerTemp {
+  taskId: string;
+  dronerId: string;
+  status: 'WAIT_RECEIVE' | 'OTHER_STATUS'; // Add other possible status values here if needed
+  dronerDetail: string[];
+  distance: number;
+}
+
+export interface CreateTaskPayload {
+  farmerId: string;
+  farmerPlotId: string;
+  farmAreaAmount: number;
+  dronerId: string;
+  dateAppointment: string;
+  targetSpray: string[];
+  purposeSprayName: string; // this custom field is not in the API response
+  preparationBy: string;
+  purposeSprayId: string;
+  cropName: string;
+  taskDronerTemp?: TaskDronerTemp[];
+  status?: 'OPEN' | 'CLOSED' | 'OTHER_STATUS'; // Add other possible status values here if needed
+  createBy: string;
+  distance: number;
+  unitPriceStandard: number;
+  priceStandard: number;
+  unitPrice: number;
+  price: number;
+  fee: number;
+  discountFee: number;
+  // customSpray: string[];
+  preparationRemark?: string;
 }

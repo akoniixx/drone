@@ -1,27 +1,26 @@
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, KeyboardAvoidingView, View} from 'react-native';
 import React from 'react';
 import CardFarmer from '../../components/CardFarmer/CardFarmer';
 import DateInputFarmer from '../../components/Input/DateInputFarmer';
 import TimeInputFarmer from '../../components/Input/TimeInputFarmer';
-import {InputData} from '.';
+import {InputData, PurposeListType} from '.';
 import {FarmerResponse} from '../../entities/FarmerInterface';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {colors} from '../../assets';
 import SelectPlotInput from '../../components/CreateTaskComponent/SelectPlotInput';
 import RaiInput from '../../components/CreateTaskComponent/RaiInput';
+import PurposeSprayInput from '../../components/CreateTaskComponent/PurposeSprayInput';
+import TargetSpraySelect from '../../components/CreateTaskComponent/TargetSpraySelect';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {
   farmer: FarmerResponse;
   taskData: InputData;
   setTaskData: (v: InputData) => void;
   loadingFarmer: boolean;
+  purposeList: PurposeListType[];
+  setListTargetSpray: React.Dispatch<React.SetStateAction<string[]>>;
+  listTargetSpray: string[];
 };
 
 const StepOne = ({
@@ -29,6 +28,9 @@ const StepOne = ({
   setTaskData,
   taskData,
   loadingFarmer = false,
+  purposeList = [],
+  setListTargetSpray,
+  listTargetSpray,
 }: Props) => {
   return (
     <View>
@@ -60,6 +62,19 @@ const StepOne = ({
           imageURL={farmer?.profileImage || ''}
         />
       )}
+      <View
+        style={{
+          height: 1,
+          width: '100%',
+          backgroundColor: colors.disable,
+          marginVertical: 8,
+        }}
+      />
+      <View
+        style={{
+          height: 8,
+        }}
+      />
       <DateInputFarmer
         label="วันที่นัดหมาย"
         date={taskData.date}
@@ -89,11 +104,17 @@ const StepOne = ({
           setTaskData({
             ...taskData,
             plotDetail: v,
+            raiAmount: v?.rai,
+            purposeSpray: {
+              id: '',
+              purposeSprayName: '',
+            },
           });
         }}
       />
       <RaiInput
         placeholder="ระบุจำนวนไร่ที่เกษตรกรต้องการ"
+        maximumRai={+taskData.plotDetail.rai || 0}
         onChangeText={v => {
           setTaskData({
             ...taskData,
@@ -101,6 +122,32 @@ const StepOne = ({
           });
         }}
         value={taskData.raiAmount}
+      />
+      <PurposeSprayInput
+        onChange={v => {
+          setTaskData({
+            ...taskData,
+            purposeSpray: {
+              id: v.id,
+              purposeSprayName: v.purposeSprayName,
+            },
+          });
+        }}
+        value={taskData.purposeSpray}
+        purposeSprayList={purposeList}
+        label="ช่วงเวลา"
+        placeholder="เลือกช่วงเวลา"
+      />
+      <TargetSpraySelect
+        listTargetSpray={listTargetSpray}
+        setListTargetSpray={setListTargetSpray}
+        onChange={v => {
+          setTaskData({
+            ...taskData,
+            targetSpray: v,
+          });
+        }}
+        value={taskData.targetSpray}
       />
     </View>
   );

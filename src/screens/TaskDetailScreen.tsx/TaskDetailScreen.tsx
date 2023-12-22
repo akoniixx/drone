@@ -55,6 +55,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   const taskId = route.params.taskId;
   const isFinishTask = route.params.isFinishTask;
   const isFromTaskDetail = route.params.isFromTaskDetail || false;
+  const isWaitStart = route.params.isWaitStart || false;
   const isFocused = useIsFocused();
 
   const [data, setData] = useState<any>();
@@ -160,15 +161,6 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
       .finally(() => {
         setLoading(false);
       });
-  };
-
-  const onFinishTaskSuccess = () => {
-    // navigation.navigate('FinishTaskScreen', {
-    //   taskId: taskId,
-    //   isFromTaskDetail: true,
-    //   taskAppointment: data.dateAppointment,
-    // });
-    setTogleModalSuccess(false);
   };
 
   const updateTask = (status: string) => {
@@ -284,8 +276,15 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
       navigation.navigate('MainScreen', {
         screen: 'myTask',
       });
+    } else if (isWaitStart) {
+      navigation.navigate('myTask', {
+        initialTab: 1,
+      });
     } else {
-      navigation.goBack();
+      // navigation.goBack();
+      navigation.navigate('myTask', {
+        initialTab: 1,
+      });
     }
   };
 

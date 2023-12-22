@@ -9,9 +9,42 @@ import {FarmerPlot} from '../../entities/FarmerInterface';
 import {Image} from 'react-native';
 import {colors, font, icons} from '../../assets';
 
-export default function SheetTargetSpray({sheetId, payload}: SheetProps) {
-  const [currentValue, setCurrentValue] = React.useState();
-  const [targetSprayList, setTargetSprayList] = React.useState<FarmerPlot[]>();
+interface CurrentType {
+  plotId: string;
+  plotName: string;
+  cropName: string;
+  rai: string;
+  plotArea: {
+    subdistrictName: string;
+    districtName: string;
+    provinceName: string;
+    postcode: string;
+  };
+  shortPlotName: string;
+}
+export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
+  const [currentValue, setCurrentValue] = React.useState<CurrentType>({
+    plotId: '',
+    plotName: '',
+    cropName: '',
+    rai: '',
+    plotArea: {
+      subdistrictName: '',
+      districtName: '',
+      provinceName: '',
+      postcode: '',
+    },
+    shortPlotName: '',
+  });
+  const [farmerPlot, setFarmerPlot] = React.useState<FarmerPlot[]>([]);
+  React.useEffect(() => {
+    if (payload?.currentValue) {
+      setCurrentValue(payload?.currentValue);
+    }
+    if (payload?.farmerPlot) {
+      setFarmerPlot(payload?.farmerPlot);
+    }
+  }, [payload]);
 
   return (
     <ActionSheet
@@ -42,12 +75,30 @@ export default function SheetTargetSpray({sheetId, payload}: SheetProps) {
                 setCurrentValue({
                   plotId: item.id,
                   plotName: `${item.plantName} (${item.raiAmount} ไร่) | ${item.plotName}`,
+                  cropName: item.plantName,
+                  rai: item.raiAmount,
+                  plotArea: {
+                    subdistrictName: item.plotArea.subdistrictName,
+                    districtName: item.plotArea.districtName,
+                    provinceName: item.plotArea.provinceName,
+                    postcode: item.plotArea.postcode,
+                  },
+                  shortPlotName: item.plotName,
                 });
                 await SheetManager.hide(sheetId, {
                   payload: {
                     currentValue: {
                       plotId: item.id,
                       plotName: `${item.plantName} (${item.raiAmount} ไร่) | ${item.plotName}`,
+                      cropName: item.plantName,
+                      rai: item.raiAmount,
+                      plotArea: {
+                        subdistrictName: item.plotArea.subdistrictName,
+                        districtName: item.plotArea.districtName,
+                        provinceName: item.plotArea.provinceName,
+                        postcode: item.plotArea.postcode,
+                      },
+                      shortPlotName: item.plotName,
                     },
                   },
                 });
@@ -78,9 +129,7 @@ export default function SheetTargetSpray({sheetId, payload}: SheetProps) {
               <TouchableOpacity
                 onPress={async () =>
                   SheetManager.hide(sheetId, {
-                    payload: {
-                      currentValue: currentValue,
-                    },
+                    payload: null,
                   })
                 }>
                 <Image source={icons.closeBlack} style={styles.closeIcon} />

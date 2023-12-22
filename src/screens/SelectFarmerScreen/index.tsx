@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Text from '../../components/Text';
 import CustomHeader from '../../components/CustomHeader';
@@ -15,7 +15,10 @@ import colors from '../../assets/colors/colors';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../navigations/MainNavigator';
 import {font, image} from '../../assets';
-import {callcenterNumber} from '../../definitions/callCenterNumber';
+import {
+  callCenterDash,
+  callcenterNumber,
+} from '../../definitions/callCenterNumber';
 import InputSearch from '../../components/Input/InputSearch';
 import FooterFarmerList from './FooterFarmerList';
 import {createTaskDatasource} from '../../datasource/CreateTaskDatasource';
@@ -24,12 +27,29 @@ type Props = {
   navigation: StackNavigationProp<StackParamList, 'SelectFarmerScreen'>;
 };
 const mappingError = {
-  NONE: 'ไม่พบเบอร์เกษตรกรในระบบ กรุณาลองอีกครั้ง หากต้องการเพิ่มเกษตรกรใหม่',
-  PENDING: 'เบอร์เกษตรกรที่ระบุ ยังไม่ได้ถูกอนุมัติการใช้งานจากเจ้าหน้าที่',
+  NONE: 'ไม่พบเบอร์เกษตรกรในระบบ กรุณาลองอีกครั้ง \nหากต้องการเพิ่มเกษตรกรใหม่',
+  PENDING: 'เบอร์เกษตรกรที่ระบุ \nยังไม่ได้ถูกอนุมัติการใช้งานจากเจ้าหน้าที่',
 };
-
+export interface Farmer {
+  id: string;
+  firstname: string;
+  lastname: string;
+  nickname?: string;
+  telephone_no: string;
+  province_name: string;
+  image_url: string;
+  count_task_farmer: number;
+}
+export interface FarmerList {
+  data: Farmer[];
+  count: number;
+}
 const SelectFarmerScreen = ({navigation}: Props) => {
   const [searchValue, setSearchValue] = React.useState('');
+  const [farmerList, setFarmerList] = React.useState<FarmerList>({
+    data: [],
+    count: 0,
+  });
   const [error, setError] = React.useState('');
   const onPressBack = () => {
     navigation.goBack();
@@ -62,6 +82,21 @@ const SelectFarmerScreen = ({navigation}: Props) => {
   const onPressTel = () => {
     Linking.openURL(`tel:${callcenterNumber}`);
   };
+
+  useEffect(() => {
+    const getFarmerTopOfThree = async () => {
+      try {
+        const result = await createTaskDatasource.getFarmerEverBeen({
+          page: 1,
+          take: 3,
+        });
+        setFarmerList(result);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getFarmerTopOfThree();
+  }, []);
   return (
     <SafeAreaView
       edges={['top', 'left', 'right']}
@@ -90,20 +125,22 @@ const SelectFarmerScreen = ({navigation}: Props) => {
             <Text style={styles.desc}>
               กรุณาติดต่อเจ้าหน้าที่​ โทร.{' '}
               <Text style={styles.telText} onPress={onPressTel}>
-                02-233-9000
+                {callCenterDash()}
               </Text>
             </Text>
-            <View style={{marginTop: 16, paddingHorizontal: 16}}>
+            <View style={{marginTop: 16, paddingHorizontal: 16, width: '100%'}}>
               <InputSearch
                 maxLength={10}
                 placeholder={'ระบุเบอร์โทรศัพท์เกษตรกร'}
                 onChangeText={text => {
                   setSearchValue(text);
                 }}
+                disableButton={searchValue.length < 10}
                 keyboardType="number-pad"
                 titleButton="สร้าง"
                 onPressButton={onPressCreate}
                 value={searchValue}
+                errorText={error}
                 showButton
               />
               <View style={{height: 16}} />
@@ -124,7 +161,7 @@ const SelectFarmerScreen = ({navigation}: Props) => {
               </View>
             </View>
 
-            <FooterFarmerList navigation={navigation} />
+            <FooterFarmerList navigation={navigation} farmerList={farmerList} />
           </View>
         </TouchableWithoutFeedback>
       </View>

@@ -180,7 +180,6 @@ export default function AddressDetail({
             user?.id || '',
           );
           const state = [result.address, result.otherAddress];
-          console.log(JSON.stringify(state, null, 2));
           setAddressList(state);
           setDisabled(false);
         } catch (e) {

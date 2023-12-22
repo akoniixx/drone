@@ -64,4 +64,5 @@ export default {
   imageUploading: require('./imageUploading.json'),
   createTaskBg: require('./createTaskBg.png'),
   emptyFarmerList: require('./emptyFarmerList.png'),
+  imageFarmer: require('./imageFarmer.png'),
 };

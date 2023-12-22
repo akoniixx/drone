@@ -5,28 +5,32 @@ import {normalize} from '../../function/Normalize';
 import {SheetManager} from 'react-native-actions-sheet';
 import icons from '../../assets/icons/icons';
 import {FarmerPlot} from '../../entities/FarmerInterface';
+import {PurposeListType} from '../../screens/CreateTaskScreen';
 
 interface Props {
   placeholder?: string;
   label?: string;
-  onChange: (v: any) => void;
-  value?: any;
-  targetSprayData: [];
+  onChange: (v: PurposeListType) => void;
+  value?: PurposeListType;
+  purposeSprayList: PurposeListType[];
 }
-export default function TargetSprayInput({
+export default function PurposeSprayInput({
   label,
   onChange,
   value,
   placeholder,
-  targetSprayData,
+  purposeSprayList,
 }: Props) {
   const onShowActionSheet = async () => {
-    const result: any = await SheetManager.show('selectTargetSpray', {
+    const result: {
+      currentValue: PurposeListType;
+    } = await SheetManager.show('selectPurposeSpray', {
       payload: {
         currentValue: value,
+        purposeSprayList: purposeSprayList || [],
       },
     });
-    if (result) {
+    if (result.currentValue) {
       onChange(result.currentValue);
     }
   };
@@ -35,37 +39,40 @@ export default function TargetSprayInput({
       {label && (
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 16,
             fontFamily: font.medium,
             marginBottom: normalize(4),
           }}>
           {label}
         </Text>
       )}
-      <TouchableOpacity style={styles.container} onPress={onShowActionSheet}>
-        {value ? (
+      <TouchableOpacity
+        style={styles.container}
+        disabled={purposeSprayList.length < 1}
+        onPress={onShowActionSheet}>
+        {value?.purposeSprayName ? (
           <Text
             numberOfLines={1}
             style={{
               color: colors.fontBlack,
               fontFamily: font.regular,
-              fontSize: normalize(16),
+              fontSize: 16,
               width: '90%',
             }}>
-            {value}
+            {value.purposeSprayName}
           </Text>
         ) : (
           <Text
             style={{
               fontFamily: font.regular,
-              fontSize: normalize(16),
+              fontSize: 16,
               color: colors.grey2,
             }}>
             {placeholder}
           </Text>
         )}
         <Image
-          source={icons.plotsGrey}
+          source={icons.plantPeriod}
           style={{
             width: normalize(24),
             height: normalize(24),

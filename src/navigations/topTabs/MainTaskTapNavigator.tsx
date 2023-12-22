@@ -1,7 +1,7 @@
 import {normalize} from '@rneui/themed';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useState} from 'react';
-import {useWindowDimensions, StyleSheet} from 'react-native';
+import {useWindowDimensions, StyleSheet, View} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import fonts from '../../assets/fonts';
 import {colors} from '../../assets';
@@ -10,6 +10,7 @@ import WaitStartTask from '../../screens/MainTaskScreen/WaitStartTask';
 import InprogressTask from '../../screens/MainTaskScreen/InprogressTask';
 import Text from '../../components/Text';
 import {mixpanel} from '../../../mixpanel';
+import {useFocusEffect} from '@react-navigation/native';
 
 const renderTabBar = (props: any) => (
   <TabBar
@@ -30,11 +31,13 @@ const renderScene = SceneMap({
   WaitStart: WaitStartTask,
   finish: FinishTask,
 });
-
-const MainTaskTapNavigator: React.FC = () => {
+type Props = {
+  index: number;
+  setIndex: (index: number) => void;
+};
+const MainTaskTapNavigator: React.FC<Props> = ({index, setIndex}) => {
   const layout = useWindowDimensions();
 
-  const [index, setIndex] = useState(0);
   const [routes] = useState([
     {key: 'inprogress', title: 'กำลังดำเนินการ'},
     {key: 'WaitStart', title: 'รอเริ่มงาน'},
@@ -46,11 +49,11 @@ const MainTaskTapNavigator: React.FC = () => {
       navigationState={{index, routes}}
       renderTabBar={renderTabBar}
       renderScene={renderScene}
-      onIndexChange={(index: number) => {
+      onIndexChange={(idx: number) => {
         mixpanel.track('MainTaskScreen_TabView_ChangeTab', {
-          tab: routes[index].title,
+          tab: routes[idx].title,
         });
-        setIndex(index);
+        setIndex(idx);
       }}
       initialLayout={{width: layout.width}}
       lazy

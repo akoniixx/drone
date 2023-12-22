@@ -15,6 +15,7 @@ import fonts from '../../assets/fonts';
 import {mixValidator} from '../../function/inputValidate';
 import Text from '../Text';
 import AsyncButton from '../Button/AsyncButton';
+import {Animated} from 'react-native';
 
 type Props = {
   isError?: boolean;
@@ -28,6 +29,9 @@ type Props = {
   allowClear?: boolean;
   keyboardType?: 'default' | 'number-pad';
   maxLength?: number;
+  disableButton?: boolean;
+  errorText?: string;
+  lineError?: number;
 };
 
 type StyleProps = {
@@ -43,10 +47,14 @@ const InputSearch = ({
   titleButton = 'ค้นหา',
   allowClear = true,
   maxLength,
+  disableButton = false,
+  errorText = '',
+  lineError = 2,
   ...props
 }: Props) => {
   const [isFocus, setIsFocus] = React.useState(false);
   const refTextInput = React.useRef<TextInput>(null);
+  const [heightAnim] = React.useState(new Animated.Value(0));
   const onFocus = () => {
     setIsFocus(true);
     if (refTextInput.current) {
@@ -56,74 +64,115 @@ const InputSearch = ({
   const onClear = () => {
     onChangeText && onChangeText('');
   };
+  React.useEffect(() => {
+    if (errorText.length > 0) {
+      // Expand
+      Animated.timing(heightAnim, {
+        toValue: 25 * lineError, // Assuming 30 is the height of your error message
+        duration: 300,
+        useNativeDriver: false, // height does not support native driver
+      }).start();
+    } else {
+      // Collapse
+      Animated.timing(heightAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorText]);
   return (
-    <Pressable
-      onPress={onFocus}
-      style={[
-        styles({
-          isError: props.isError,
-          isFocus,
-        }).container,
-        props.style,
-      ]}>
-      <Image source={icons.searchGrey} style={styles(props).icon} />
-      {placeholder && value?.length < 1 && (
-        <Text style={styles(props).placeholder}>{placeholder}</Text>
-      )}
-      <TextInput
-        keyboardType={props.keyboardType || 'default'}
-        allowFontScaling={false}
-        onFocus={onFocus}
-        maxLength={maxLength}
-        onBlur={() => {
-          setIsFocus(false);
-          refTextInput.current?.blur();
-          Keyboard.dismiss();
-        }}
-        ref={refTextInput}
-        style={styles(props).textInput}
-        onChangeText={text => {
-          const newText = mixValidator(text);
-          onChangeText && onChangeText(newText);
-        }}
-        value={value}
-      />
+    <>
+      <Pressable
+        onPress={onFocus}
+        style={[
+          styles({
+            isError: props.isError,
+            isFocus,
+          }).container,
+          props.style,
+        ]}>
+        <Image source={icons.searchGrey} style={styles(props).icon} />
+        {placeholder && value?.length < 1 && (
+          <Text style={styles(props).placeholder}>{placeholder}</Text>
+        )}
+        <TextInput
+          keyboardType={props.keyboardType || 'default'}
+          allowFontScaling={false}
+          onFocus={onFocus}
+          maxLength={maxLength}
+          onBlur={() => {
+            setIsFocus(false);
+            refTextInput.current?.blur();
+            Keyboard.dismiss();
+          }}
+          ref={refTextInput}
+          style={styles(props).textInput}
+          onChangeText={text => {
+            const newText = mixValidator(text);
+            onChangeText && onChangeText(newText);
+          }}
+          value={value}
+        />
 
-      {allowClear && value?.length > 0 && (
-        <TouchableOpacity style={styles(props).mainButton} onPress={onClear}>
-          <Image
-            source={icons.closeGrey}
+        {allowClear && value?.length > 0 && (
+          <TouchableOpacity style={styles(props).mainButton} onPress={onClear}>
+            <Image
+              source={icons.closeGrey}
+              style={{
+                width: 18,
+                height: 18,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        )}
+        {showButton && (
+          <AsyncButton
+            title={titleButton}
+            onPress={() => {
+              refTextInput.current?.blur();
+              onPressButton?.();
+            }}
+            styleText={{
+              fontSize: 14,
+              fontFamily: fonts.bold,
+              color: colors.white,
+            }}
+            disabled={value?.length < 1 || disableButton}
             style={{
-              width: 18,
-              height: 18,
-              resizeMode: 'contain',
+              width: 'auto',
+              height: 'auto',
+              minHeight: '100%',
+              paddingVertical: 8,
+              paddingHorizontal: 16,
             }}
           />
-        </TouchableOpacity>
-      )}
-      {showButton && (
-        <AsyncButton
-          title={titleButton}
-          onPress={() => {
-            refTextInput.current?.blur();
-            onPressButton?.();
-          }}
-          styleText={{
-            fontSize: 14,
-            fontFamily: fonts.bold,
-            color: colors.white,
-          }}
-          disabled={value?.length < 1}
-          style={{
-            width: 'auto',
-            height: 'auto',
-            minHeight: '100%',
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-          }}
-        />
-      )}
-    </Pressable>
+        )}
+      </Pressable>
+      <Animated.View
+        style={{
+          height: heightAnim, // Bind height to animated value
+          overflow: 'hidden', // Hide content when container collapses
+          width: '100%',
+          flexWrap: 'wrap',
+        }}>
+        {errorText?.length > 0 ? (
+          <Text
+            style={{
+              fontFamily: fonts.regular,
+              fontSize: 14,
+              marginTop: 4,
+              alignSelf: 'flex-start',
+              color: colors.decreasePoint,
+              flexShrink: 1,
+            }}>
+            {errorText}
+          </Text>
+        ) : null}
+      </Animated.View>
+    </>
   );
 };
 const styles = ({isError, isFocus}: StyleProps) =>

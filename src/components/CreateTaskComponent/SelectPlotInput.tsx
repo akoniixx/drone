@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import {colors, font} from '../../assets';
 import {normalize} from '../../function/Normalize';
@@ -9,10 +9,24 @@ import {FarmerPlot} from '../../entities/FarmerInterface';
 interface Props {
   placeholder?: string;
   label?: string;
-  onChange: (v: {plotId: string; plotName: string}) => void;
+  onChange: (v: {
+    plotId: string;
+    plotName: string;
+    cropName: string;
+    rai: string;
+    plotArea: {
+      subdistrictName: string;
+      districtName: string;
+      provinceName: string;
+      postcode: string;
+    };
+    shortPlotName: string;
+  }) => void;
   value?: {
     plotId: string;
     plotName: string;
+    cropName: string;
+    rai: string;
   };
   farmerPlot: FarmerPlot[];
 }
@@ -39,7 +53,7 @@ export default function SelectPlotInput({
       {label && (
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 16,
             fontFamily: font.medium,
             marginBottom: normalize(4),
           }}>

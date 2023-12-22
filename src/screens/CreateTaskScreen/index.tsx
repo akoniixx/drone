@@ -1,25 +1,26 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import React, {useCallback, useMemo} from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
 import {StackParamList} from '../../navigations/MainNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp, useFocusEffect} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader';
-import {colors} from '../../assets';
+import {colors, icons} from '../../assets';
 import StepIndicator from '../../components/StepIndicator/StepIndicator';
 import AsyncButton from '../../components/Button/AsyncButton';
 import StepOne from './StepOne';
-import StepTwo from './StepTwo';
+import StepTwo, {listData} from './StepTwo';
 import StepThree from './StepThree';
 import {createTaskDatasource} from '../../datasource/CreateTaskDatasource';
-import {FarmerResponse} from '../../entities/FarmerInterface';
+import {
+  CreateTaskPayload,
+  FarmerResponse,
+} from '../../entities/FarmerInterface';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Modal from '../../components/Modal/Modal';
+import Text from '../../components/Text';
+import {useAuth} from '../../contexts/AuthContext';
+import moment from 'moment';
 
 type Props = {
   navigation: StackNavigationProp<StackParamList, 'CreateTaskScreen'>;
@@ -34,62 +35,125 @@ export interface InputData {
   };
   plotDetail: {
     plotId: string;
+    cropName: string;
     plotName: string;
+    rai: string;
+    plotArea: {
+      subdistrictName: string;
+      districtName: string;
+      provinceName: string;
+      postcode: string;
+    };
+    shortPlotName: string;
   };
   raiAmount?: string;
+  purposeSpray?: {
+    id: string;
+    purposeSprayName: string;
+  };
+  targetSpray: Array<string>;
+  preparationBy: string;
+  preparationRemark?: string;
 }
+export interface PurposeListType {
+  id: string;
+  cropId?: string;
+  purposeSprayName: string;
+}
+export interface CalPriceType {
+  couponId: string | null;
+  couponName: string | null;
+  pricePerRai: string;
+  priceBefore: number;
+  fee: number;
+  discountFee: number;
+  priceCouponDiscountStandard: number;
+  priceCouponDiscount: number;
+  netPrice: number;
+  discountPromotion: number;
+  discountPoint: number;
+}
+const initialData: InputData = {
+  date: new Date(),
+  time: {
+    hour: 6,
+    minute: 0,
+  },
+  plotDetail: {
+    plotId: '',
+    plotName: '',
+    cropName: '',
+    rai: '',
+    plotArea: {
+      subdistrictName: '',
+      districtName: '',
+      provinceName: '',
+      postcode: '',
+    },
+    shortPlotName: '',
+  },
+  raiAmount: '',
+  targetSpray: [],
+  preparationBy: listData[0].value,
+};
 const stepData = ['รายละเอียดงาน', 'เตรียมยา', 'สรุปงาน'];
 const CreateTaskScreen = ({route, navigation}: Props) => {
   const {farmerId} = route.params;
-  const [taskData, setTaskData] = React.useState<InputData>({
-    date: new Date(),
-    time: {
-      hour: 6,
-      minute: 0,
-    },
-    plotDetail: {
-      plotId: '',
-      plotName: '',
-    },
-  });
+  const {
+    state: {user},
+  } = useAuth();
+  const [showConfirmModal, setShowConfirmModal] = React.useState(false);
+  const [showSuccessModal, setShowSuccessModal] = React.useState(false);
+  const [taskData, setTaskData] = React.useState<InputData>(initialData);
+  const [purposeList, setPurposeList] = React.useState<PurposeListType[]>([]);
   const [step, setStep] = React.useState(0);
   const [loadingFarmer, setLoadingFarmer] = React.useState(false);
   const [farmerData, setFarmerData] = React.useState<FarmerResponse>(
     {} as FarmerResponse,
   );
-  useFocusEffect(
-    useCallback(() => {
-      const getFarmerData = async () => {
-        try {
-          setLoadingFarmer(true);
-          const result = await createTaskDatasource.getFarmerById(farmerId);
-          if (result) {
-            const newValue = {
-              ...result,
-            };
-            const findProfileImage = (result.file || []).find(
-              (v: {category: string}) => v.category === 'PROFILE_IMAGE',
-            );
-            if (findProfileImage) {
-              const res = await createTaskDatasource.getImageByPath({
-                path: findProfileImage?.path,
-              });
-              if (res) {
-                newValue.profileImage = res.url;
-              }
-            }
-            setFarmerData(newValue);
-          }
-          setLoadingFarmer(false);
-        } catch (e) {
-          console.log(e);
-        } finally {
-          setLoadingFarmer(false);
-        }
-      };
-      getFarmerData();
-    }, [farmerId]),
+  const [calPriceData, setCalPriceData] = React.useState<CalPriceType>(
+    {} as CalPriceType,
   );
+  const [listTargetSpray, setListTargetSpray] = React.useState<string[]>([]);
+  useEffect(() => {
+    const getFarmerData = async () => {
+      try {
+        setLoadingFarmer(true);
+        const result = await createTaskDatasource.getFarmerById(farmerId);
+        if (result) {
+          const newValue = {
+            ...result,
+          };
+          const findProfileImage = (result.file || []).find(
+            (v: {category: string}) => v.category === 'PROFILE_IMAGE',
+          );
+          if (findProfileImage) {
+            const res = await createTaskDatasource.getImageByPath({
+              path: findProfileImage?.path,
+            });
+            if (res) {
+              newValue.profileImage = res.url;
+            }
+          }
+          setFarmerData(newValue);
+        }
+        setLoadingFarmer(false);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoadingFarmer(false);
+      }
+    };
+    const getListTargetSpray = async () => {
+      const result = await createTaskDatasource.getTargetSpray();
+      const newFormat = result.data.map((item: {name: string}) => item.name);
+      setListTargetSpray(newFormat);
+    };
+
+    getFarmerData();
+    getListTargetSpray();
+  }, [farmerId]);
+  const [taskId, setTaskId] = React.useState('');
 
   const onPressBack = () => {
     if (step === 0) {
@@ -98,6 +162,39 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
       setStep(step - 1);
     }
   };
+  const onPressToSummary = async () => {
+    try {
+      const result = await createTaskDatasource.calculatePriceTask({
+        cropName: taskData.plotDetail.cropName,
+        raiAmount: taskData.raiAmount ? parseFloat(taskData.raiAmount) : 0,
+        farmerPlotId: taskData.plotDetail.plotId,
+      });
+      if (result) {
+        setCalPriceData(result.responseData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const getPurposeSpray = async () => {
+      try {
+        const result = await createTaskDatasource.getPurposeSpray(
+          taskData.plotDetail.cropName,
+        );
+
+        if (result) {
+          setPurposeList(result[0]?.purposeSpray);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (taskData.plotDetail.cropName !== '') {
+      getPurposeSpray();
+    }
+  }, [taskData?.plotDetail?.cropName]);
   const RenderStep = useMemo(() => {
     switch (step) {
       case 0:
@@ -107,17 +204,117 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
             taskData={taskData}
             setTaskData={setTaskData}
             loadingFarmer={loadingFarmer}
+            purposeList={purposeList}
+            listTargetSpray={listTargetSpray}
+            setListTargetSpray={setListTargetSpray}
           />
         );
       case 1:
-        return <StepTwo />;
+        return (
+          <StepTwo
+            farmer={farmerData}
+            setTaskData={setTaskData}
+            taskData={taskData}
+          />
+        );
       case 2:
-        return <StepThree />;
+        return (
+          <StepThree
+            farmer={farmerData}
+            taskData={taskData}
+            calPriceData={calPriceData}
+          />
+        );
       default:
         return null;
     }
-  }, [step, farmerData, setTaskData, taskData, loadingFarmer]);
+  }, [
+    step,
+    farmerData,
+    setTaskData,
+    taskData,
+    loadingFarmer,
+    purposeList,
+    listTargetSpray,
+    setListTargetSpray,
+    calPriceData,
+  ]);
 
+  const disableNextStep = useMemo(() => {
+    switch (step) {
+      case 0:
+        return (
+          !taskData.plotDetail ||
+          !taskData.raiAmount ||
+          !taskData.purposeSpray?.purposeSprayName ||
+          !taskData.targetSpray
+        );
+      case 1:
+        return taskData.preparationBy === listData[1].value
+          ? !taskData.preparationRemark
+          : false;
+      default:
+        return false;
+    }
+  }, [step, taskData]);
+  const onShowConfirmModal = () => {
+    setShowConfirmModal(true);
+  };
+  const onSubmitCreateTask = async () => {
+    try {
+      if (!user) {
+        return;
+      }
+      const dateAppointment = moment(taskData.date)
+        .set({
+          hour: taskData.time.hour,
+          minute: taskData.time.minute,
+        })
+        .toISOString();
+      const payload: CreateTaskPayload = {
+        createBy: `${user?.firstname} ${user?.lastname}`,
+        farmerId: farmerId,
+        cropName: taskData.plotDetail.cropName,
+        // customSpray: taskData.targetSpray,
+        dateAppointment: dateAppointment,
+        discountFee: calPriceData.discountFee,
+        distance: 0,
+        dronerId: user?.id || '',
+        farmAreaAmount: parseFloat(taskData.raiAmount || '0'),
+        farmerPlotId: taskData.plotDetail.plotId,
+        fee: calPriceData.fee,
+        preparationBy: taskData.preparationBy,
+        preparationRemark: taskData.preparationRemark,
+        price: calPriceData.priceBefore,
+        priceStandard: calPriceData.priceBefore,
+        purposeSprayId: taskData.purposeSpray?.id || '',
+        purposeSprayName: taskData.purposeSpray?.purposeSprayName || '',
+        targetSpray: taskData.targetSpray,
+        unitPrice: +calPriceData.pricePerRai,
+        unitPriceStandard: +calPriceData.pricePerRai,
+      };
+      const result = await createTaskDatasource.createTask(payload);
+      if (result && result.success) {
+        const taskId = result.responseData.id;
+        setTaskId(taskId);
+        setShowConfirmModal(false);
+        setShowSuccessModal(true);
+      }
+    } catch (e) {
+      console.log(JSON.stringify(e, null, 2));
+    }
+  };
+  const onToMainScreen = () => {
+    setShowSuccessModal(false);
+    navigation.navigate('MainScreen');
+  };
+  const onToTaskDetailScreen = () => {
+    setShowSuccessModal(false);
+    navigation.navigate('TaskDetailScreen', {
+      taskId: taskId,
+      isWaitStart: true,
+    });
+  };
   return (
     <SafeAreaView
       edges={['right', 'top', 'left']}
@@ -127,13 +324,21 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         paddingBottom: 16,
       }}>
       <CustomHeader title="สร้างงาน" showBackBtn onPressBack={onPressBack} />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{flex: 1}}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={{
-            flexGrow: 1,
+      <KeyboardAwareScrollView
+        scrollIndicatorInsets={{
+          right: 1,
+        }}
+        style={{
+          flex: 1,
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'space-between',
+            paddingHorizontal: 16,
           }}>
           <View style={styles.mainContent}>
             <StepIndicator labelList={stepData} currentPosition={step} />
@@ -141,14 +346,72 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
           </View>
           <View style={styles.footer}>
             <AsyncButton
-              title="ถัดไป"
+              title={step >= 2 ? 'ยืนยันการสร้างงาน' : 'ถัดไป'}
+              disabled={disableNextStep}
               onPress={() => {
-                setStep(step + 1);
+                if (step === 1) {
+                  onPressToSummary();
+                  setStep(step + 1);
+                } else if (step >= 2) {
+                  onShowConfirmModal();
+                } else {
+                  setStep(step + 1);
+                }
               }}
             />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+      </KeyboardAwareScrollView>
+      <Modal
+        visible={showConfirmModal}
+        title={'ยืนยันการสร้างงาน?'}
+        onClose={() => {
+          setShowConfirmModal(false);
+        }}
+        onPressPrimary={onSubmitCreateTask}
+        onPressSecondary={() => {
+          setShowConfirmModal(false);
+        }}
+        subTitle={
+          <>
+            <Text style={{marginTop: 8}}>กรุณาตรวจสอบความถูกต้องของข้อมูล</Text>
+            <Text
+              style={{
+                color: colors.decreasePoint,
+                textAlign: 'center',
+              }}>
+              หากข้อมูลที่แจ้งเป็นเท็จ {'\n'} จะดำเนินการการตามเงื่อนไขบริษัทฯ
+            </Text>
+          </>
+        }
+      />
+      <Modal
+        visible={showSuccessModal}
+        title={'สร้างงานสำเร็จ'}
+        iconTop={
+          <Image
+            source={icons.successFillGreen}
+            style={{
+              width: 60,
+              height: 60,
+              marginBottom: 16,
+            }}
+          />
+        }
+        subTitle={
+          <Text
+            style={{
+              marginTop: 8,
+              textAlign: 'center',
+            }}>
+            กรุณาตรวจสอบงานที่สร้างผ่านแอปฯ {'\n'} นักบินโดรนของคุณอีกครั้ง
+          </Text>
+        }
+        onPressPrimary={onToTaskDetailScreen}
+        onPressSecondary={onToMainScreen}
+        titlePrimary="ดูงานที่เพิ่งสร้างในแอป"
+        titleSecondary="กลับไปหน้าหลัก"
+      />
     </SafeAreaView>
   );
 };
@@ -166,5 +429,6 @@ const styles = StyleSheet.create({
 
   footer: {
     paddingBottom: 16,
+    paddingTop: 16,
   },
 });

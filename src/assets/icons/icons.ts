@@ -112,4 +112,11 @@ export default {
   timeGrey: require('./timeGrey.png'),
   plotsGrey: require('./plotsGrey.png'),
   closeGreyX: require('./closeGreyX.png'),
+  plantPeriod: require('./plantPeriod.png'),
+  calendarDarkGreen: require('./calendarDarkGreen.png'),
+  locationDarkGreen: require('./locationDarkGreen.png'),
+  bottleDarkGreen: require('./bottleDarkGreen.png'),
+  billDarkGreen: require('./billDarkGreen.png'),
+  callingWhiteSolid: require('./callingWhiteSolid.png'),
+  successFillGreen: require('./successFillGreen.png'),
 };

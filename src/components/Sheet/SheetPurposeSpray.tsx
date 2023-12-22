@@ -8,24 +8,34 @@ import ActionSheet, {
 import {FarmerPlot} from '../../entities/FarmerInterface';
 import {Image} from 'react-native';
 import {colors, font, icons} from '../../assets';
+import {PurposeListType} from '../../screens/CreateTaskScreen';
 
-export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
-  const [currentValue, setCurrentValue] = React.useState<{
-    plotId: string;
-    plotName: string;
-  }>({
-    plotId: '',
-    plotName: '',
+export default function SheetPurposeSpray({sheetId, payload}: SheetProps) {
+  const [currentValue, setCurrentValue] = React.useState<PurposeListType>({
+    id: '',
+    purposeSprayName: '',
+    cropId: '',
   });
-  const [farmerPlot, setFarmerPlot] = React.useState<FarmerPlot[]>([]);
+  const [purposeSprayList, setPurposeSprayList] = React.useState<
+    PurposeListType[]
+  >([]);
   React.useEffect(() => {
     if (payload?.currentValue) {
       setCurrentValue(payload?.currentValue);
     }
-    if (payload?.farmerPlot) {
-      setFarmerPlot(payload?.farmerPlot);
+    if (payload?.purposeSprayList) {
+      setPurposeSprayList(payload?.purposeSprayList);
     }
   }, [payload]);
+
+  const onSelectPurposeSpray = async (item: PurposeListType) => {
+    setCurrentValue(item);
+    await SheetManager.hide(sheetId, {
+      payload: {
+        currentValue: item,
+      },
+    });
+  };
 
   return (
     <ActionSheet
@@ -37,7 +47,7 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
         borderTopRightRadius: 16,
       }}>
       <FlatList
-        data={farmerPlot}
+        data={purposeSprayList}
         ListFooterComponent={
           <View
             style={{
@@ -47,48 +57,25 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
         }
         stickyHeaderIndices={[0]}
         renderItem={({item}) => {
-          const isPending = item.status === 'PENDING';
           return (
             <TouchableOpacity
               style={styles.list}
-              disabled={isPending}
-              onPress={async () => {
-                setCurrentValue({
-                  plotId: item.id,
-                  plotName: `${item.plantName} (${item.raiAmount} ไร่) | ${item.plotName}`,
-                });
-                await SheetManager.hide(sheetId, {
-                  payload: {
-                    currentValue: {
-                      plotId: item.id,
-                      plotName: `${item.plantName} (${item.raiAmount} ไร่) | ${item.plotName}`,
-                    },
-                  },
-                });
-              }}>
+              onPress={() => onSelectPurposeSpray(item)}>
               <Text
                 style={{
                   width: '80%',
                   fontFamily: font.regular,
-                  color: isPending ? colors.grey2 : colors.fontBlack,
-                }}>{`${item.plantName} (${item.raiAmount} ไร่) | ${item.plotName}`}</Text>
-              {isPending && (
-                <Text
-                  style={{
-                    fontFamily: font.regular,
-                    color: colors.orange,
-                    fontSize: 14,
-                  }}>
-                  รอเจ้าหน้าที่ตรวจสอบ
-                </Text>
-              )}
+                  color: colors.fontBlack,
+                }}>
+                {item.purposeSprayName}
+              </Text>
             </TouchableOpacity>
           );
         }}
         ListHeaderComponent={
           <>
             <View style={styles.header}>
-              <Text style={styles.title}>แปลงเกษตรกร</Text>
+              <Text style={styles.title}>ช่วงเวลา</Text>
               <TouchableOpacity
                 onPress={async () =>
                   SheetManager.hide(sheetId, {

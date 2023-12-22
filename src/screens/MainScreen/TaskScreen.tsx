@@ -214,7 +214,6 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
     )
       .then(res => {
         if (res !== undefined) {
-          console.log(JSON.stringify(res, null, 2));
           setData(res);
           setCheckResIsComplete(true);
           setLoading(false);

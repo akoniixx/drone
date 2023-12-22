@@ -3,9 +3,11 @@ import React from 'react';
 import Text from '../Text';
 import {colors, font, image} from '../../assets';
 
-type Props = {};
+type Props = {
+  isMain?: boolean;
+};
 
-const EmptyFarmerList = ({}: Props) => {
+const EmptyFarmerList = ({isMain}: Props) => {
   return (
     <View style={styles.container}>
       <Image
@@ -16,7 +18,9 @@ const EmptyFarmerList = ({}: Props) => {
           height: Dimensions.get('window').width / 2.5,
         }}
       />
-      <Text style={styles.text}>ไม่พบเกษตรกรที่ค้นหา</Text>
+      <Text style={styles.text}>
+        {isMain ? 'ไม่มีเกษตรที่เคยจ้าง' : 'ไม่พบเกษตรกรที่ค้นหา'}
+      </Text>
     </View>
   );
 };

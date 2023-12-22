@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   textSubButton: {
     fontSize: 18,
-    fontFamily: font.bold,
+    fontFamily: font.semiBold,
     color: colors.fontBlack,
   },
   subButton: {

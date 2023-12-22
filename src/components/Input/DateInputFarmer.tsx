@@ -23,7 +23,7 @@ const DateInputFarmer = ({placeholder, date, setDate, label}: Props) => {
       {label && (
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 16,
             fontFamily: font.medium,
             marginBottom: normalize(4),
           }}>

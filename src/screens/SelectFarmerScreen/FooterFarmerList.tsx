@@ -1,79 +1,46 @@
-import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {FlatList} from 'react-native';
 import React from 'react';
-import Text from '../../components/Text';
 import CardFarmer from '../../components/CardFarmer/CardFarmer';
+import EmptyFarmerList from '../../components/EmptyComponent/EmptyFarmerList';
+import {Farmer} from '.';
 
 type Props = {
   navigation: any;
+  farmerList: {
+    data: Farmer[];
+    count: number;
+  };
 };
 
-const mockData = [
-  {
-    image: 'https://picsum.photos/200/300',
-    name: 'นายสมชาย ใจดี',
-    nickname: null,
-    id: '1',
-    tel: '0812345678',
-    address: {
-      subDistrict: 'สุรินทร์',
-      district: 'สุรินทร์',
-      province: 'สุรินทร์',
-    },
-  },
-  {
-    image: 'https://picsum.photos/200/300',
-    name: 'นายสมัย สนุกสนาน',
-    nickname: 'สมัย',
-    id: '2',
-    tel: '0812345678',
-    address: {
-      subDistrict: 'ร้อยเอ็ด',
-      district: 'ร้อยเอ็ด',
-      province: 'ร้อยเอ็ด',
-    },
-  },
-  {
-    image: 'https://picsum.photos/200/300',
-    name: 'นายสมัย สนุกสนาน',
-    nickname: 'สมัย',
-    id: '2',
-    tel: '0812345678',
-    address: {
-      subDistrict: 'ร้อยเอ็ด',
-      district: 'ร้อยเอ็ด',
-      province: 'ร้อยเอ็ด',
-    },
-  },
-];
-
-export interface Farmer {
-  image: string;
-  name: string;
-  nickname: string | null;
-  id: string;
-  tel: string;
-  address: {
-    subDistrict: string;
-    district: string;
-    province: string;
-  };
-}
-const FooterFarmerList = ({navigation}: Props) => {
+const FooterFarmerList = ({navigation, farmerList}: Props) => {
   return (
     <FlatList
-      data={mockData}
+      data={farmerList.data || []}
       contentContainerStyle={{
         paddingHorizontal: 16,
         paddingVertical: 8,
       }}
-      keyExtractor={item => item.id}
+      ListEmptyComponent={<EmptyFarmerList isMain />}
+      keyExtractor={item => item?.id}
       renderItem={({item}) => {
-        return <CardFarmer item={item} navigation={navigation} />;
+        const newItem: any = {
+          id: item.id,
+          firstname: item.firstname,
+          lastname: item.lastname,
+          nickname: item.nickname,
+          telephoneNo: item.telephone_no,
+          province: item.province_name,
+        };
+        return (
+          <CardFarmer
+            item={newItem}
+            navigation={navigation}
+            imageURL={item.image_url}
+          />
+        );
       }}
     />
   );
 };
 
 export default FooterFarmerList;
-
-const styles = StyleSheet.create({});

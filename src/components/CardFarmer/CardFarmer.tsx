@@ -17,14 +17,14 @@ const CardFarmer = ({
   item,
   navigation,
   isSelected = false,
-  imageURL = '',
+  imageURL,
 }: Props) => {
   const onPress = () => {
     navigation.navigate('CreateTaskScreen', {
       farmerId: item.id,
     });
   };
-
+  console.log(imageURL);
   return (
     <TouchableOpacity
       disabled={isSelected}
@@ -34,17 +34,26 @@ const CardFarmer = ({
         style={{
           marginRight: 16,
         }}>
-        <ProgressiveImage
-          source={{
-            uri: imageURL,
-          }}
-          borderRadius={30}
-          style={{
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-          }}
-        />
+        {imageURL !== null && imageURL ? (
+          <ProgressiveImage
+            source={{uri: imageURL}}
+            borderRadius={30}
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+            }}
+          />
+        ) : (
+          <Image
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+            }}
+            source={image.imageFarmer}
+          />
+        )}
       </View>
 
       <View
@@ -123,8 +132,8 @@ const styles = StyleSheet.create({
   },
   cardContainerSoftOrange: {
     borderWidth: 1,
-    borderColor: colors.orangeSoft,
-    backgroundColor: colors.orangeSoft,
+    borderColor: colors.lightOrange,
+    backgroundColor: colors.lightOrange,
     borderRadius: 8,
     flexDirection: 'row',
     minHeight: 80,

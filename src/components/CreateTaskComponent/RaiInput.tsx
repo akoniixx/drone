@@ -26,6 +26,7 @@ type Props = {
   label?: string;
   keyboardType?: 'default' | 'number-pad';
   maxLength?: number;
+  maximumRai?: number;
 };
 
 type StyleProps = {
@@ -39,6 +40,7 @@ const RaiInput = ({
   allowClear = true,
   maxLength = 8,
   label,
+  maximumRai = 0,
   ...props
 }: Props) => {
   const [isFocus, setIsFocus] = React.useState(false);
@@ -57,7 +59,7 @@ const RaiInput = ({
       {label && (
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 16,
             fontFamily: font.medium,
             marginBottom: normalize(4),
           }}>
@@ -66,6 +68,7 @@ const RaiInput = ({
       )}
       <Pressable
         onPress={onFocus}
+        disabled={maximumRai < 1}
         style={[
           styles({
             isError: props.isError,
@@ -78,6 +81,7 @@ const RaiInput = ({
         )}
         <TextInput
           scrollEnabled={false}
+          editable={maximumRai > 0}
           keyboardType={'numeric'}
           allowFontScaling={false}
           onFocus={onFocus}
@@ -92,6 +96,12 @@ const RaiInput = ({
           style={styles(props).textInput}
           onChangeText={text => {
             const newText = validatorDecimal(text);
+            if (maximumRai) {
+              const newRai = parseFloat(newText);
+              if (newRai > maximumRai) {
+                return;
+              }
+            }
             onChangeText && onChangeText(newText);
           }}
           value={value}
@@ -137,6 +147,7 @@ const styles = ({isError, isFocus}: StyleProps) =>
       height: normalize(56),
       flexDirection: 'row',
       alignItems: 'center',
+      marginBottom: normalize(16),
     },
     icon: {
       width: 32,

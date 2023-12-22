@@ -3,11 +3,12 @@ import SheetSelectArea from './SheetSelectArea';
 import SheetInfo from './SheetInfo';
 import SheetComment from './SheetComment';
 import SheetSelectPlot from './SheetSelectPlot';
+import SheetPurposeSpray from './SheetPurposeSpray';
 
 registerSheet('selectArea', SheetSelectArea);
 registerSheet('nicknameSheet', SheetInfo);
 registerSheet('commentSheet', SheetComment);
 registerSheet('selectPlot', SheetSelectPlot);
-registerSheet('selectTargetSpray', SheetSelectPlot);
+registerSheet('selectPurposeSpray', SheetPurposeSpray);
 
 export {};
