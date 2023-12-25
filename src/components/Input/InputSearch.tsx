@@ -5,12 +5,11 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  View,
   ViewStyle,
 } from 'react-native';
 import React from 'react';
 import colors from '../../assets/colors/colors';
-import {icons, image} from '../../assets';
+import {icons} from '../../assets';
 import fonts from '../../assets/fonts';
 import {mixValidator} from '../../function/inputValidate';
 import Text from '../Text';
@@ -69,7 +68,7 @@ const InputSearch = ({
       // Expand
       Animated.timing(heightAnim, {
         toValue: 25 * lineError, // Assuming 30 is the height of your error message
-        duration: 300,
+        duration: 400,
         useNativeDriver: false, // height does not support native driver
       }).start();
     } else {
@@ -82,6 +81,7 @@ const InputSearch = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorText]);
+
   return (
     <>
       <Pressable
