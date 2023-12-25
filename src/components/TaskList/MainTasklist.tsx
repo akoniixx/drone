@@ -17,6 +17,7 @@ import {mixpanel} from '../../../mixpanel';
 
 const MainTasklists: React.FC<any> = (props: any) => {
   const ratting = [1, 2, 3, 4, 5];
+  const purposeSprayName = props.purposeSpray.purposeSprayName;
   const finishDate = new Date(
     props.finishTime?.length ? props.finishTime[0].createdAt : null,
   );
@@ -28,7 +29,7 @@ const MainTasklists: React.FC<any> = (props: any) => {
       +props.discountCoupon > 0 || +props.discountCampaignPoint > 0;
     return isUseDiscount && !isDoneAuth;
   }, [props.discountCampaignPoint, props.discountCoupon, isDoneAuth]);
-
+  console.log(JSON.stringify(props, null, 2));
   return (
     <>
       <View style={[styles.taskMenu]}>
@@ -98,14 +99,18 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   color: colors.fontBlack,
                   fontFamily: fonts.medium,
                   fontSize: normalize(19),
+                  width: '75%',
                 }}>
-                {`${props.title} | ${checkDecimal(props.farmArea)} ไร่`}
+                {`${purposeSprayName} (${props.title}) | ${checkDecimal(
+                  props.farmArea,
+                )} ไร่`}
               </Text>
               <Text
                 style={{
                   fontFamily: fonts.medium,
                   color: '#2EC66E',
                   fontSize: normalize(17),
+                  marginTop: 2,
                 }}>
                 ฿ {props.price ? numberWithCommas(props.price) : null}
               </Text>
@@ -312,7 +317,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 5,
   },
   borderReview: {
