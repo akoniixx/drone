@@ -580,7 +580,7 @@ const styles = StyleSheet.create({
   leftFooter: {
     alignSelf: 'flex-start',
     alignItems: 'flex-start',
-    flex: 0.7,
+    flex: 0.6,
   },
   leftTitle: {
     fontFamily: font.semiBold,

@@ -1,3 +1,7 @@
+## Feature [1.11.4] 2023-12-22
+- add select JJDrone 
+- add task wording
+  
 ## Feature [1.11.1] 2023-12-22
 - add feature create task
 

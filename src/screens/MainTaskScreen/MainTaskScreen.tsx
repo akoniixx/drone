@@ -35,7 +35,8 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          // justifyContent: 'space-between',
+          justifyContent: 'center',
           alignItems: 'center',
           padding: normalize(20),
           backgroundColor: colors.white,
@@ -48,7 +49,7 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
           }}>
           งานของฉัน
         </Text>
-        <TouchableOpacity style={styles.button} onPress={onPressCreateTask}>
+        {/* <TouchableOpacity style={styles.button} onPress={onPressCreateTask}>
           <Image
             source={icons.plusWhite}
             style={{
@@ -58,7 +59,7 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
             }}
           />
           <Text style={styles.text}>สร้างงานใหม่</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <MainTaskTapNavigator index={index} setIndex={setIndex} />
     </View>
