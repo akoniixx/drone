@@ -55,6 +55,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   const taskId = route.params.taskId;
   const isFinishTask = route.params.isFinishTask;
   const isFromTaskDetail = route.params.isFromTaskDetail || false;
+  const isWaitStart = route.params.isWaitStart || false;
   const isFocused = useIsFocused();
 
   const [data, setData] = useState<any>();
@@ -160,15 +161,6 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
       .finally(() => {
         setLoading(false);
       });
-  };
-
-  const onFinishTaskSuccess = () => {
-    // navigation.navigate('FinishTaskScreen', {
-    //   taskId: taskId,
-    //   isFromTaskDetail: true,
-    //   taskAppointment: data.dateAppointment,
-    // });
-    setTogleModalSuccess(false);
   };
 
   const updateTask = (status: string) => {
@@ -284,8 +276,15 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
       navigation.navigate('MainScreen', {
         screen: 'myTask',
       });
+    } else if (isWaitStart) {
+      navigation.navigate('myTask', {
+        initialTab: 1,
+      });
     } else {
-      navigation.goBack();
+      // navigation.goBack();
+      navigation.navigate('myTask', {
+        initialTab: 1,
+      });
     }
   };
 
@@ -393,18 +392,21 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                 </View>
                 <View style={styles.listTile}>
                   <Text
+                    numberOfLines={2}
                     style={{
                       fontFamily: fonts.medium,
                       fontSize: normalize(19),
                       color: colors.fontBlack,
+                      width: '75%',
                     }}>
-                    {data.farmerPlot.plantName}
+                    {`${data.purposeSpray.purposeSprayName}  (${data.farmerPlot.plantName})`}
                   </Text>
                   <Text
                     style={{
                       fontFamily: fonts.medium,
                       color: '#2EC66E',
                       fontSize: normalize(17),
+                      marginTop: 2,
                     }}>
                     ฿{' '}
                     {numberWithCommas(
@@ -1184,7 +1186,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 5,
   },
   font16: {

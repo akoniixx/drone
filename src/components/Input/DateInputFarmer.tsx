@@ -11,13 +11,25 @@ import icons from '../../assets/icons/icons';
 
 type Props = {
   placeholder?: string;
+  date: Date | undefined;
+  setDate: (v: Date) => void;
+  label?: string;
 };
 
-const DateInputFarmer = ({placeholder}: Props) => {
+const DateInputFarmer = ({placeholder, date, setDate, label}: Props) => {
   const [openCalendar, setOpenCalendar] = React.useState(false);
-  const [date, setDate] = React.useState<Date>(new Date());
   return (
     <>
+      {label && (
+        <Text
+          style={{
+            fontSize: 16,
+            fontFamily: font.medium,
+            marginBottom: normalize(4),
+          }}>
+          {label}
+        </Text>
+      )}
       <TouchableOpacity
         style={styles.container}
         onPress={() => {
@@ -28,14 +40,20 @@ const DateInputFarmer = ({placeholder}: Props) => {
             style={{
               color: colors.fontBlack,
               fontFamily: font.regular,
-              fontSize: normalize(18),
+              fontSize: normalize(16),
             }}>
             {momentExtend.toBuddhistYear(date, 'DD/MM/YYYY')}
           </Text>
         ) : (
           <Text>{placeholder}</Text>
         )}
-        {/* <Image source={icons.cal} /> */}
+        <Image
+          source={icons.CalendarGrey}
+          style={{
+            width: normalize(24),
+            height: normalize(24),
+          }}
+        />
       </TouchableOpacity>
       <Modal transparent={true} visible={openCalendar} animationType="fade">
         <View
@@ -59,22 +77,13 @@ const DateInputFarmer = ({placeholder}: Props) => {
                 {
                   textAlign: 'center',
                   color: colors.fontBlack,
+                  fontSize: 20,
+                  fontFamily: font.bold,
                 },
               ]}>
-              วันที่ฉีดพ่น
+              วันนัดหมาย
             </Text>
-            <Text
-              style={{
-                textAlign: 'center',
-                color: colors.fontBlack,
-                fontFamily: font.regular,
-                fontSize: normalize(18),
-                marginTop: normalize(4),
 
-                lineHeight: normalize(30),
-              }}>
-              เลื่อนขึ้นลงเพื่อเลือกวันฉีดพ่น
-            </Text>
             <View>
               <DatePickerCustom
                 value={date}
@@ -94,6 +103,24 @@ const DateInputFarmer = ({placeholder}: Props) => {
               }}>
               <AsyncButton
                 title="ยกเลิก"
+                type="secondary"
+                style={{
+                  flex: 1,
+                }}
+                onPress={() => {
+                  setOpenCalendar(false);
+                }}
+              />
+              <View
+                style={{
+                  width: 16,
+                }}
+              />
+              <AsyncButton
+                style={{
+                  flex: 1,
+                }}
+                title="ตกลง"
                 onPress={() => {
                   setOpenCalendar(false);
                 }}
@@ -116,6 +143,7 @@ const styles = StyleSheet.create({
     height: normalize(56),
     borderRadius: normalize(8),
     paddingHorizontal: normalize(16),
+    marginBottom: normalize(16),
   },
 });
 export default DateInputFarmer;

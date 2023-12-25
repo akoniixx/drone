@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   fontBody: {
-    fontFamily: fonts.light,
+    fontFamily: fonts.regular,
     fontSize: normalize(18),
     color: colors.fontBlack,
   },

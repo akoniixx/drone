@@ -190,6 +190,13 @@ const redeemRewardDigital = async (payload: any) => {
       throw err;
     });
 };
+const getAllCompany = async () => {
+  return httpClient
+    .get(BASE_URL + '/company/find-all-company?isActive=true')
+    .then(res => {
+      return res.data;
+    });
+};
 export const rewardDatasource = {
   getListRewards,
   getRewardDetail,
@@ -201,4 +208,5 @@ export const rewardDatasource = {
   getRewardStatus,
   useRedeemCode,
   getHistoryReadyToUseRedeem,
+  getAllCompany,
 };

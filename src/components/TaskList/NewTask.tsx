@@ -92,20 +92,28 @@ const NewTask: React.FC<any> = (props: any) => {
         </View>
         <View style={styles.listTile}>
           <Text
+            numberOfLines={2}
             style={{
+              color: colors.fontBlack,
               fontFamily: fonts.medium,
               fontSize: normalize(19),
-              color: colors.fontBlack,
+              width: '75%',
             }}>
-            {`${props.title} | ${checkDecimal(props.farmArea)} ไร่`}
+            {`${props.purposeSpray.purposeSprayName} (${
+              props.title
+            })  | ${checkDecimal(+props.farmArea)} ไร่`}
           </Text>
           <Text
             style={{
               fontFamily: fonts.medium,
               color: '#2EC66E',
               fontSize: normalize(17),
+              marginTop: 2,
             }}>
-            ฿ {props.price ? numberWithCommas(props.price) : null}
+            ฿{' '}
+            {props.price
+              ? numberWithCommas(props.price.toString() || '')
+              : null}
           </Text>
         </View>
         <View
@@ -388,7 +396,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 5,
   },
 });
