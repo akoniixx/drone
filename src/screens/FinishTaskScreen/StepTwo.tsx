@@ -72,7 +72,7 @@ export default function StepTwo({
         //   setImageSpray({
         //     isError: true,
         //     errorMessage:
-        //       'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+        //       'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
         //     assets: [],
         //   });
         //   setShowModalSelectImage(false);
@@ -82,7 +82,7 @@ export default function StepTwo({
         //   setImageSpray({
         //     isError: true,
         //     errorMessage:
-        //       'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+        //       'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
         //     assets: [],
         //   });
         //   setShowModalSelectImage(false);
@@ -242,7 +242,7 @@ export default function StepTwo({
       <View style={styles.footer}>
         <View style={styles.rowFooter}>
           <View style={styles.leftFooter}>
-            <Text style={styles.leftTitle}>อัพโหลดภาพปุ๋ย/ยา</Text>
+            <Text style={styles.leftTitle}>อัปโหลดภาพปุ๋ย/ยา</Text>
             <Text style={styles.subTitle}>จำนวน 1 ภาพ</Text>
             {imageSpray.errorMessage && (
               <Text

@@ -25,15 +25,15 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {lineOfficialURI} from '../../definitions/externalLink';
 
 const mappingErrorMessage = {
-  isDuplicate: 'อัพโหลดภาพซ้ำ กรุณาลบแล้วอัพโหลดภาพใหม่อีกครั้ง',
-  isSize: 'อัพโหลดภาพที่มีขนาดเกิน 20 MB กรุณาลบแล้วอัพโหลดภาพใหม่อีกครั้ง',
-  isAfterOnly: 'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+  isDuplicate: 'อัปโหลดภาพซ้ำ กรุณาลบแล้วอัปโหลดภาพใหม่อีกครั้ง',
+  isSize: 'อัปโหลดภาพที่มีขนาดเกิน 20 MB กรุณาลบแล้วอัปโหลดภาพใหม่อีกครั้ง',
+  isAfterOnly: 'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
   isBeforeOnly:
-    'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+    'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
   isAfterAndDuplicate:
-    'ภาพที่อัพโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+    'ภาพที่อัปโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
   isBeforeAndDuplicate:
-    'ภาพที่อัพโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+    'ภาพที่อัปโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
 };
 const convertErrorMessage = (
   errorTypeList: Array<
@@ -211,7 +211,7 @@ export default function StepOne({
         setImageData(prev => ({
           isError: true,
           assets: prev.assets,
-          errorMessage: 'อัพโหลดภาพที่มีขนาดเกิน 20 MB',
+          errorMessage: 'อัปโหลดภาพที่มีขนาดเกิน 20 MB',
         }));
         return false;
       }
@@ -239,7 +239,7 @@ export default function StepOne({
         setImageData(prev => ({
           isError: true,
           assets: prev.assets,
-          errorMessage: 'อัพโหลดภาพที่มีขนาดเกิน 5 MB',
+          errorMessage: 'อัปโหลดภาพที่มีขนาดเกิน 5 MB',
         }));
 
         return false;
@@ -354,7 +354,7 @@ export default function StepOne({
       <View style={styles.footer}>
         <View style={styles.rowFooter}>
           <View style={styles.leftFooter}>
-            <Text style={styles.leftTitle}>อัพโหลดภาพหลักฐานการบิน</Text>
+            <Text style={styles.leftTitle}>อัปโหลดภาพหลักฐานการบิน</Text>
             <Text style={styles.subTitle}>สูงสุดจำนวน 5 ภาพ</Text>
             {imageData.errorMessage && (
               <Text

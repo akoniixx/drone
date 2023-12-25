@@ -177,7 +177,7 @@ export default function StepThree({
             />
             <PureAnimatedBar progress={progress / 100} />
             <View style={{height: 10}} />
-            <Text style={styles.content}>ระบบกำลังอัพโหลดรูปภาพ</Text>
+            <Text style={styles.content}>ระบบกำลังอัปโหลดรูปภาพ</Text>
             <Text
               style={
                 styles.content
