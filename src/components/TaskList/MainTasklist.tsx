@@ -29,7 +29,6 @@ const MainTasklists: React.FC<any> = (props: any) => {
       +props.discountCoupon > 0 || +props.discountCampaignPoint > 0;
     return isUseDiscount && !isDoneAuth;
   }, [props.discountCampaignPoint, props.discountCoupon, isDoneAuth]);
-  console.log(JSON.stringify(props, null, 2));
   return (
     <>
       <View style={[styles.taskMenu]}>

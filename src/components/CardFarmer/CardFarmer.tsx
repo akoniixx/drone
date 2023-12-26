@@ -24,7 +24,6 @@ const CardFarmer = ({
       farmerId: item.id,
     });
   };
-  console.log(imageURL);
   return (
     <TouchableOpacity
       disabled={isSelected}

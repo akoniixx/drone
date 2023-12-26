@@ -61,6 +61,7 @@ const TargetSpraySelect = ({
                       return;
                     }
                     setListTargetSpray(prev => [...prev, otherPlant]);
+                    onChange([...value, otherPlant]);
                     setOtherPlant('');
                   }}
                   style={{

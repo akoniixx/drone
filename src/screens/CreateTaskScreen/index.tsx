@@ -325,6 +325,7 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
       }}>
       <CustomHeader title="สร้างงาน" showBackBtn onPressBack={onPressBack} />
       <KeyboardAwareScrollView
+        extraScrollHeight={100}
         scrollIndicatorInsets={{
           right: 1,
         }}
@@ -409,7 +410,7 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         }
         onPressPrimary={onToTaskDetailScreen}
         onPressSecondary={onToMainScreen}
-        titlePrimary="ดูงานที่เพิ่งสร้างในแอป"
+        titlePrimary="ดูรายละเอียดงาน"
         titleSecondary="กลับไปหน้าหลัก"
       />
     </SafeAreaView>

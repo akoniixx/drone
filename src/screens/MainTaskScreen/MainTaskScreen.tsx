@@ -1,5 +1,5 @@
 import {normalize} from '@rneui/themed';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, font, image} from '../../assets';
@@ -35,8 +35,7 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
       <View
         style={{
           flexDirection: 'row',
-          // justifyContent: 'space-between',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
           padding: normalize(20),
           backgroundColor: colors.white,
@@ -49,7 +48,7 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
           }}>
           งานของฉัน
         </Text>
-        {/* <TouchableOpacity style={styles.button} onPress={onPressCreateTask}>
+        <TouchableOpacity style={styles.button} onPress={onPressCreateTask}>
           <Image
             source={icons.plusWhite}
             style={{
@@ -59,7 +58,7 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
             }}
           />
           <Text style={styles.text}>สร้างงานใหม่</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       <MainTaskTapNavigator index={index} setIndex={setIndex} />
     </View>
