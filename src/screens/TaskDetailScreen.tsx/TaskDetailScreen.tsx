@@ -474,13 +474,37 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                     <Text style={styles.font16}>{data.preparationBy}</Text>
                   </View>
                 </View>
+                {data?.preparationRemark && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: normalize(10),
+                    }}>
+                    <Image
+                      style={{
+                        width: normalize(20),
+                        height: normalize(20),
+                        marginRight: normalize(5),
+                      }}
+                      source={icons.bottleDarkGreen}
+                    />
+                    <Text
+                      style={{
+                        color: colors.grey2,
+                        fontSize: 14,
+                      }}>
+                      {data.preparationRemark}
+                    </Text>
+                  </View>
+                )}
               </View>
               <View
                 style={{backgroundColor: colors.white, padding: normalize(15)}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image
                     source={icons.note}
-                    style={{marginRight: 20, height: 24, width: 24}}
+                    style={{marginRight: 20, height: 28, width: 28}}
                   />
                   <Text style={styles.fontGray}>
                     {data.comment ? data.comment : '-'}
@@ -1190,7 +1214,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   font16: {
-    fontFamily: fonts.medium,
+    fontFamily: fonts.semiBold,
     fontSize: normalize(16),
     color: colors.fontBlack,
   },
