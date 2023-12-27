@@ -1,10 +1,11 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useMemo} from 'react';
 import {colors, image} from '../../assets';
 import ProgressiveImage from '../ProgressingImage/ProgressingImage';
 import fonts from '../../assets/fonts';
 import icons from '../../assets/icons/icons';
 import {FarmerResponse} from '../../entities/FarmerInterface';
+import Text from '../Text';
 
 type Props = {
   item: FarmerResponse;

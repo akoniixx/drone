@@ -19,7 +19,7 @@ export const WaitStartFooter: React.FC<WaitStartProp> = ({
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
+    <View style={[styles.footer, {paddingBottom: 10}]}>
       <TouchableOpacity
         style={[
           styles.startButton,

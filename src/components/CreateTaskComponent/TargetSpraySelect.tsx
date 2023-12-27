@@ -1,10 +1,11 @@
-import {LogBox, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {LogBox, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import fonts from '../../assets/fonts';
 import {colors} from '../../assets';
 import {FlatList} from 'react-native';
 import InputWithSuffix from '../Input/InputWithSuffix';
 import {normalize} from '../../function/Normalize';
+import Text from '../Text';
 
 type Props = {
   setListTargetSpray: React.Dispatch<React.SetStateAction<string[]>>;

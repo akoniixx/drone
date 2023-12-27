@@ -105,7 +105,7 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
                 <Text
                   style={{
                     position: 'absolute',
-                    top: 20,
+                    top: 28,
                     left: 10,
                     fontFamily: font.regular,
                     color: colors.grey40,
@@ -125,10 +125,9 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
                   borderWidth: 1,
                   borderRadius: normalize(8),
                   borderColor: isFocus ? colors.orange : colors.greyWhite,
-                  padding: normalize(10),
+                  paddingHorizontal: normalize(10),
                   minHeight: normalize(100),
                   marginBottom: normalize(8),
-                  paddingTop: 12,
                 }}
                 onChangeText={text => {
                   const newValue = mixValidator(text);

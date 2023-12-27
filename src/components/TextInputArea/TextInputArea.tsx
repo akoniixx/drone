@@ -17,7 +17,7 @@ interface Props extends TextInputProps {
   label?: string;
   placeholder?: string;
 }
-export default function TextInputArea({label, ...props}: Props) {
+export default function TextInputArea({label, style, ...props}: Props) {
   return (
     <View
       style={{
@@ -49,13 +49,14 @@ export default function TextInputArea({label, ...props}: Props) {
               padding: normalize(5),
               paddingTop: normalize(12),
               textAlignVertical: 'top',
+              writingDirection: 'rtl',
               borderRadius: 8,
               borderWidth: 1,
               borderColor: colors.grayPlaceholder,
               marginVertical: normalize(10),
               fontFamily: font.medium,
             },
-            props.style,
+            style,
           ]}
           {...props}
           onChangeText={text => {
