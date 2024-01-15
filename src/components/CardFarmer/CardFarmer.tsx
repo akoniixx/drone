@@ -1,10 +1,18 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import React, {useMemo} from 'react';
 import {colors, image} from '../../assets';
 import ProgressiveImage from '../ProgressingImage/ProgressingImage';
 import fonts from '../../assets/fonts';
 import icons from '../../assets/icons/icons';
 import {FarmerResponse} from '../../entities/FarmerInterface';
+import Text from '../Text';
+import {mixpanel} from '../../../mixpanel';
 
 type Props = {
   item: FarmerResponse;
@@ -20,11 +28,17 @@ const CardFarmer = ({
   imageURL,
 }: Props) => {
   const onPress = () => {
+    mixpanel.track('SelectFarmerScreen_SelectFarmer_Press', {
+      farmerId: item.id,
+      to: 'CreateTaskScreen',
+    });
     navigation.navigate('CreateTaskScreen', {
       farmerId: item.id,
     });
   };
-  console.log(imageURL);
+  const currentWidth = useWindowDimensions().width;
+  const isBreakLine = (currentWidth - 16) / 2 < 160;
+
   return (
     <TouchableOpacity
       disabled={isSelected}
@@ -68,9 +82,10 @@ const CardFarmer = ({
         )}
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: isBreakLine ? 'column' : 'row',
             alignItems: 'center',
             alignSelf: 'flex-start',
+
             flex: 1,
             width: '100%',
           }}>

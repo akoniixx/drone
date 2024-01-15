@@ -9,6 +9,7 @@ import TextInputArea from '../../components/TextInputArea/TextInputArea';
 import {mixValidator} from '../../function/inputValidate';
 import Text from '../../components/Text';
 import {normalize} from '../../function/Normalize';
+import {mixpanel} from '../../../mixpanel';
 
 type Props = {
   farmer: FarmerResponse;
@@ -40,6 +41,10 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
   });
   const [isFocus, setIsFocus] = React.useState(false);
   const onSelected = (item: {id: string; label: string; value: string}) => {
+    mixpanel.track('CreateTaskScreen_RadioPrepare_Press', {
+      value: item.value,
+      label: item.label,
+    });
     setSelected(item);
     setTaskData(prev => ({
       ...prev,
@@ -80,7 +85,17 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
             marginVertical: 8,
           }}
         />
-        {listData.map(el => {
+        <Text
+          style={{
+            fontFamily: font.medium,
+            fontSize: normalize(16),
+            color: colors.fontBlack,
+            marginBottom: normalize(8),
+          }}>
+          ระบุการเตรียมยา
+        </Text>
+        {listData.map((el, index) => {
+          const isLast = index === listData.length - 1;
           return (
             <RadioList
               label={el.label}
@@ -89,6 +104,9 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
                 onSelected(el);
               }}
               isSelected={selected.id === el.id}
+              styleWrapper={{
+                marginBottom: isLast ? -4 : normalize(16),
+              }}
             />
           );
         })}
@@ -105,7 +123,7 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
                 <Text
                   style={{
                     position: 'absolute',
-                    top: 20,
+                    top: 28,
                     left: 10,
                     fontFamily: font.regular,
                     color: colors.grey40,
@@ -117,6 +135,9 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
               <TextInputArea
                 onBlur={() => {
                   setIsFocus(false);
+                  mixpanel.track('CreateTaskScreen_TextArea_Press', {
+                    value: taskData.preparationRemark,
+                  });
                 }}
                 onFocus={() => {
                   setIsFocus(true);
@@ -125,14 +146,16 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
                   borderWidth: 1,
                   borderRadius: normalize(8),
                   borderColor: isFocus ? colors.orange : colors.greyWhite,
-                  padding: normalize(10),
+                  paddingHorizontal: normalize(10),
                   minHeight: normalize(100),
                   marginBottom: normalize(8),
-                  paddingTop: 12,
+                  textAlignVertical: 'top',
                 }}
                 onChangeText={text => {
-                  const newValue = mixValidator(text);
-                  setTaskData(prev => ({...prev, preparationRemark: newValue}));
+                  setTaskData(prev => ({
+                    ...prev,
+                    preparationRemark: text,
+                  }));
                 }}
                 value={taskData.preparationRemark}
               />

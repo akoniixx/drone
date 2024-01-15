@@ -107,6 +107,7 @@ export default function StepThree({
             ภาพรวมของเกษตรกร
           </Text>
           <ReviewBar rating={rating} setRating={setRating} />
+
           <Text
             style={{
               fontFamily: font.medium,
@@ -123,7 +124,7 @@ export default function StepThree({
               <Text
                 style={{
                   position: 'absolute',
-                  top: 14,
+                  top: 30,
                   left: 10,
                   fontFamily: font.regular,
                   color: colors.grey40,

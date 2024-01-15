@@ -8,6 +8,7 @@ import moment from 'moment';
 import {momentExtend, numberWithCommas} from '../../function/utility';
 import {colors, font, icons, image} from '../../assets';
 import {callcenterNumber} from '../../definitions/callCenterNumber';
+import {mixpanel} from '../../../mixpanel';
 
 type Props = {
   farmer: FarmerResponse;
@@ -156,7 +157,7 @@ const StepThree = ({farmer, taskData, calPriceData}: Props) => {
                   height: 1,
                   width: '100%',
                   backgroundColor: colors.softGrey2,
-                  marginVertical: 8,
+                  marginVertical: 16,
                 }}
               />
             )}
@@ -175,6 +176,10 @@ const StepThree = ({farmer, taskData, calPriceData}: Props) => {
           <TouchableOpacity
             style={styles.buttonCallcenter}
             onPress={() => {
+              mixpanel.track('CreateTaskScreen_CallCenter_Press', {
+                to: 'CallCenter',
+                tel: callcenterNumber,
+              });
               Linking.openURL(`tel:${callcenterNumber}`);
             }}>
             <Image

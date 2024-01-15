@@ -22,6 +22,7 @@ import {
 import InputSearch from '../../components/Input/InputSearch';
 import FooterFarmerList from './FooterFarmerList';
 import {createTaskDatasource} from '../../datasource/CreateTaskDatasource';
+import {mixpanel} from '../../../mixpanel';
 
 type Props = {
   navigation: StackNavigationProp<StackParamList, 'SelectFarmerScreen'>;
@@ -58,6 +59,13 @@ const SelectFarmerScreen = ({navigation}: Props) => {
     try {
       setError('');
       const result = await createTaskDatasource.findFarmerByTel(searchValue);
+      mixpanel.track('SelectFarmerScreen_Search_Press', {
+        to: 'CreateTaskScreen',
+        value: searchValue,
+        error: mappingError[result.status as keyof typeof mappingError] || '',
+        status: result.status,
+        farmerId: result.id,
+      });
       if (result) {
         switch (result.status) {
           case 'PENDING': {
@@ -104,7 +112,14 @@ const SelectFarmerScreen = ({navigation}: Props) => {
         flex: 1,
         backgroundColor: colors.white,
       }}>
-      <CustomHeader showBackBtn title="สร้างงาน" onPressBack={onPressBack} />
+      <CustomHeader
+        showBackBtn
+        title="สร้างงาน"
+        onPressBack={onPressBack}
+        styleTitle={{
+          marginRight: 16,
+        }}
+      />
       <View style={styles.container}>
         <Image
           source={image.createTaskBg}
@@ -142,6 +157,12 @@ const SelectFarmerScreen = ({navigation}: Props) => {
                 value={searchValue}
                 errorText={error}
                 showButton
+                onBlur={() => {
+                  mixpanel.track('SelectFarmerScreen_Search_Typed', {
+                    to: 'SearchFarmerScreen',
+                    value: searchValue,
+                  });
+                }}
               />
               <View style={{height: 16}} />
               <View style={styles.rowTitle}>
@@ -154,6 +175,9 @@ const SelectFarmerScreen = ({navigation}: Props) => {
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
+                    mixpanel.track('SelectFarmerScreen_SeeAll_Press', {
+                      to: 'AllFarmerListScreen',
+                    });
                     navigation.navigate('AllFarmerListScreen');
                   }}>
                   <Text style={styles.textSeeAll}>ดูทั้งหมด</Text>
@@ -173,6 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    paddingTop: 16,
     flex: 1,
   },
   title: {

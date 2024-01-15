@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   StyleSheet,
   ViewProps,
+  TextStyle,
 } from 'react-native';
 import {colors, font, icons} from '../assets';
 import {normalize} from '../function/Normalize';
@@ -23,6 +24,7 @@ interface Prop {
   style?: ViewProps['style'];
   styleWrapper?: ViewProps['style'];
   image?: () => JSX.Element;
+  styleTitle?: TextStyle;
 }
 
 const CustomHeader: React.FC<Prop> = ({
@@ -36,6 +38,7 @@ const CustomHeader: React.FC<Prop> = ({
   image,
   headerCenter,
   styleWrapper,
+  styleTitle,
 }) => {
   return (
     <SafeAreaView style={[styles.headerSafeArea, style]}>
@@ -66,6 +69,7 @@ const CustomHeader: React.FC<Prop> = ({
                 fontSize: normalize(20),
                 color: titleColor ?? colors.fontBlack,
                 textAlign: 'center',
+                ...styleTitle,
               }}>
               {title}
             </Text>

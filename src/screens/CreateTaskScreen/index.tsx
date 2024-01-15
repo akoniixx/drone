@@ -21,6 +21,7 @@ import Modal from '../../components/Modal/Modal';
 import Text from '../../components/Text';
 import {useAuth} from '../../contexts/AuthContext';
 import moment from 'moment';
+import {mixpanel} from '../../../mixpanel';
 
 type Props = {
   navigation: StackNavigationProp<StackParamList, 'CreateTaskScreen'>;
@@ -169,6 +170,13 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         raiAmount: taskData.raiAmount ? parseFloat(taskData.raiAmount) : 0,
         farmerPlotId: taskData.plotDetail.plotId,
       });
+      mixpanel.track('CreateTaskScreen_CalculatePrice', {
+        ...taskData,
+        cropName: taskData.plotDetail.cropName,
+        raiAmount: taskData.raiAmount ? parseFloat(taskData.raiAmount) : 0,
+        farmerPlotId: taskData.plotDetail.plotId,
+        responseCal: result.responseData,
+      });
       if (result) {
         setCalPriceData(result.responseData);
       }
@@ -258,6 +266,10 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
     }
   }, [step, taskData]);
   const onShowConfirmModal = () => {
+    mixpanel.track('CreateTaskScreen_ConfirmModal_Press', {
+      ...taskData,
+      calPriceData,
+    });
     setShowConfirmModal(true);
   };
   const onSubmitCreateTask = async () => {
@@ -294,6 +306,10 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         unitPriceStandard: +calPriceData.pricePerRai,
       };
       const result = await createTaskDatasource.createTask(payload);
+      mixpanel.track('CreateTaskScreen_CreateTask_Press', {
+        ...payload,
+        responseCreateTask: result,
+      });
       if (result && result.success) {
         const taskId = result.responseData.id;
         setTaskId(taskId);
@@ -305,15 +321,25 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
     }
   };
   const onToMainScreen = () => {
+    mixpanel.track('CreateTaskScreen_ToMainScreen_Press', {
+      taskId: taskId,
+    });
     setShowSuccessModal(false);
-    navigation.navigate('MainScreen');
+    setTimeout(() => {
+      navigation.navigate('MainScreen');
+    }, 400);
   };
   const onToTaskDetailScreen = () => {
-    setShowSuccessModal(false);
-    navigation.navigate('TaskDetailScreen', {
+    mixpanel.track('CreateTaskScreen_ToTaskDetailScreen_Press', {
       taskId: taskId,
-      isWaitStart: true,
     });
+    setShowSuccessModal(false);
+    setTimeout(() => {
+      navigation.navigate('TaskDetailScreen', {
+        taskId: taskId,
+        isWaitStart: true,
+      });
+    }, 400);
   };
   return (
     <SafeAreaView
@@ -323,8 +349,16 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         backgroundColor: colors.white,
         paddingBottom: 16,
       }}>
-      <CustomHeader title="สร้างงาน" showBackBtn onPressBack={onPressBack} />
+      <CustomHeader
+        title="สร้างงาน"
+        showBackBtn
+        onPressBack={onPressBack}
+        styleTitle={{
+          marginRight: 20,
+        }}
+      />
       <KeyboardAwareScrollView
+        extraScrollHeight={100}
         scrollIndicatorInsets={{
           right: 1,
         }}
@@ -409,7 +443,7 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         }
         onPressPrimary={onToTaskDetailScreen}
         onPressSecondary={onToMainScreen}
-        titlePrimary="ดูงานที่เพิ่งสร้างในแอป"
+        titlePrimary="ดูรายละเอียดงาน"
         titleSecondary="กลับไปหน้าหลัก"
       />
     </SafeAreaView>

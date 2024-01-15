@@ -1,6 +1,7 @@
-## Feature [1.11.4] 2023-12-22
-- add select JJDrone 
-- add task wording
+## Feature [1.12.0] 2023-12-22
+- droner create task
+-  48 hours validation
+-  fix some ui
   
 ## Feature [1.11.1] 2023-12-22
 - add feature create task

@@ -18,7 +18,6 @@ import CardRedeemDigital from '../../components/CardRedeemDigital/CardRedeemDigi
 import moment from 'moment';
 import Modal from '../../components/Modal/Modal';
 import {rewardDatasource} from '../../datasource/RewardDatasource';
-import AsyncButton from '../../components/Button/AsyncButton';
 import FastImage from 'react-native-fast-image';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -274,14 +273,14 @@ export default function RedeemScreen({navigation, route}: Props) {
               );
             }}
           />
-          <View
+          {/* <View
             style={{
               width: '100%',
               height: 1,
               backgroundColor: colors.disable,
               marginBottom: 16,
             }}
-          />
+          /> */}
           <TouchableOpacity
             style={{
               padding: 8,
@@ -295,7 +294,7 @@ export default function RedeemScreen({navigation, route}: Props) {
             <Text
               style={{
                 fontSize: 20,
-                fontFamily: font.regular,
+                fontFamily: font.semiBold,
               }}>
               ยกเลิก
             </Text>
@@ -326,7 +325,8 @@ const styles = StyleSheet.create({
   containerBrand: {
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
     borderRadius: 8,
     width: '100%',
     backgroundColor: colors.white,

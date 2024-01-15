@@ -33,6 +33,7 @@ export interface ImageDataType {
     type: string;
     fileName: string;
     uri: string;
+    createdDate?: string;
     errorMessage?: string[];
     isError?: boolean;
     errorTypeList?: Array<
@@ -138,7 +139,7 @@ export default function FinishTaskScreen({navigation, route}: Props) {
         });
       });
       await Promise.all(multiList);
-      const result = await TaskDatasource.finishTask({
+      await TaskDatasource.finishTask({
         fileDrug: imageSpray,
         taskId: taskId,
         updateBy: user?.firstname + ' ' + user?.lastname,

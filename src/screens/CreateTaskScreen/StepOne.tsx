@@ -1,5 +1,5 @@
 import {Dimensions, KeyboardAvoidingView, View} from 'react-native';
-import React from 'react';
+import React, {useMemo} from 'react';
 import CardFarmer from '../../components/CardFarmer/CardFarmer';
 import DateInputFarmer from '../../components/Input/DateInputFarmer';
 import TimeInputFarmer from '../../components/Input/TimeInputFarmer';
@@ -11,7 +11,8 @@ import SelectPlotInput from '../../components/CreateTaskComponent/SelectPlotInpu
 import RaiInput from '../../components/CreateTaskComponent/RaiInput';
 import PurposeSprayInput from '../../components/CreateTaskComponent/PurposeSprayInput';
 import TargetSpraySelect from '../../components/CreateTaskComponent/TargetSpraySelect';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {mixpanel} from '../../../mixpanel';
+import moment from 'moment';
 
 type Props = {
   farmer: FarmerResponse;
@@ -32,6 +33,16 @@ const StepOne = ({
   setListTargetSpray,
   listTargetSpray,
 }: Props) => {
+  const newFarmerPlot = useMemo(() => {
+    if (!farmer.farmerPlot) {
+      return [];
+    }
+    const plotsCopy = [...farmer.farmerPlot];
+    const activePlot = plotsCopy.filter(el => el.status === 'ACTIVE') || [];
+    const inactivePlot = plotsCopy.filter(el => el.status !== 'ACTIVE') || [];
+    const newPlot = [...activePlot, ...inactivePlot];
+    return newPlot;
+  }, [farmer.farmerPlot]);
   return (
     <View>
       {loadingFarmer ? (
@@ -83,6 +94,10 @@ const StepOne = ({
             ...taskData,
             date: v,
           });
+          mixpanel.track('CreateTaskScreen_SelectDate', {
+            date: v,
+            formatDate: moment(v).format('DD/MM/YYYY'),
+          });
         }}
       />
       <TimeInputFarmer
@@ -93,15 +108,47 @@ const StepOne = ({
             ...taskData,
             time: v,
           });
+          mixpanel.track('CreateTaskScreen_SelectTime_Changed', {
+            time: v,
+            formatTime: moment(v).format('HH:mm'),
+          });
+        }}
+        onCancel={() => {
+          setTaskData({
+            ...taskData,
+            time: {
+              hour: 6,
+              minute: 0,
+            },
+          });
+          mixpanel.track('CreateTaskScreen_SelectTime_Cancel', {
+            time: {
+              hour: 6,
+              minute: 0,
+            },
+            formatTime: moment({
+              hour: 6,
+              minute: 0,
+            }).format('HH:mm'),
+          });
         }}
       />
       <SelectPlotInput
         label="แปลงเกษตรกร"
         placeholder="เลือกแปลงเกษตรกร"
-        farmerPlot={farmer.farmerPlot}
+        farmerPlot={newFarmerPlot}
         value={taskData.plotDetail}
         onChange={v => {
           setTaskData({
+            ...taskData,
+            plotDetail: v,
+            raiAmount: v?.rai,
+            purposeSpray: {
+              id: '',
+              purposeSprayName: '',
+            },
+          });
+          mixpanel.track('CreateTaskScreen_SelectPlot_Selected', {
             ...taskData,
             plotDetail: v,
             raiAmount: v?.rai,
@@ -120,11 +167,21 @@ const StepOne = ({
             ...taskData,
             raiAmount: v,
           });
+          mixpanel.track('CreateTaskScreen_SelectRai', {
+            raiAmount: v,
+          });
         }}
         value={taskData.raiAmount}
       />
       <PurposeSprayInput
         onChange={v => {
+          mixpanel.track('CreateTaskScreen_SelectPurposeSpray', {
+            ...taskData,
+            purposeSpray: {
+              id: v.id,
+              purposeSprayName: v.purposeSprayName,
+            },
+          });
           setTaskData({
             ...taskData,
             purposeSpray: {
@@ -144,6 +201,9 @@ const StepOne = ({
         onChange={v => {
           setTaskData({
             ...taskData,
+            targetSpray: v,
+          });
+          mixpanel.track('CreateTaskScreen_SelectTargetSpray', {
             targetSpray: v,
           });
         }}

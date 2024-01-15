@@ -67,10 +67,11 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
         stickyHeaderIndices={[0]}
         renderItem={({item}) => {
           const isPending = item.status === 'PENDING';
+          const isReject = item.status === 'REJECTED';
           return (
             <TouchableOpacity
               style={styles.list}
-              disabled={isPending}
+              disabled={isPending || isReject}
               onPress={async () => {
                 setCurrentValue({
                   plotId: item.id,
@@ -107,7 +108,8 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
                 style={{
                   width: '80%',
                   fontFamily: font.regular,
-                  color: isPending ? colors.grey2 : colors.fontBlack,
+                  color:
+                    isPending || isReject ? colors.grey2 : colors.fontBlack,
                 }}>{`${item.plantName} (${item.raiAmount} ไร่) | ${item.plotName}`}</Text>
               {isPending && (
                 <Text
@@ -117,6 +119,16 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
                     fontSize: 14,
                   }}>
                   รอเจ้าหน้าที่ตรวจสอบ
+                </Text>
+              )}
+              {isReject && (
+                <Text
+                  style={{
+                    fontFamily: font.regular,
+                    color: colors.decreasePoint,
+                    fontSize: 14,
+                  }}>
+                  ถูกปฏิเสธ
                 </Text>
               )}
             </TouchableOpacity>

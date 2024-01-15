@@ -1,10 +1,11 @@
-import {Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {Image, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import {colors, font} from '../../assets';
 import {normalize} from '../../function/Normalize';
 import {SheetManager} from 'react-native-actions-sheet';
 import icons from '../../assets/icons/icons';
 import {FarmerPlot} from '../../entities/FarmerInterface';
+import Text from '../Text';
 
 interface Props {
   placeholder?: string;
