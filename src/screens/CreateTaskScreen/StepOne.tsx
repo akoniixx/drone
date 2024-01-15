@@ -11,6 +11,8 @@ import SelectPlotInput from '../../components/CreateTaskComponent/SelectPlotInpu
 import RaiInput from '../../components/CreateTaskComponent/RaiInput';
 import PurposeSprayInput from '../../components/CreateTaskComponent/PurposeSprayInput';
 import TargetSpraySelect from '../../components/CreateTaskComponent/TargetSpraySelect';
+import {mixpanel} from '../../../mixpanel';
+import moment from 'moment';
 
 type Props = {
   farmer: FarmerResponse;
@@ -92,6 +94,10 @@ const StepOne = ({
             ...taskData,
             date: v,
           });
+          mixpanel.track('CreateTaskScreen_SelectDate', {
+            date: v,
+            formatDate: moment(v).format('DD/MM/YYYY'),
+          });
         }}
       />
       <TimeInputFarmer
@@ -102,6 +108,10 @@ const StepOne = ({
             ...taskData,
             time: v,
           });
+          mixpanel.track('CreateTaskScreen_SelectTime_Changed', {
+            time: v,
+            formatTime: moment(v).format('HH:mm'),
+          });
         }}
         onCancel={() => {
           setTaskData({
@@ -110,6 +120,16 @@ const StepOne = ({
               hour: 6,
               minute: 0,
             },
+          });
+          mixpanel.track('CreateTaskScreen_SelectTime_Cancel', {
+            time: {
+              hour: 6,
+              minute: 0,
+            },
+            formatTime: moment({
+              hour: 6,
+              minute: 0,
+            }).format('HH:mm'),
           });
         }}
       />
@@ -128,6 +148,15 @@ const StepOne = ({
               purposeSprayName: '',
             },
           });
+          mixpanel.track('CreateTaskScreen_SelectPlot_Selected', {
+            ...taskData,
+            plotDetail: v,
+            raiAmount: v?.rai,
+            purposeSpray: {
+              id: '',
+              purposeSprayName: '',
+            },
+          });
         }}
       />
       <RaiInput
@@ -138,11 +167,21 @@ const StepOne = ({
             ...taskData,
             raiAmount: v,
           });
+          mixpanel.track('CreateTaskScreen_SelectRai', {
+            raiAmount: v,
+          });
         }}
         value={taskData.raiAmount}
       />
       <PurposeSprayInput
         onChange={v => {
+          mixpanel.track('CreateTaskScreen_SelectPurposeSpray', {
+            ...taskData,
+            purposeSpray: {
+              id: v.id,
+              purposeSprayName: v.purposeSprayName,
+            },
+          });
           setTaskData({
             ...taskData,
             purposeSpray: {
@@ -162,6 +201,9 @@ const StepOne = ({
         onChange={v => {
           setTaskData({
             ...taskData,
+            targetSpray: v,
+          });
+          mixpanel.track('CreateTaskScreen_SelectTargetSpray', {
             targetSpray: v,
           });
         }}

@@ -9,6 +9,7 @@ import TextInputArea from '../../components/TextInputArea/TextInputArea';
 import {mixValidator} from '../../function/inputValidate';
 import Text from '../../components/Text';
 import {normalize} from '../../function/Normalize';
+import {mixpanel} from '../../../mixpanel';
 
 type Props = {
   farmer: FarmerResponse;
@@ -40,6 +41,10 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
   });
   const [isFocus, setIsFocus] = React.useState(false);
   const onSelected = (item: {id: string; label: string; value: string}) => {
+    mixpanel.track('CreateTaskScreen_RadioPrepare_Press', {
+      value: item.value,
+      label: item.label,
+    });
     setSelected(item);
     setTaskData(prev => ({
       ...prev,
@@ -130,6 +135,9 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
               <TextInputArea
                 onBlur={() => {
                   setIsFocus(false);
+                  mixpanel.track('CreateTaskScreen_TextArea_Press', {
+                    value: taskData.preparationRemark,
+                  });
                 }}
                 onFocus={() => {
                   setIsFocus(true);

@@ -73,13 +73,6 @@ export default function SheetSelectArea(props: SheetProps) {
   };
   return (
     <ActionSheet
-      //   onClose={async () => {
-      //     await SheetManager.hide(props.sheetId, {
-      //       payload: {
-      //         selected: selectedArea,
-      //       },
-      //     });
-      //   }}
       closeOnTouchBackdrop={false}
       id={props.sheetId}
       containerStyle={{

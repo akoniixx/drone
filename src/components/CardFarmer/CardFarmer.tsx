@@ -12,6 +12,7 @@ import fonts from '../../assets/fonts';
 import icons from '../../assets/icons/icons';
 import {FarmerResponse} from '../../entities/FarmerInterface';
 import Text from '../Text';
+import {mixpanel} from '../../../mixpanel';
 
 type Props = {
   item: FarmerResponse;
@@ -27,6 +28,10 @@ const CardFarmer = ({
   imageURL,
 }: Props) => {
   const onPress = () => {
+    mixpanel.track('SelectFarmerScreen_SelectFarmer_Press', {
+      farmerId: item.id,
+      to: 'CreateTaskScreen',
+    });
     navigation.navigate('CreateTaskScreen', {
       farmerId: item.id,
     });

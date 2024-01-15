@@ -9,6 +9,7 @@ import {stylesCentral} from '../../styles/StylesCentral';
 import RegisterNotification from '../../components/Modal/RegisterNotification';
 import Text from '../../components/Text';
 import icons from '../../assets/icons/icons';
+import {mixpanel} from '../../../mixpanel';
 
 const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
@@ -18,6 +19,9 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
   const [openNoti, setOpenNoti] = useState(false);
 
   const onPressCreateTask = () => {
+    mixpanel.track('MainTaskScreen_CreateTask_Press', {
+      to: 'SelectFarmerScreen',
+    });
     navigation.navigate('SelectFarmerScreen');
   };
 

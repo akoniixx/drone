@@ -31,6 +31,7 @@ type Props = {
   disableButton?: boolean;
   errorText?: string;
   lineError?: number;
+  onBlur?: () => void;
 };
 
 type StyleProps = {
@@ -49,6 +50,7 @@ const InputSearch = ({
   disableButton = false,
   errorText = '',
   lineError = 2,
+  onBlur,
   ...props
 }: Props) => {
   const [isFocus, setIsFocus] = React.useState(false);
@@ -106,6 +108,7 @@ const InputSearch = ({
             setIsFocus(false);
             refTextInput.current?.blur();
             Keyboard.dismiss();
+            onBlur && onBlur();
           }}
           ref={refTextInput}
           style={styles(props).textInput}
