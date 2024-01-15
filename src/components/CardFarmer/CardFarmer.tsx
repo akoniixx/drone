@@ -1,4 +1,10 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import React, {useMemo} from 'react';
 import {colors, image} from '../../assets';
 import ProgressiveImage from '../ProgressingImage/ProgressingImage';
@@ -25,6 +31,9 @@ const CardFarmer = ({
       farmerId: item.id,
     });
   };
+  const currentWidth = useWindowDimensions().width;
+  const isBreakLine = (currentWidth - 16) / 2 < 160;
+
   return (
     <TouchableOpacity
       disabled={isSelected}
@@ -68,9 +77,10 @@ const CardFarmer = ({
         )}
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: isBreakLine ? 'column' : 'row',
             alignItems: 'center',
             alignSelf: 'flex-start',
+
             flex: 1,
             width: '100%',
           }}>

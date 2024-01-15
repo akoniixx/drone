@@ -1,5 +1,5 @@
 import {Dimensions, KeyboardAvoidingView, View} from 'react-native';
-import React from 'react';
+import React, {useMemo} from 'react';
 import CardFarmer from '../../components/CardFarmer/CardFarmer';
 import DateInputFarmer from '../../components/Input/DateInputFarmer';
 import TimeInputFarmer from '../../components/Input/TimeInputFarmer';
@@ -11,7 +11,6 @@ import SelectPlotInput from '../../components/CreateTaskComponent/SelectPlotInpu
 import RaiInput from '../../components/CreateTaskComponent/RaiInput';
 import PurposeSprayInput from '../../components/CreateTaskComponent/PurposeSprayInput';
 import TargetSpraySelect from '../../components/CreateTaskComponent/TargetSpraySelect';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {
   farmer: FarmerResponse;
@@ -32,6 +31,16 @@ const StepOne = ({
   setListTargetSpray,
   listTargetSpray,
 }: Props) => {
+  const newFarmerPlot = useMemo(() => {
+    if (!farmer.farmerPlot) {
+      return [];
+    }
+    const plotsCopy = [...farmer.farmerPlot];
+    const activePlot = plotsCopy.filter(el => el.status === 'ACTIVE') || [];
+    const inactivePlot = plotsCopy.filter(el => el.status !== 'ACTIVE') || [];
+    const newPlot = [...activePlot, ...inactivePlot];
+    return newPlot;
+  }, [farmer.farmerPlot]);
   return (
     <View>
       {loadingFarmer ? (
@@ -94,11 +103,20 @@ const StepOne = ({
             time: v,
           });
         }}
+        onCancel={() => {
+          setTaskData({
+            ...taskData,
+            time: {
+              hour: 6,
+              minute: 0,
+            },
+          });
+        }}
       />
       <SelectPlotInput
         label="แปลงเกษตรกร"
         placeholder="เลือกแปลงเกษตรกร"
-        farmerPlot={farmer.farmerPlot}
+        farmerPlot={newFarmerPlot}
         value={taskData.plotDetail}
         onChange={v => {
           setTaskData({

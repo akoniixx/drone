@@ -25,7 +25,10 @@ const TargetSpraySelect = ({
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
   return (
-    <View>
+    <View
+      style={{
+        marginTop: 10,
+      }}>
       <Text
         style={{
           fontSize: 16,
@@ -101,12 +104,12 @@ const TargetSpraySelect = ({
                   backgroundColor:
                     item && value.includes(item.toString())
                       ? colors.orangeSoft
-                      : '#F2F3F4',
+                      : colors.greyWhite,
                   borderWidth: 1.5,
                   borderColor:
                     item && value.includes(item.toString())
                       ? colors.orange
-                      : '#F2F3F4',
+                      : colors.greyWhite,
                 },
               ]}
               onPress={() => {

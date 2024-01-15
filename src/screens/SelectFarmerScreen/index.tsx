@@ -104,7 +104,14 @@ const SelectFarmerScreen = ({navigation}: Props) => {
         flex: 1,
         backgroundColor: colors.white,
       }}>
-      <CustomHeader showBackBtn title="สร้างงาน" onPressBack={onPressBack} />
+      <CustomHeader
+        showBackBtn
+        title="สร้างงาน"
+        onPressBack={onPressBack}
+        styleTitle={{
+          marginRight: 16,
+        }}
+      />
       <View style={styles.container}>
         <Image
           source={image.createTaskBg}
@@ -173,6 +180,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    paddingTop: 16,
     flex: 1,
   },
   title: {

@@ -46,7 +46,10 @@ const calculatePriceTask = async (payload: PayloadCal) => {
 };
 const createTask = async (payload: CreateTaskPayload) => {
   return await httpClient
-    .post(BASE_URL + '/tasks/task/create-task-line', payload)
+    .post(BASE_URL + '/tasks/task/create-task-line', {
+      ...payload,
+      applicationType: 'DRONER',
+    })
     .then(res => res.data);
 };
 const getFarmerEverBeen = async (payload: {

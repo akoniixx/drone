@@ -13,9 +13,16 @@ type Props = {
   label?: string;
   onChange: (v: {hour: number; minute: number}) => void;
   value: {hour: number; minute: number};
+  onCancel?: () => void;
 };
 
-const TimeInputFarmer = ({placeholder, onChange, value, label}: Props) => {
+const TimeInputFarmer = ({
+  placeholder,
+  onChange,
+  value,
+  label,
+  onCancel,
+}: Props) => {
   const [openCalendar, setOpenCalendar] = React.useState(false);
 
   const timeFormat = useMemo(() => {
@@ -117,6 +124,7 @@ const TimeInputFarmer = ({placeholder, onChange, value, label}: Props) => {
                 }}
                 onPress={() => {
                   setOpenCalendar(false);
+                  onCancel && onCancel();
                 }}
               />
               <View

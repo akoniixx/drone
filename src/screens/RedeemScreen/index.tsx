@@ -18,7 +18,6 @@ import CardRedeemDigital from '../../components/CardRedeemDigital/CardRedeemDigi
 import moment from 'moment';
 import Modal from '../../components/Modal/Modal';
 import {rewardDatasource} from '../../datasource/RewardDatasource';
-import AsyncButton from '../../components/Button/AsyncButton';
 import FastImage from 'react-native-fast-image';
 import {SafeAreaView} from 'react-native-safe-area-context';
 

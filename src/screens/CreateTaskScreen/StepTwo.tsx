@@ -80,7 +80,17 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
             marginVertical: 8,
           }}
         />
-        {listData.map(el => {
+        <Text
+          style={{
+            fontFamily: font.medium,
+            fontSize: normalize(16),
+            color: colors.fontBlack,
+            marginBottom: normalize(8),
+          }}>
+          ระบุการเตรียมยา
+        </Text>
+        {listData.map((el, index) => {
+          const isLast = index === listData.length - 1;
           return (
             <RadioList
               label={el.label}
@@ -89,6 +99,9 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
                 onSelected(el);
               }}
               isSelected={selected.id === el.id}
+              styleWrapper={{
+                marginBottom: isLast ? -4 : normalize(16),
+              }}
             />
           );
         })}
@@ -128,10 +141,13 @@ const StepTwo = ({farmer, setTaskData, taskData}: Props) => {
                   paddingHorizontal: normalize(10),
                   minHeight: normalize(100),
                   marginBottom: normalize(8),
+                  textAlignVertical: 'top',
                 }}
                 onChangeText={text => {
-                  const newValue = mixValidator(text);
-                  setTaskData(prev => ({...prev, preparationRemark: newValue}));
+                  setTaskData(prev => ({
+                    ...prev,
+                    preparationRemark: text,
+                  }));
                 }}
                 value={taskData.preparationRemark}
               />

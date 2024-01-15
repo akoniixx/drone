@@ -104,9 +104,12 @@ export default function StepOne({
             size: el.fileSize,
             mime: el.type,
             filename: el.fileName,
+            creationDate: el.createdDate,
+            modificationDate: el.createdDate,
           };
         });
         const newResult = [...format, ...result];
+        console.log('newResult :>> ', JSON.stringify(newResult, null, 2));
 
         const array = newResult.map(async (item: ImageType) => {
           const fileData = await RNFS.readFile(item.path, 'base64');
@@ -134,14 +137,14 @@ export default function StepOne({
             .add(48, 'hours')
             .isBefore(date);
 
-          // if (isDateBefore48Hours) {
-          //   errorMessages.push('เกินเวลา');
-          //   errorTypeList.push('isAfter');
-          // }
-          // if (isDateAfter48Hours) {
-          //   errorMessages.push('เกินเวลา');
-          //   errorTypeList.push('isBefore');
-          // }
+          if (isDateBefore48Hours) {
+            errorMessages.push('เกินเวลา');
+            errorTypeList.push('isAfter');
+          }
+          if (isDateAfter48Hours) {
+            errorMessages.push('เกินเวลา');
+            errorTypeList.push('isBefore');
+          }
 
           if (item?.size) {
             const isFileMoreThan20MB = item.size > 20 * 1024 * 1024;
@@ -156,6 +159,7 @@ export default function StepOne({
             type: item.mime,
             fileName: item?.filename,
             uri: item.path,
+            createdDate: modifedDate,
             //   fileData: fileData,
             errorMessage: errorMessages,
             isError: errorMessages.length > 0,
@@ -175,7 +179,8 @@ export default function StepOne({
             setLoading(false);
           },
         );
-        //   console.log('newAssets :>> ', JSON.stringify(newAssets, null, 2));
+        console.log('newAssets :>> ', JSON.stringify(newAssets, null, 2));
+
         const errorTypeList = newAssets.reduce((acc: any, item: any) => {
           if (item.errorTypeList) {
             return [...acc, ...item.errorTypeList];
@@ -225,8 +230,8 @@ export default function StepOne({
       setShowModalSelectImage(false);
       setImageData(prev => ({
         assets: [...prev.assets, newAssets],
-        isError: false,
-        errorMessage: null,
+        isError: prev.isError || false,
+        errorMessage: prev.errorMessage || null,
       }));
     }
   };
@@ -256,8 +261,8 @@ export default function StepOne({
 
       setImageData(prev => ({
         assets: [...prev.assets, newPhoto],
-        isError: false,
-        errorMessage: null,
+        isError: prev.isError || false,
+        errorMessage: prev.errorMessage || null,
       }));
 
       setShowModalSelectImage(false);
@@ -285,6 +290,7 @@ export default function StepOne({
           hashMap[convertSha] = true; // Add to hash map
         }
         return {
+          createdDate: item.createdDate,
           fileSize: item.fileSize,
           type: item.type,
           fileName: item.fileName,
@@ -451,21 +457,11 @@ export default function StepOne({
                   key={index}
                   style={{
                     marginTop: 8,
-                    borderRadius: 12,
-
                     overflow: 'hidden',
                     marginBottom: 4,
 
                     marginRight: 12,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                    backgroundColor: colors.white,
+                    backgroundColor: 'transparent',
                   }}>
                   <TouchableOpacity
                     onPress={() => {

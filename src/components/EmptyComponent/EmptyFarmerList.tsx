@@ -19,7 +19,7 @@ const EmptyFarmerList = ({isMain}: Props) => {
         }}
       />
       <Text style={styles.text}>
-        {isMain ? 'ไม่มีเกษตรที่เคยจ้าง' : 'ไม่พบเกษตรกรที่ค้นหา'}
+        {isMain ? 'ไม่มีเกษตกรที่เคยจ้าง' : 'ไม่พบเกษตรกรที่ค้นหา'}
       </Text>
     </View>
   );

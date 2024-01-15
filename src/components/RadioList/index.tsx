@@ -1,5 +1,11 @@
 import React, {useEffect, useRef} from 'react';
-import {View, TouchableOpacity, Animated, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Animated,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 import {colors, font} from '../../assets';
 import Text from '../Text';
 
@@ -9,6 +15,7 @@ interface Props {
   isSelected: boolean;
   belowComponent?: React.ReactNode;
   extra?: JSX.Element | null;
+  styleWrapper?: ViewStyle;
 }
 const RadioList = ({
   onPress,
@@ -16,6 +23,7 @@ const RadioList = ({
   label,
   belowComponent,
   extra,
+  styleWrapper,
 }: Props) => {
   const scaleValue = useRef(new Animated.Value(1))?.current;
 
@@ -45,6 +53,7 @@ const RadioList = ({
     <View
       style={{
         marginBottom: 16,
+        ...styleWrapper,
       }}>
       <TouchableOpacity
         style={{flexDirection: 'row', alignItems: 'flex-start'}}
@@ -103,7 +112,7 @@ const RadioList = ({
             <Text
               style={{
                 fontSize: 16,
-                fontFamily: font.medium,
+                fontFamily: font.regular,
                 marginLeft: 8,
               }}>
               {label}

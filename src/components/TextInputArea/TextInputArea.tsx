@@ -11,7 +11,7 @@ import React from 'react';
 import colors from '../../assets/colors/colors';
 import {normalize} from '../../function/Normalize';
 import {font} from '../../assets';
-import {mixValidator} from '../../function/inputValidate';
+import {containsEmoji, mixValidator} from '../../function/inputValidate';
 
 interface Props extends TextInputProps {
   label?: string;
@@ -38,6 +38,7 @@ export default function TextInputArea({label, style, ...props}: Props) {
       )}
       <ScrollView keyboardShouldPersistTaps="handled">
         <TextInput
+          textAlignVertical="top"
           multiline
           allowFontScaling={false}
           numberOfLines={4}
@@ -49,20 +50,25 @@ export default function TextInputArea({label, style, ...props}: Props) {
               padding: normalize(5),
               paddingTop: normalize(12),
               textAlignVertical: 'top',
-              writingDirection: 'rtl',
               borderRadius: 8,
               borderWidth: 1,
               borderColor: colors.grayPlaceholder,
               marginVertical: normalize(10),
-              fontFamily: font.medium,
+              fontFamily: font.regular,
             },
             style,
           ]}
           {...props}
           onChangeText={text => {
-            const newValue = mixValidator(text);
+            if (text.length === 1 && text === ' ') {
+              return;
+            }
 
-            props.onChangeText && props.onChangeText(newValue);
+            if (containsEmoji(text)) {
+              text = text.replace(/[\uD800-\uDFFF]./g, '');
+            }
+
+            props.onChangeText && props.onChangeText(text);
           }}
         />
       </ScrollView>

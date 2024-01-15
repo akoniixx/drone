@@ -156,7 +156,7 @@ const StepThree = ({farmer, taskData, calPriceData}: Props) => {
                   height: 1,
                   width: '100%',
                   backgroundColor: colors.softGrey2,
-                  marginVertical: 8,
+                  marginVertical: 16,
                 }}
               />
             )}

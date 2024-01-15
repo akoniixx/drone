@@ -323,7 +323,14 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         backgroundColor: colors.white,
         paddingBottom: 16,
       }}>
-      <CustomHeader title="สร้างงาน" showBackBtn onPressBack={onPressBack} />
+      <CustomHeader
+        title="สร้างงาน"
+        showBackBtn
+        onPressBack={onPressBack}
+        styleTitle={{
+          marginRight: 20,
+        }}
+      />
       <KeyboardAwareScrollView
         extraScrollHeight={100}
         scrollIndicatorInsets={{

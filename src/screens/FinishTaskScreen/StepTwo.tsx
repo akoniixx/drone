@@ -68,26 +68,26 @@ export default function StepTwo({
           .add(48, 'hours')
           .isBefore(date);
 
-        // if (isDateBefore48Hours) {
-        //   setImageSpray({
-        //     isError: true,
-        //     errorMessage:
-        //       'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
-        //     assets: [],
-        //   });
-        //   setShowModalSelectImage(false);
-        //   return;
-        // }
-        // if (isDateAfter48Hours) {
-        //   setImageSpray({
-        //     isError: true,
-        //     errorMessage:
-        //       'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
-        //     assets: [],
-        //   });
-        //   setShowModalSelectImage(false);
-        //   return;
-        // }
+        if (isDateBefore48Hours) {
+          setImageSpray({
+            isError: true,
+            errorMessage:
+              'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+            assets: [],
+          });
+          setShowModalSelectImage(false);
+          return;
+        }
+        if (isDateAfter48Hours) {
+          setImageSpray({
+            isError: true,
+            errorMessage:
+              'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+            assets: [],
+          });
+          setShowModalSelectImage(false);
+          return;
+        }
 
         if (isFileMoreThan20MB) {
           // setError('กรุณาอับโหลดรูปที่มีขนาดใหญ่ไม่เกิน 20 MB');
