@@ -1,4 +1,4 @@
-## Feature [1.11.4] 2023-12-22
+## Feature [1.12.0] 2023-12-22
 - add select JJDrone 
 - add task wording
   
