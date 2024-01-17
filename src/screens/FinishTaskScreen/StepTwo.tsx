@@ -54,21 +54,23 @@ export default function StepTwo({
           return;
         }
         const isFileMoreThan20MB = fileSize > 20 * 1024 * 1024;
+        const createDate = result?.creationDate && +result?.creationDate;
+
+        const modificationDate =
+          result?.modificationDate && +result?.modificationDate;
+
         const modifedDate =
-          (Platform.OS === 'ios'
-            ? result.creationDate
-            : result.modificationDate) || moment().unix();
-        const date = result?.modificationDate
-          ? moment(moment.unix(+modifedDate))
-          : moment();
+          Platform.OS === 'ios' ? createDate : modificationDate;
+        const date = modifedDate ? moment(modifedDate) : moment();
         const isDateBefore48Hours = moment()
           .subtract(48, 'hours')
           .isAfter(date);
         const isDateAfter48Hours = moment(taskAppointment)
           .add(48, 'hours')
           .isBefore(date);
+        const isIOS = Platform.OS === 'ios';
 
-        if (isDateBefore48Hours) {
+        if (isDateBefore48Hours && isIOS) {
           setImageSpray({
             isError: true,
             errorMessage:
@@ -78,7 +80,7 @@ export default function StepTwo({
           setShowModalSelectImage(false);
           return;
         }
-        if (isDateAfter48Hours) {
+        if (isDateAfter48Hours && isIOS) {
           setImageSpray({
             isError: true,
             errorMessage:
