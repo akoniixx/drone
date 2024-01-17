@@ -14,7 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		15B5C69CB9394B9689A6AE7A /* Anuphan-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 772F96D02BEA4F9FB73501EB /* Anuphan-SemiBold.ttf */; };
 		163B2C8FA3D0CC77B91F89D1 /* libPods-Droner-DronerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 465A5C9678C9127BA3FEFB9F /* libPods-Droner-DronerTests.a */; };
-		2D461767E99A9A1A3C4DE70E /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		2D461767E99A9A1A3C4DE70E /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		4B38A4CB68704964A3F5B7F0 /* newtaskcoming.wav in Resources */ = {isa = PBXBuildFile; fileRef = 85014E51942745C88FFA147C /* newtaskcoming.wav */; };
 		60DC076C28AB7E5E000756CF /* geolocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DC076B28AB7E5E000756CF /* geolocation.swift */; };
 		60F03EE22883795100CFC2C7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 60F03EE12883795100CFC2C7 /* fonts */; };
@@ -87,7 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D461767E99A9A1A3C4DE70E /* BuildFile in Frameworks */,
+				2D461767E99A9A1A3C4DE70E /* (null) in Frameworks */,
 				163B2C8FA3D0CC77B91F89D1 /* libPods-Droner-DronerTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -644,7 +644,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.11.4;
+				MARKETING_VERSION = 1.12.0;
 				NEW_SETTING = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -687,7 +687,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.11.4;
+				MARKETING_VERSION = 1.12.0;
 				NEW_SETTING = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
