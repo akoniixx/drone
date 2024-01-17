@@ -109,7 +109,6 @@ export default function StepOne({
           };
         });
         const newResult = [...format, ...result];
-        console.log('newResult :>> ', JSON.stringify(newResult, null, 2));
 
         const array = newResult.map(async (item: ImageType) => {
           const fileData = await RNFS.readFile(item.path, 'base64');
@@ -123,25 +122,26 @@ export default function StepOne({
           } else {
             hashMap[convertSha] = true; // Add to hash map
           }
+          const createDate = item?.creationDate && +item?.creationDate;
+          const modificationDate =
+            item?.modificationDate && +item?.modificationDate;
           const modifedDate =
-            (Platform.OS === 'ios'
-              ? item.creationDate
-              : item.modificationDate) || moment().unix();
-          const date = item?.modificationDate
-            ? moment(moment.unix(+modifedDate))
-            : moment();
+            Platform.OS === 'ios' ? createDate : modificationDate;
+          const date = modifedDate ? moment(modifedDate) : moment();
+          const isIos = Platform.OS === 'ios';
           const isDateBefore48Hours = moment()
             .subtract(48, 'hours')
             .isAfter(date);
+
           const isDateAfter48Hours = moment(taskAppointment)
             .add(48, 'hours')
             .isBefore(date);
 
-          if (isDateBefore48Hours) {
+          if (isDateBefore48Hours && isIos) {
             errorMessages.push('เกินเวลา');
             errorTypeList.push('isAfter');
           }
-          if (isDateAfter48Hours) {
+          if (isDateAfter48Hours && isIos) {
             errorMessages.push('เกินเวลา');
             errorTypeList.push('isBefore');
           }
@@ -179,7 +179,6 @@ export default function StepOne({
             setLoading(false);
           },
         );
-        console.log('newAssets :>> ', JSON.stringify(newAssets, null, 2));
 
         const errorTypeList = newAssets.reduce((acc: any, item: any) => {
           if (item.errorTypeList) {
