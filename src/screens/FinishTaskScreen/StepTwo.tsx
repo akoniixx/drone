@@ -61,7 +61,9 @@ export default function StepTwo({
 
         const modifedDate =
           Platform.OS === 'ios' ? createDate : modificationDate;
-        const date = modifedDate ? moment(modifedDate) : moment();
+        const date = modifedDate
+          ? moment.unix(modifedDate as number)
+          : moment();
         const isDateBefore48Hours = moment()
           .subtract(48, 'hours')
           .isAfter(date);

@@ -122,12 +122,14 @@ export default function StepOne({
           } else {
             hashMap[convertSha] = true; // Add to hash map
           }
-          const createDate = item?.creationDate && +item?.creationDate;
+          const createDate = item?.creationDate && item?.creationDate;
           const modificationDate =
             item?.modificationDate && +item?.modificationDate;
           const modifedDate =
             Platform.OS === 'ios' ? createDate : modificationDate;
-          const date = modifedDate ? moment(modifedDate) : moment();
+          const date = modifedDate
+            ? moment.unix(modifedDate as number)
+            : moment();
           const isIos = Platform.OS === 'ios';
           const isDateBefore48Hours = moment()
             .subtract(48, 'hours')
