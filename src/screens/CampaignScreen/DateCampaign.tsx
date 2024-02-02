@@ -2,13 +2,26 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import CustomHeader from '../../components/CustomHeader';
 import {colors} from '../../assets';
-import {Dimensions, Image, SafeAreaView, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {mixpanel} from '../../../mixpanel';
 import ZoomableImage from '../../components/ZoomableImage/ZoomableImage';
+import ImageZoom from 'react-native-image-pan-zoom';
 
 const DateCampaignScreen: React.FC<any> = ({navigation, route}) => {
   const width = Dimensions.get('window').width;
-
+  const props: any = {
+    imageWidth: width - 15,
+    imageHeight: width - 15,
+    cropWidth: width,
+    cropHeight: width,
+  };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <CustomHeader
@@ -20,16 +33,25 @@ const DateCampaignScreen: React.FC<any> = ({navigation, route}) => {
         }}
       />
 
-      <View style={{flex: 1, alignItems: 'center'}}>
-        <ZoomableImage
-          source={{
-            uri: route.params.image,
-          }}
-          style={{width: width - 15, height: width - 15}}
-        />
+      <View style={{flex: 1, alignItems: 'center', overflow: 'hidden'}}>
+        <View style={styles.imageZoomContainer}>
+          <ImageZoom {...props}>
+            <Image
+              style={{width: width - 15, height: width - 15}}
+              source={{
+                uri: route.params.image,
+              }}
+            />
+          </ImageZoom>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
-
+const styles = StyleSheet.create({
+  imageZoomContainer: {
+    width: '100%',
+    height: '100%',
+  },
+});
 export default DateCampaignScreen;

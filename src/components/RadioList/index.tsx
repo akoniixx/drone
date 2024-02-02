@@ -10,12 +10,13 @@ import {colors, font} from '../../assets';
 import Text from '../Text';
 
 interface Props {
-  onPress: () => void;
-  label: string;
+  onPress?: () => void;
+  label: string | null;
   isSelected: boolean;
   belowComponent?: React.ReactNode;
   extra?: JSX.Element | null;
   styleWrapper?: ViewStyle;
+  onlyRadio?: boolean;
 }
 const RadioList = ({
   onPress,
@@ -24,6 +25,7 @@ const RadioList = ({
   belowComponent,
   extra,
   styleWrapper,
+  onlyRadio = false,
 }: Props) => {
   const scaleValue = useRef(new Animated.Value(1))?.current;
 
@@ -49,7 +51,41 @@ const RadioList = ({
     }
   }, [isSelected]);
 
-  return (
+  return onlyRadio ? (
+    <Animated.View
+      style={[
+        styles(isSelected).radioButton,
+        {
+          transform: [
+            {
+              scale: scaleValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 1],
+              }),
+            },
+          ],
+        },
+      ]}>
+      {isSelected && (
+        <Animated.View
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: 10,
+            backgroundColor: colors.white,
+            transform: [
+              {
+                scale: scaleValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 1.2],
+                }),
+              },
+            ],
+          }}
+        />
+      )}
+    </Animated.View>
+  ) : (
     <View
       style={{
         marginBottom: 16,
@@ -59,7 +95,7 @@ const RadioList = ({
         style={{flexDirection: 'row', alignItems: 'flex-start'}}
         activeOpacity={0.8}
         onPress={() => {
-          onPress();
+          onPress?.();
         }}>
         <View
           style={{

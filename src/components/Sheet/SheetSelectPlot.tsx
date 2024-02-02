@@ -48,13 +48,25 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
 
   return (
     <ActionSheet
-      useBottomSafeAreaPadding={false}
+      useBottomSafeAreaPadding={true}
       id={sheetId}
+      enableGesturesInScrollView={false}
       containerStyle={{
         height: '60%',
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
       }}>
+      <View style={styles.header}>
+        <Text style={styles.title}>แปลงเกษตรกร</Text>
+        <TouchableOpacity
+          onPress={async () =>
+            SheetManager.hide(sheetId, {
+              payload: null,
+            })
+          }>
+          <Image source={icons.closeBlack} style={styles.closeIcon} />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={farmerPlot}
         ListFooterComponent={
@@ -64,7 +76,6 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
             }}
           />
         }
-        stickyHeaderIndices={[0]}
         renderItem={({item}) => {
           const isPending = item.status === 'PENDING';
           const isReject = item.status === 'REJECTED';
@@ -134,21 +145,6 @@ export default function SheetSelectPlot({sheetId, payload}: SheetProps) {
             </TouchableOpacity>
           );
         }}
-        ListHeaderComponent={
-          <>
-            <View style={styles.header}>
-              <Text style={styles.title}>แปลงเกษตรกร</Text>
-              <TouchableOpacity
-                onPress={async () =>
-                  SheetManager.hide(sheetId, {
-                    payload: null,
-                  })
-                }>
-                <Image source={icons.closeBlack} style={styles.closeIcon} />
-              </TouchableOpacity>
-            </View>
-          </>
-        }
       />
     </ActionSheet>
   );

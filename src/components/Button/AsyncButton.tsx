@@ -118,7 +118,7 @@ const styles = (props: {noBorder: boolean; disabled?: boolean}) =>
     },
     secondaryText: {
       color: colors.fontBlack,
-      fontFamily: font.bold,
+      fontFamily: font.semiBold,
       fontSize: 20,
     },
 

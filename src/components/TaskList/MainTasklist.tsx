@@ -36,7 +36,14 @@ const MainTasklists: React.FC<any> = (props: any) => {
           style={{
             padding: 16,
           }}>
-          <View style={styles.listTile}>
+          <View
+            style={[
+              styles.listTile,
+              {
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              },
+            ]}>
             <Text
               style={{
                 fontFamily: fonts.medium,
@@ -49,7 +56,8 @@ const MainTasklists: React.FC<any> = (props: any) => {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                marginLeft: 4,
+                flex: 1,
+                justifyContent: 'flex-end',
               }}>
               <View
                 style={{
@@ -58,7 +66,6 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   alignItems: 'center',
                   backgroundColor: getStatusToText(props.status)?.bgcolor,
                   paddingHorizontal: normalize(8),
-
                   paddingVertical: normalize(5),
                   borderRadius: normalize(12),
                 }}>
@@ -98,7 +105,7 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   color: colors.fontBlack,
                   fontFamily: fonts.medium,
                   fontSize: normalize(19),
-                  width: '75%',
+                  width: '70%',
                 }}>
                 {`${purposeSprayName} (${props.title}) | ${checkDecimal(
                   props.farmArea,

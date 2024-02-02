@@ -30,6 +30,9 @@ export default function BadgeStatus({
   if (!statusPayment || status === 'WAIT_REVIEW') {
     return null;
   }
+  if (statusPayment && statusPayment === 'SUCCESS') {
+    return null;
+  }
   return (
     <View
       style={[

@@ -27,7 +27,68 @@ interface PayloadUploadImage {
   };
   onProgressUpload: (progress: number) => void;
 }
+
+export interface GetTaskDroner {
+  dronerId: string;
+  taskStatus: Array<
+    | 'OPEN'
+    | 'WAIT_RECEIVE'
+    | 'WAIT_START'
+    | 'IN_PROGRESS'
+    | 'WAIT_REVIEW'
+    | 'DONE'
+    | 'CANCELED'
+  >;
+  taskStatusPayment?: Array<'WAIT_PAYMENT' | 'DONE_PAYMENT' | 'SUCCESS'>;
+  taskStatusDelay?: Array<
+    'WAIT_APPROVE' | 'APPROVED' | 'REJECTED' | 'EXTENDED'
+  >;
+  sortField?: string;
+  sortDirection: string;
+  page: number;
+  take: number;
+}
+export type CurrentTaskDroner = {
+  taskStatus: Array<
+    | 'OPEN'
+    | 'WAIT_RECEIVE'
+    | 'WAIT_START'
+    | 'IN_PROGRESS'
+    | 'WAIT_REVIEW'
+    | 'DONE'
+    | 'CANCELED'
+  >;
+  dronerId: string;
+  page: number;
+  take: number;
+};
 export class TaskDatasource {
+  static async getCurrentTaskDroner({
+    dronerId,
+    taskStatus,
+    page,
+    take,
+  }: CurrentTaskDroner): Promise<any> {
+    let taskStatusString = '';
+    taskStatus.map(item => (taskStatusString += `taskStatus=${item}&`));
+    return httpClient
+      .get(
+        BASE_URL +
+          `/tasks/task/current-task-droner?dronerId=${dronerId}&${taskStatusString}page=${page}&take=${take}`,
+      )
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        crashlytics().log('getCurrentTaskDroner');
+        crashlytics().recordError(error);
+        crashlytics().setAttributes({
+          dronerId: dronerId,
+          taskStatus: taskStatusString,
+        });
+        throw error;
+      });
+  }
   static getTaskById(
     dronerID: string,
     taskStatus: Array<string>,
@@ -52,6 +113,46 @@ export class TaskDatasource {
           taskStatus: taskStatusString,
         });
         throw error;
+      });
+  }
+  static async getAllTaskByFilter({
+    taskStatusDelay,
+    taskStatusPayment,
+    taskStatus,
+    ...payload
+  }: GetTaskDroner): Promise<any> {
+    const convertToArray = Object.keys(payload);
+    let queryString = '';
+    convertToArray.map(item => {
+      queryString += `${item}=${payload[item as keyof typeof payload]}&`;
+    });
+    if (taskStatus) {
+      taskStatus.map(item => (queryString += `taskStatus=${item}&`));
+    }
+    if (taskStatusPayment) {
+      taskStatusPayment.map((item, index) => {
+        const isLast = index === taskStatusPayment.length - 1;
+        if (isLast) {
+          queryString += `taskStatusPayment=${item}`;
+        } else {
+          queryString += `taskStatusPayment=${item}&`;
+        }
+      });
+    }
+    if (taskStatusDelay) {
+      taskStatusDelay.map((item, index) => {
+        const isLast = index === taskStatusDelay.length - 1;
+        if (isLast) {
+          queryString += `taskStatusDelay=${item}`;
+        } else {
+          queryString += `taskStatusDelay=${item}&`;
+        }
+      });
+    }
+    return httpClient
+      .post(BASE_URL + '/tasks/task/task-droner?' + queryString)
+      .then(response => {
+        return response.data;
       });
   }
 

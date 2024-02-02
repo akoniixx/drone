@@ -292,7 +292,7 @@ const NotificationList: React.FC<any> = ({navigation}) => {
   );
   return (
     <SafeAreaView style={[stylesCentral.container]}>
-      <Modal transparent={true} visible={deleteall}>
+      <Modal transparent={true} visible={deleteall} animationType="fade">
         <View style={styles.modal}>
           <View style={styles.modalBg}>
             <View
@@ -313,10 +313,21 @@ const NotificationList: React.FC<any> = ({navigation}) => {
                   fontFamily: fonts.bold,
                   fontSize: normalize(18),
                   color: colors.fontBlack,
+                  marginBottom: normalize(10),
                 }}>
                 ออกจากกล่องข้อความ?
               </Text>
             </View>
+            <MainButton
+              label="ยืนยัน"
+              color={colors.orange}
+              fontColor={colors.white}
+              style={{
+                marginVertical: normalize(5),
+                height: responsiveHeigth(50),
+              }}
+              onPress={deleteAllItem}
+            />
             <MainButton
               label="ยกเลิก"
               color={colors.white}
@@ -324,19 +335,11 @@ const NotificationList: React.FC<any> = ({navigation}) => {
               borderColor={colors.fontBlack}
               style={{
                 marginVertical: normalize(5),
+                height: responsiveHeigth(50),
               }}
               onPress={() => {
                 setDeleteall(false);
               }}
-            />
-            <MainButton
-              label="ยืนยัน"
-              color={colors.orange}
-              fontColor={colors.white}
-              style={{
-                marginVertical: normalize(5),
-              }}
-              onPress={deleteAllItem}
             />
           </View>
         </View>

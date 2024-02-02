@@ -10,7 +10,10 @@ import {colors, image, icons} from '../../assets';
 import fonts from '../../assets/fonts';
 
 import Tasklists from '../../components/TaskList/Tasklists';
-import {TaskDatasource} from '../../datasource/TaskDatasource';
+import {
+  CurrentTaskDroner,
+  TaskDatasource,
+} from '../../datasource/TaskDatasource';
 
 import {stylesCentral} from '../../styles/StylesCentral';
 import {dataUpdateStatusEntity} from '../../entities/TaskScreenEntities';
@@ -101,14 +104,15 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
 
     if (data.data.length < data.count) {
       setLoadingInfinite(true);
-      setPage(page + 1);
+
       const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
-      TaskDatasource.getTaskById(
-        droner_id,
-        ['WAIT_START', 'IN_PROGRESS'],
-        page + 1,
-        limit,
-      )
+      const payload: CurrentTaskDroner = {
+        dronerId: droner_id,
+        taskStatus: ['WAIT_START', 'IN_PROGRESS'],
+        page: initialPage,
+        take: limit,
+      };
+      TaskDatasource.getCurrentTaskDroner(payload)
         .then(res => {
           if (res !== undefined) {
             setData({
@@ -125,6 +129,7 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
           isFetching.current = false;
           setLoadingInfinite(false);
         });
+      setPage(page + 1);
     }
   };
   const startTask = () => {
@@ -206,12 +211,13 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
   const getData = async () => {
     setLoading(true);
     const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
-    TaskDatasource.getTaskById(
-      droner_id,
-      ['WAIT_START', 'IN_PROGRESS'],
-      initialPage,
-      limit,
-    )
+    const payload: CurrentTaskDroner = {
+      dronerId: droner_id,
+      taskStatus: ['WAIT_START', 'IN_PROGRESS'],
+      page: initialPage,
+      take: limit,
+    };
+    TaskDatasource.getCurrentTaskDroner(payload)
       .then(res => {
         if (res !== undefined) {
           setData(res);
