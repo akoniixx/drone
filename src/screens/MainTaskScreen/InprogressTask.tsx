@@ -52,6 +52,9 @@ const InprogressTask: React.FC<{
         el => el.value,
       ) as GetTaskDroner['taskStatusDelay'],
     };
+    if (currentFilter.taskStatusNormal.length > 0) {
+      payload.taskStatusNormal = currentFilter.taskStatusNormal[0].value;
+    }
     TaskDatasource.getAllTaskByFilter(payload)
       .then(res => {
         setTimeout(() => setLoading(false), 200);
@@ -69,6 +72,7 @@ const InprogressTask: React.FC<{
     currentFilter.sortByField.value,
     currentFilter.sortByField.sortDirection,
     currentFilter.listStatus,
+    currentFilter.taskStatusNormal,
   ]);
   useFocusEffect(
     React.useCallback(() => {
@@ -93,6 +97,7 @@ const InprogressTask: React.FC<{
     if (data.data.length < data.count) {
       setLoadingInfinite(true);
       const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
+
       const payload: GetTaskDroner = {
         dronerId: droner_id,
         sortField: currentFilter.sortByField.value,
@@ -104,6 +109,9 @@ const InprogressTask: React.FC<{
           el => el.value,
         ) as GetTaskDroner['taskStatusDelay'],
       };
+      if (currentFilter.taskStatusNormal.length > 0) {
+        payload.taskStatusNormal = currentFilter.taskStatusNormal[0].value;
+      }
       await TaskDatasource.getAllTaskByFilter(payload)
         .then(res => {
           setData(prev => ({

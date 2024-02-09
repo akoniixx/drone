@@ -272,6 +272,8 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
     setDronerId((await AsyncStorage.getItem('droner_id')) ?? '');
   };
   const onPressBack = () => {
+    const isInProgress = data.status === 'IN_PROGRESS';
+    const isWaitStart = data.status === 'WAIT_START';
     if (isFromTaskDetail) {
       navigation.navigate('MainScreen', {
         screen: 'myTask',
@@ -280,11 +282,12 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
       navigation.navigate('myTask', {
         initialTab: 1,
       });
-    } else {
-      // navigation.goBack();
+    } else if (isInProgress) {
       navigation.navigate('myTask', {
-        initialTab: 1,
+        initialTab: 0,
       });
+    } else {
+      navigation.goBack();
     }
   };
 
@@ -386,6 +389,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                         marginLeft: 4,
                       }}
                       status={data.status}
+                      statusDelay={data.statusDelay}
                       statusPayment={data.statusPayment}
                     />
                   </View>

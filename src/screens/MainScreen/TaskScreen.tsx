@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 import {normalize} from '@rneui/themed';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {FlatList} from 'react-native-gesture-handler';
@@ -29,6 +29,7 @@ import Loading from '../../components/Loading/Loading';
 import NetworkLost from '../../components/NetworkLost/NetworkLost';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {mixpanel} from '../../../mixpanel';
+import {numberWithCommas} from '../../function/utility';
 
 interface Prop {
   navigation: any;
@@ -57,10 +58,6 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [checkResIsComplete, setCheckResIsComplete] = useState<boolean>(false);
 
-  // const [toggleModalStartTask, setToggleModalStartTask] =
-  //   useState<boolean>(false);
-
-  // const [toggleModalReview, setToggleModalReview] = useState<boolean>(false);
   const [imgUploaded] = useState<boolean>(false);
   const [finishImg, setFinishImg] = useState<any>(null);
   const [defaultRating, setDefaultRating] = useState<number>(0);
@@ -354,10 +351,7 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
                       id={item.item.taskNo}
                       status={item.item.status}
                       title={item.item.farmerPlot.plantName}
-                      price={
-                        parseInt(item.item.price) +
-                        parseInt(item.item.revenuePromotion)
-                      }
+                      price={item.item.totalPrice}
                       date={item.item.dateAppointment}
                       address={item.item.farmerPlot.locationName}
                       distance={item.item.distance}

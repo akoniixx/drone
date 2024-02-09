@@ -42,6 +42,7 @@ const MainTasklists: React.FC<any> = (props: any) => {
               {
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                flex: 1,
               },
             ]}>
             <Text
@@ -49,14 +50,19 @@ const MainTasklists: React.FC<any> = (props: any) => {
                 fontFamily: fonts.medium,
                 fontSize: normalize(14),
                 color: '#9BA1A8',
+                flex: 1,
               }}>
               #{props.id}
             </Text>
             <View
               style={{
+                width: 8,
+              }}
+            />
+            <View
+              style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                flex: 1,
                 justifyContent: 'flex-end',
               }}>
               <View
@@ -78,9 +84,11 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   {getStatusToText(props.status)?.label}
                 </Text>
               </View>
+
               <BadgeStatus
                 status={props.status}
                 statusPayment={props.statusPayment}
+                statusDelay={props.statusDelay}
                 style={{
                   marginLeft: 4,
                 }}
@@ -105,12 +113,17 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   color: colors.fontBlack,
                   fontFamily: fonts.medium,
                   fontSize: normalize(19),
-                  width: '70%',
+                  flex: 1,
                 }}>
                 {`${purposeSprayName} (${props.title}) | ${checkDecimal(
                   props.farmArea,
                 )} ไร่`}
               </Text>
+              <View
+                style={{
+                  width: 8,
+                }}
+              />
               <Text
                 style={{
                   fontFamily: fonts.medium,

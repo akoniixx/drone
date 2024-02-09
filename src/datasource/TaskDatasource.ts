@@ -43,6 +43,7 @@ export interface GetTaskDroner {
   taskStatusDelay?: Array<
     'WAIT_APPROVE' | 'APPROVED' | 'REJECTED' | 'EXTENDED'
   >;
+  taskStatusNormal?: string;
   sortField?: string;
   sortDirection: string;
   page: number;

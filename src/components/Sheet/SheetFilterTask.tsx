@@ -39,6 +39,13 @@ const sortFields = [
     sortDirection: 'DESC',
   },
 ];
+export const ListStatusTaskNormal = [
+  {
+    id: '1',
+    label: 'งานปกติ',
+    value: 'NORMAL_INPROGRESS',
+  },
+];
 export const StatusListExtend = [
   {
     id: '1',
@@ -68,7 +75,7 @@ export const StatusFinish = [
     value: 'DONE',
   },
   {
-    id: '5',
+    id: '3',
     label: 'ถูกยกเลิก',
     value: 'CANCELED',
   },
@@ -101,6 +108,11 @@ export interface CurrentFilterType {
     label: string;
     value: string;
   }>;
+  taskStatusNormal: Array<{
+    id: string;
+    label: string;
+    value: string;
+  }>;
 }
 
 interface PayloadSheetType {
@@ -116,6 +128,7 @@ export default function SheetFilterTask(props: SheetProps) {
     listStatus: [],
     sortByField: sortFields[0],
     paymentStatus: [],
+    taskStatusNormal: [],
   } as CurrentFilterType);
   const payload: PayloadSheetType = props.payload;
   const [heightAnim] = React.useState(new Animated.Value(0));
@@ -177,6 +190,28 @@ export default function SheetFilterTask(props: SheetProps) {
       });
     }
   };
+  const onPressSelectNormalStatus = (item: {
+    id: string;
+    label: string;
+    value: string;
+  }) => {
+    const isExist = currentFilter?.taskStatusNormal?.find(el => {
+      return el.value === item.value;
+    });
+    if (isExist) {
+      setCurrentFilter({
+        ...currentFilter,
+        taskStatusNormal: currentFilter?.taskStatusNormal?.filter(el => {
+          return el.value !== item.value;
+        }),
+      });
+    } else {
+      setCurrentFilter({
+        ...currentFilter,
+        taskStatusNormal: [...currentFilter?.taskStatusNormal, item],
+      });
+    }
+  };
 
   const onPressSelectStatusPayment = (item: {
     id: string;
@@ -214,12 +249,16 @@ export default function SheetFilterTask(props: SheetProps) {
     }
     let listStatus: PayloadSheetType['currentFilter']['listStatus'] = [];
     let paymentStatus: PayloadSheetType['currentFilter']['paymentStatus'] = [];
+    let taskStatusNormal: PayloadSheetType['currentFilter']['taskStatusNormal'] =
+      [];
     if (payload.currentTab.key === 'inprogress') {
       listStatus = StatusListExtend;
+      taskStatusNormal = ListStatusTaskNormal;
     }
     if (payload.currentTab.key === 'finish') {
       listStatus = StatusFinish;
       paymentStatus = StatusPayment;
+      taskStatusNormal = [];
     }
     return {
       sortByField: {
@@ -229,6 +268,7 @@ export default function SheetFilterTask(props: SheetProps) {
       },
       listStatus,
       paymentStatus,
+      taskStatusNormal,
     };
   }, [payload.currentTab]);
 
@@ -236,7 +276,9 @@ export default function SheetFilterTask(props: SheetProps) {
     let isDisabled = false;
     switch (payload.currentTab.key) {
       case 'inprogress':
-        isDisabled = currentFilter?.listStatus?.length < 1;
+        isDisabled =
+          currentFilter?.listStatus?.length < 1 &&
+          currentFilter?.taskStatusNormal?.length < 1;
         break;
       case 'finish':
         isDisabled = currentFilter?.listStatus?.length < 1;
@@ -353,6 +395,53 @@ export default function SheetFilterTask(props: SheetProps) {
                 <View style={styles().title}>
                   <Text style={styles().textTitle}>สถานะงาน</Text>
                 </View>
+                {payload.currentTab.key === 'inprogress' && (
+                  <View
+                    style={{
+                      marginTop: 12,
+                      paddingHorizontal: 16,
+                      marginBottom: 4,
+                    }}>
+                    {ListStatusTaskNormal.map((item, index) => {
+                      const isSelected = currentFilter?.taskStatusNormal?.find(
+                        el => {
+                          return el.value === item.value;
+                        },
+                      );
+                      return (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => {
+                            onPressSelectNormalStatus(item);
+                          }}
+                          style={[
+                            styles().card,
+                            {
+                              borderWidth: 1.5,
+                              borderColor: isSelected
+                                ? colors.orange
+                                : colors.greyWhite,
+                              backgroundColor: isSelected
+                                ? colors.orangeSoft
+                                : colors.greyWhite,
+                              alignSelf: 'flex-start',
+                            },
+                          ]}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: isSelected
+                                ? colors.darkOrange2
+                                : colors.fontBlack,
+                              fontFamily: font.medium,
+                            }}>
+                            {item.label}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                )}
                 {payload.currentTab.key === 'inprogress' && (
                   <View
                     style={{

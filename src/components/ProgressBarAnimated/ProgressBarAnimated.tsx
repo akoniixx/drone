@@ -1,4 +1,11 @@
-import {View, StyleSheet, Platform, Animated, ViewStyle} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Animated,
+  ViewStyle,
+  Dimensions,
+} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import Lottie from 'lottie-react-native';
 import {image} from '../../assets';
@@ -22,7 +29,8 @@ export default function ProgressBarAnimated({
   isDisabled?: boolean;
 }) {
   const progress = (current / total) * 100;
-
+  const widthProgressBarAndroid = 72 * 2;
+  console.log(Dimensions.get('window').width * (10 / 100));
   return (
     <View
       style={[
@@ -129,40 +137,8 @@ const AnimatedProgressBar: React.FC<ProgressBarProps> = ({
   style,
   height = 8,
 }) => {
-  const shimmerAnimation = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.loop(
-      Animated.timing(shimmerAnimation, {
-        toValue: 1,
-        duration: 2000,
-        useNativeDriver: false,
-      }),
-    ).start();
-  }, []);
-
-  const movingGradient = shimmerAnimation.interpolate({
-    inputRange: [0.5, 1],
-    outputRange: ['-30%', '130%'],
-  });
-
   return (
-    <View style={{...style, width: '100%', overflow: 'hidden', height}}>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          left: movingGradient,
-          width: '30%', // Adjust this for the size of the shimmer
-          height: '100%',
-        }}>
-        <LinearGradient
-          colors={['#ffa41c', '#FFDE1F']}
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 1}}
-          style={{flex: 1, height, borderRadius: 0}}
-        />
-      </Animated.View>
-    </View>
+    <View style={{...style, width: '100%', overflow: 'hidden', height}}></View>
   );
 };
 const styles = StyleSheet.create({

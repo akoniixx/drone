@@ -1,5 +1,5 @@
 import {normalize} from '@rneui/themed';
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, font} from '../../assets';
@@ -12,10 +12,12 @@ import {mixpanel} from '../../../mixpanel';
 import {SheetManager} from 'react-native-actions-sheet';
 import {
   CurrentFilterType,
+  ListStatusTaskNormal,
   StatusFinish,
   StatusListExtend,
   StatusPayment,
 } from '../../components/Sheet/SheetFilterTask';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const mappingTab = [
   {key: 'inprogress', title: 'กำลังดำเนินการ'},
@@ -31,10 +33,11 @@ const initialFilter: CurrentFilterType = {
   },
   listStatus: StatusListExtend,
   paymentStatus: StatusPayment,
+  taskStatusNormal: ListStatusTaskNormal,
 };
 const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
-  // const initialTab = route?.params?.initialTab || 0;
+  const initialTab = route?.params?.initialTab || 0;
   const [index, setIndex] = useState(0);
   const [currentFilter, setCurrentFilter] =
     useState<CurrentFilterType>(initialFilter);
@@ -60,11 +63,14 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
       },
     });
     if (result?.currentFilter) {
-      console.log(JSON.stringify(result.currentFilter, null, 2));
-
       setCurrentFilter(result.currentFilter);
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      setIndex(initialTab);
+    }, [initialTab]),
+  );
 
   return (
     <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
@@ -130,18 +136,22 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
           let paymentStatus = [] as typeof StatusPayment;
           if (currentTab.key === 'inprogress') {
             filter.listStatus = StatusListExtend;
+            filter.taskStatusNormal = ListStatusTaskNormal;
           }
           if (currentTab.key === 'finish') {
             filter.listStatus = StatusFinish;
             paymentStatus = StatusPayment;
+            filter.taskStatusNormal = [];
           }
           if (currentTab.key === 'waitStart') {
             filter.listStatus = [];
+            filter.taskStatusNormal = [];
           }
           setCurrentFilter({
             sortByField: initialFilter.sortByField,
             listStatus: filter.listStatus,
             paymentStatus,
+            taskStatusNormal: filter.taskStatusNormal,
           });
         }}
       />
