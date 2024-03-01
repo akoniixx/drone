@@ -5,7 +5,6 @@ import ActionSheet, {
   SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
-import {FarmerPlot} from '../../entities/FarmerInterface';
 import {Image} from 'react-native';
 import {colors, font, icons} from '../../assets';
 import {PurposeListType} from '../../screens/CreateTaskScreen';

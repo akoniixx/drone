@@ -1,29 +1,76 @@
 import {normalize} from '@rneui/themed';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {colors, font, image} from '../../assets';
+import {colors, font} from '../../assets';
 import MainTaskTapNavigator from '../../navigations/topTabs/MainTaskTapNavigator';
 import {stylesCentral} from '../../styles/StylesCentral';
-
 import RegisterNotification from '../../components/Modal/RegisterNotification';
 import Text from '../../components/Text';
 import icons from '../../assets/icons/icons';
 import {mixpanel} from '../../../mixpanel';
+import {SheetManager} from 'react-native-actions-sheet';
+import {
+  CurrentFilterType,
+  ListStatusTaskNormal,
+  StatusFinish,
+  StatusListExtend,
+  StatusPayment,
+} from '../../components/Sheet/SheetFilterTask';
+import {useFocusEffect} from '@react-navigation/native';
 
+export const mappingTab = [
+  {key: 'inprogress', title: 'กำลังดำเนินการ'},
+  {key: 'waitStart', title: 'รอเริ่มงาน'},
+  {key: 'finish', title: 'งานเสร็จสิ้น'},
+];
+
+const initialFilter: CurrentFilterType = {
+  sortByField: {
+    label: 'งานที่ใกล้ถึง',
+    sortDirection: 'DESC',
+    value: 'dateAppointment',
+  },
+  listStatus: StatusListExtend,
+  paymentStatus: StatusPayment,
+  taskStatusNormal: ListStatusTaskNormal,
+};
 const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
-  // const initialTab = route?.params?.initialTab || 0;
+  const initialTab = route?.params?.initialTab || 0;
   const [index, setIndex] = useState(0);
+  const [currentFilter, setCurrentFilter] =
+    useState<CurrentFilterType>(initialFilter);
 
   const [openNoti, setOpenNoti] = useState(false);
-
+  const currentTab = useMemo(() => {
+    return mappingTab[index];
+  }, [index]);
   const onPressCreateTask = () => {
     mixpanel.track('MainTaskScreen_CreateTask_Press', {
       to: 'SelectFarmerScreen',
     });
     navigation.navigate('SelectFarmerScreen');
   };
+  const onOpenFilter = async () => {
+    mixpanel.track('MainTaskScreen_Filter_Press');
+    const result: {
+      currentFilter: CurrentFilterType;
+    } = await SheetManager.show('selectFilterTask', {
+      payload: {
+        currentTab: currentTab,
+        currentFilter: currentFilter,
+      },
+    });
+    if (result?.currentFilter) {
+      setCurrentFilter(result.currentFilter);
+    }
+  };
+  useFocusEffect(
+    useCallback(() => {
+      setIndex(initialTab);
+    }, [initialTab]),
+  );
 
   return (
     <View style={[stylesCentral.container, {paddingTop: insets.top}]}>
@@ -52,19 +99,62 @@ const MainTaskScreen: React.FC<any> = ({navigation, route}) => {
           }}>
           งานของฉัน
         </Text>
-        <TouchableOpacity style={styles.button} onPress={onPressCreateTask}>
-          <Image
-            source={icons.plusWhite}
+        <View style={styles.row}>
+          <TouchableOpacity
+            onPress={onOpenFilter}
             style={{
-              width: normalize(16),
-              height: normalize(16),
-              marginRight: normalize(4),
-            }}
-          />
-          <Text style={styles.text}>สร้างงานใหม่</Text>
-        </TouchableOpacity>
+              marginRight: normalize(12),
+            }}>
+            <Image
+              source={icons.filter}
+              style={{
+                width: normalize(24),
+                height: normalize(24),
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={onPressCreateTask}>
+            <Image
+              source={icons.plusWhite}
+              style={{
+                width: normalize(16),
+                height: normalize(16),
+                marginRight: normalize(4),
+              }}
+            />
+            <Text style={styles.text}>สร้างงานใหม่</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <MainTaskTapNavigator index={index} setIndex={setIndex} />
+      <MainTaskTapNavigator
+        index={index}
+        currentFilter={currentFilter}
+        setIndex={index => {
+          setIndex(index);
+          const currentTab = mappingTab[index];
+          let filter = initialFilter;
+          let paymentStatus = [] as typeof StatusPayment;
+          if (currentTab.key === 'inprogress') {
+            filter.listStatus = StatusListExtend;
+            filter.taskStatusNormal = ListStatusTaskNormal;
+          }
+          if (currentTab.key === 'finish') {
+            filter.listStatus = StatusFinish;
+            paymentStatus = StatusPayment;
+            filter.taskStatusNormal = [];
+          }
+          if (currentTab.key === 'waitStart') {
+            filter.listStatus = [];
+            filter.taskStatusNormal = [];
+          }
+          setCurrentFilter({
+            sortByField: initialFilter.sortByField,
+            listStatus: filter.listStatus,
+            paymentStatus,
+            taskStatusNormal: filter.taskStatusNormal,
+          });
+        }}
+      />
     </View>
   );
 };
@@ -81,6 +171,10 @@ const styles = StyleSheet.create({
     fontFamily: font.bold,
     fontSize: 16,
     color: colors.white,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 export default MainTaskScreen;

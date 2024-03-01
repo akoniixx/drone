@@ -36,20 +36,34 @@ const MainTasklists: React.FC<any> = (props: any) => {
           style={{
             padding: 16,
           }}>
-          <View style={styles.listTile}>
+          <View
+            style={[
+              styles.listTile,
+              {
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flex: 1,
+              },
+            ]}>
             <Text
               style={{
                 fontFamily: fonts.medium,
                 fontSize: normalize(14),
                 color: '#9BA1A8',
+                flex: 1,
               }}>
               #{props.id}
             </Text>
             <View
               style={{
+                width: 8,
+              }}
+            />
+            <View
+              style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                marginLeft: 4,
+                justifyContent: 'flex-end',
               }}>
               <View
                 style={{
@@ -58,7 +72,6 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   alignItems: 'center',
                   backgroundColor: getStatusToText(props.status)?.bgcolor,
                   paddingHorizontal: normalize(8),
-
                   paddingVertical: normalize(5),
                   borderRadius: normalize(12),
                 }}>
@@ -71,9 +84,11 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   {getStatusToText(props.status)?.label}
                 </Text>
               </View>
+
               <BadgeStatus
                 status={props.status}
                 statusPayment={props.statusPayment}
+                statusDelay={props.statusDelay}
                 style={{
                   marginLeft: 4,
                 }}
@@ -98,12 +113,17 @@ const MainTasklists: React.FC<any> = (props: any) => {
                   color: colors.fontBlack,
                   fontFamily: fonts.medium,
                   fontSize: normalize(19),
-                  width: '75%',
+                  flex: 1,
                 }}>
                 {`${purposeSprayName} (${props.title}) | ${checkDecimal(
                   props.farmArea,
                 )} ไร่`}
               </Text>
+              <View
+                style={{
+                  width: 8,
+                }}
+              />
               <Text
                 style={{
                   fontFamily: fonts.medium,

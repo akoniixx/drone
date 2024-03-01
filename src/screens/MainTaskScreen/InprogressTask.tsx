@@ -3,7 +3,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {FlatList, Image, RefreshControl, View} from 'react-native';
 import {colors, image} from '../../assets';
 import MainTasklist from '../../components/TaskList/MainTasklist';
-import {TaskDatasource} from '../../datasource/TaskDatasource';
+import {GetTaskDroner, TaskDatasource} from '../../datasource/TaskDatasource';
 import {stylesCentral} from '../../styles/StylesCentral';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {calTotalPrice} from '../../function/utility';
@@ -14,10 +14,14 @@ import NetworkLost from '../../components/NetworkLost/NetworkLost';
 import {useFocusEffect} from '@react-navigation/native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import Text from '../../components/Text';
+import {CurrentFilterType} from '../../components/Sheet/SheetFilterTask';
 
 const initialPage = 1;
 const limit = 10;
-const InprogressTask: React.FC = () => {
+const InprogressTask: React.FC<{
+  currentFilter: CurrentFilterType;
+  currentIndex: number;
+}> = ({currentFilter, currentIndex}) => {
   const isFetching = React.useRef(false);
   const {
     state: {isDoneAuth},
@@ -37,7 +41,21 @@ const InprogressTask: React.FC = () => {
   const getData = useCallback(async () => {
     setLoading(true);
     const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
-    TaskDatasource.getTaskById(droner_id, ['IN_PROGRESS'], initialPage, limit)
+    const payload: GetTaskDroner = {
+      dronerId: droner_id,
+      sortField: currentFilter.sortByField.value,
+      sortDirection: currentFilter.sortByField.sortDirection,
+      page: initialPage,
+      take: limit,
+      taskStatus: ['IN_PROGRESS'],
+      taskStatusDelay: currentFilter.listStatus.map(
+        el => el.value,
+      ) as GetTaskDroner['taskStatusDelay'],
+    };
+    if (currentFilter.taskStatusNormal.length > 0) {
+      payload.taskStatusNormal = currentFilter.taskStatusNormal[0].value;
+    }
+    TaskDatasource.getAllTaskByFilter(payload)
       .then(res => {
         setTimeout(() => setLoading(false), 200);
         setData(res);
@@ -50,11 +68,18 @@ const InprogressTask: React.FC = () => {
       .finally(() => {
         isFetching.current = false;
       });
-  }, []);
+  }, [
+    currentFilter.sortByField.value,
+    currentFilter.sortByField.sortDirection,
+    currentFilter.listStatus,
+    currentFilter.taskStatusNormal,
+  ]);
   useFocusEffect(
     React.useCallback(() => {
-      getData();
-    }, []),
+      if (currentIndex === 0) {
+        getData();
+      }
+    }, [getData, currentIndex]),
   );
 
   const onRefresh = async () => {
@@ -73,12 +98,21 @@ const InprogressTask: React.FC = () => {
       setLoadingInfinite(true);
       const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
 
-      await TaskDatasource.getTaskById(
-        droner_id,
-        ['IN_PROGRESS'],
-        page + 1,
-        limit,
-      )
+      const payload: GetTaskDroner = {
+        dronerId: droner_id,
+        sortField: currentFilter.sortByField.value,
+        sortDirection: currentFilter.sortByField.sortDirection,
+        page: page + 1,
+        take: limit,
+        taskStatus: ['IN_PROGRESS'],
+        taskStatusDelay: currentFilter.listStatus.map(
+          el => el.value,
+        ) as GetTaskDroner['taskStatusDelay'],
+      };
+      if (currentFilter.taskStatusNormal.length > 0) {
+        payload.taskStatusNormal = currentFilter.taskStatusNormal[0].value;
+      }
+      await TaskDatasource.getAllTaskByFilter(payload)
         .then(res => {
           setData(prev => ({
             data: [...prev.data, ...res.data],

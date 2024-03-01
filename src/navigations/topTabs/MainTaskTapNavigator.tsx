@@ -1,8 +1,8 @@
 import {normalize} from '@rneui/themed';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useState} from 'react';
-import {useWindowDimensions, StyleSheet, View} from 'react-native';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {useWindowDimensions, StyleSheet} from 'react-native';
+import {TabView, TabBar} from 'react-native-tab-view';
 import fonts from '../../assets/fonts';
 import {colors} from '../../assets';
 import FinishTask from '../../screens/MainTaskScreen/FinishTask';
@@ -10,7 +10,8 @@ import WaitStartTask from '../../screens/MainTaskScreen/WaitStartTask';
 import InprogressTask from '../../screens/MainTaskScreen/InprogressTask';
 import Text from '../../components/Text';
 import {mixpanel} from '../../../mixpanel';
-import {useFocusEffect} from '@react-navigation/native';
+import {mappingTab} from '../../screens/MainTaskScreen/MainTaskScreen';
+import {CurrentFilterType} from '../../components/Sheet/SheetFilterTask';
 
 const renderTabBar = (props: any) => (
   <TabBar
@@ -26,29 +27,46 @@ const renderTabBar = (props: any) => (
   />
 );
 
-const renderScene = SceneMap({
-  inprogress: InprogressTask,
-  WaitStart: WaitStartTask,
-  finish: FinishTask,
-});
+const renderScene = ({route, currentFilter, index}: any) => {
+  switch (route.key) {
+    case 'inprogress':
+      return (
+        <InprogressTask currentFilter={currentFilter} currentIndex={index} />
+      );
+    case 'waitStart':
+      return (
+        <WaitStartTask currentFilter={currentFilter} currentIndex={index} />
+      );
+    case 'finish':
+      return <FinishTask currentFilter={currentFilter} currentIndex={index} />;
+    default:
+      return null;
+  }
+};
 type Props = {
   index: number;
   setIndex: (index: number) => void;
+  currentFilter: CurrentFilterType;
 };
-const MainTaskTapNavigator: React.FC<Props> = ({index, setIndex}) => {
+const MainTaskTapNavigator: React.FC<Props> = ({
+  index,
+  setIndex,
+  currentFilter,
+}) => {
   const layout = useWindowDimensions();
-
-  const [routes] = useState([
-    {key: 'inprogress', title: 'กำลังดำเนินการ'},
-    {key: 'WaitStart', title: 'รอเริ่มงาน'},
-    {key: 'finish', title: 'งานเสร็จสิ้น'},
-  ]);
+  const [routes] = useState(mappingTab);
 
   return (
     <TabView
       navigationState={{index, routes}}
       renderTabBar={renderTabBar}
-      renderScene={renderScene}
+      renderScene={({route}) =>
+        renderScene({
+          route,
+          currentFilter,
+          index,
+        })
+      }
       onIndexChange={(idx: number) => {
         mixpanel.track('MainTaskScreen_TabView_ChangeTab', {
           tab: routes[idx].title,

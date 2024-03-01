@@ -1,9 +1,9 @@
 import {normalize} from '@rneui/themed';
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {FlatList, Image, RefreshControl, View} from 'react-native';
 import {colors, image} from '../../assets';
 import MainTasklist from '../../components/TaskList/MainTasklist';
-import {TaskDatasource} from '../../datasource/TaskDatasource';
+import {GetTaskDroner, TaskDatasource} from '../../datasource/TaskDatasource';
 import {stylesCentral} from '../../styles/StylesCentral';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
@@ -14,9 +14,13 @@ import Loading from '../../components/Loading/Loading';
 import NetworkLost from '../../components/NetworkLost/NetworkLost';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import Text from '../../components/Text';
+import {CurrentFilterType} from '../../components/Sheet/SheetFilterTask';
 const initialPage = 1;
 const limit = 10;
-const FinishTask: React.FC = () => {
+const FinishTask: React.FC<{
+  currentFilter: CurrentFilterType;
+  currentIndex: number;
+}> = ({currentFilter, currentIndex}) => {
   const isFetching = React.useRef(false);
   const [data, setData] = useState<{
     data: any[];
@@ -33,15 +37,24 @@ const FinishTask: React.FC = () => {
   const [checkResIsComplete, setCheckResIsComplete] = useState(false);
   const [loadingInfinite, setLoadingInfinite] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const getData = async () => {
+  const getData = useCallback(async () => {
     setLoading(true);
     const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
-    TaskDatasource.getTaskById(
-      droner_id,
-      ['DONE', 'WAIT_REVIEW', 'CANCELED'],
-      initialPage,
-      limit,
-    )
+    const payload: GetTaskDroner = {
+      dronerId: droner_id,
+      sortField: currentFilter.sortByField.value,
+      sortDirection: currentFilter.sortByField.sortDirection,
+      page: initialPage,
+      take: limit,
+      taskStatus: currentFilter.listStatus.map(
+        el => el.value,
+      ) as GetTaskDroner['taskStatus'],
+      taskStatusPayment: currentFilter.paymentStatus.map(
+        el => el.value,
+      ) as GetTaskDroner['taskStatusPayment'],
+    };
+
+    TaskDatasource.getAllTaskByFilter(payload)
       .then(res => {
         setData(res);
         setCheckResIsComplete(true);
@@ -55,11 +68,18 @@ const FinishTask: React.FC = () => {
         isFetching.current = false;
         setLoading(false);
       });
-  };
+  }, [
+    currentFilter.listStatus,
+    currentFilter.paymentStatus,
+    currentFilter.sortByField.value,
+    currentFilter.sortByField.sortDirection,
+  ]);
   useFocusEffect(
     React.useCallback(() => {
-      getData();
-    }, []),
+      if (currentIndex === 2) {
+        getData();
+      }
+    }, [getData, currentIndex]),
   );
   const onRefresh = async () => {
     setRefreshing(true);
@@ -74,12 +94,21 @@ const FinishTask: React.FC = () => {
     if (data.data.length < data.count) {
       setLoadingInfinite(true);
       const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
-      TaskDatasource.getTaskById(
-        droner_id,
-        ['DONE', 'WAIT_REVIEW', 'CANCELED'],
-        page + 1,
-        limit,
-      )
+      const payload: GetTaskDroner = {
+        dronerId: droner_id,
+        sortField: currentFilter.sortByField.value,
+        sortDirection: currentFilter.sortByField.sortDirection,
+        page: page + 1,
+        take: limit,
+        taskStatus: currentFilter.listStatus.map(
+          el => el.value,
+        ) as GetTaskDroner['taskStatus'],
+        taskStatusPayment: currentFilter.paymentStatus.map(
+          el => el.value,
+        ) as GetTaskDroner['taskStatusPayment'],
+      };
+
+      TaskDatasource.getAllTaskByFilter(payload)
         .then(res => {
           setData({
             data: [...data.data, ...res.data],

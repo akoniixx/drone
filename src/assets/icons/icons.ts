@@ -119,4 +119,7 @@ export default {
   billDarkGreen: require('./billDarkGreen.png'),
   callingWhiteSolid: require('./callingWhiteSolid.png'),
   successFillGreen: require('./successFillGreen.png'),
+  waitExtendTask: require('./waitExtendTask.png'),
+  extendedTask: require('./extendedTask.png'),
+  rejectExtendTask: require('./rejectExtendTask.png'),
 };

@@ -63,9 +63,17 @@ const CampaignScreen: React.FC<any> = ({navigation, route}) => {
       <ScrollView style={{flex: 1, backgroundColor: '#FFF7EA'}}>
         <View>
           <TouchableOpacity
-            style={{position: 'absolute', zIndex: 1, top: '15%', left: '5%'}}
+            style={{
+              position: 'absolute',
+              zIndex: 1,
+              top: '15%',
+              left: '5%',
+              backgroundColor: '#523A19',
+              borderRadius: 50,
+              padding: 5,
+            }}
             onPress={() => navigation.goBack()}>
-            <Image source={icons.closeBlack} style={{width: 14, height: 14}} />
+            <Image source={icons.closewhite} style={{width: 18, height: 18}} />
           </TouchableOpacity>
           <Image
             source={{uri: campaign.pathImageBanner}}
