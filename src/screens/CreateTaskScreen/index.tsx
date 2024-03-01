@@ -1,4 +1,4 @@
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, Linking, Pressable, StyleSheet, View} from 'react-native';
 import React, {useEffect, useMemo} from 'react';
 import {StackParamList} from '../../navigations/MainNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -22,6 +22,8 @@ import Text from '../../components/Text';
 import {useAuth} from '../../contexts/AuthContext';
 import moment from 'moment';
 import {mixpanel} from '../../../mixpanel';
+import {callcenterNumber} from '../../definitions/callCenterNumber';
+import {lineOfficialURI} from '../../definitions/externalLink';
 
 type Props = {
   navigation: StackNavigationProp<StackParamList, 'CreateTaskScreen'>;
@@ -103,6 +105,8 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
   const {
     state: {user},
   } = useAuth();
+  const [showWarningServerDown, setShowWarningServerDown] =
+    React.useState(false);
   const [showConfirmModal, setShowConfirmModal] = React.useState(false);
   const [showSuccessModal, setShowSuccessModal] = React.useState(false);
   const [taskData, setTaskData] = React.useState<InputData>(initialData);
@@ -177,8 +181,11 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         farmerPlotId: taskData.plotDetail.plotId,
         responseCal: result.responseData,
       });
-      if (result) {
+      if (result?.success && result.responseData) {
         setCalPriceData(result.responseData);
+        setStep(step + 1);
+      } else {
+        setShowWarningServerDown(true);
       }
     } catch (error) {
       console.log(error);
@@ -287,7 +294,6 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         createBy: `${user?.firstname} ${user?.lastname}`,
         farmerId: farmerId,
         cropName: taskData.plotDetail.cropName,
-        // customSpray: taskData.targetSpray,
         dateAppointment: dateAppointment,
         discountFee: calPriceData.discountFee,
         distance: 0,
@@ -385,7 +391,6 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
               onPress={() => {
                 if (step === 1) {
                   onPressToSummary();
-                  setStep(step + 1);
                 } else if (step >= 2) {
                   onShowConfirmModal();
                 } else {
@@ -446,6 +451,48 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
         titlePrimary="ดูรายละเอียดงาน"
         titleSecondary="กลับไปหน้าหลัก"
       />
+      <Modal
+        visible={showWarningServerDown}
+        onPressPrimary={() => {
+          setShowWarningServerDown(false);
+        }}
+        showCancelBtn={false}
+        title={`ระบบขัดข้อง!\nทีมงานกำลังเร่งดำเนินการแก้ไข`}
+        titlePrimary="ตกลง"
+        subTitle={
+          <View
+            style={{
+              marginTop: 8,
+              alignItems: 'flex-start',
+              justifyContent: 'flex-end',
+              alignSelf: 'flex-start',
+            }}>
+            <Text>วิธีเบื้องต้น</Text>
+            <Text>• กรุณารอทีมงานแก้ไขสักครู่ และกลับมาใช้งานอีกครั้ง</Text>
+            <Text>
+              • หากท่านไม่สามารถดำเนินการขั้นตอนถัดไปได้เป็น ระยะเวลานาน
+              กรุณาติดต่อเจ้าหน้าที่{' '}
+              <Text
+                style={styles.textDecoration}
+                onPress={() => {
+                  mixpanel.track('CreateTaskScreen_ContactPress');
+                  Linking.openURL(`tel:${callcenterNumber}`);
+                }}>
+                02-233-6000
+              </Text>{' '}
+              หรือ{' '}
+              <Text
+                style={styles.textDecoration}
+                onPress={() => {
+                  mixpanel.track('CreateTaskScreen_ContactPress');
+                  Linking.openURL(lineOfficialURI);
+                }}>
+                Line Official
+              </Text>
+            </Text>
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 };
@@ -464,5 +511,9 @@ const styles = StyleSheet.create({
   footer: {
     paddingBottom: 16,
     paddingTop: 16,
+  },
+  textDecoration: {
+    textDecorationLine: 'underline',
+    color: colors.darkBlue,
   },
 });
