@@ -128,8 +128,8 @@ export const NewTaskModal = (
         height: '80%',
       }}
       id={props.sheetId}
-      useBottomSafeAreaPadding
-      gestureEnabled={true}>
+      safeAreaInsets={{top: 0, bottom: 0, left: 0, right: 0}}
+      useBottomSafeAreaPadding={false}>
       <ScrollView style={styles.task}>
         <View style={styles.taskDetail}>
           <View style={styles.title}>
@@ -171,11 +171,17 @@ export const NewTaskModal = (
               }}>
               {`${data?.purposeSpray.purposeSprayName} (${data?.farmerPlot.plantName}) | ${data?.farmAreaAmount} ไร่`}
             </Text>
+            <View
+              style={{
+                height: normalize(30),
+              }}
+            />
             <Text
               style={{
                 fontFamily: fonts.medium,
                 color: '#2EC66E',
                 fontSize: normalize(17),
+                marginTop: 2,
               }}>
               ฿{' '}
               {data?.price
@@ -444,14 +450,12 @@ export const NewTaskModal = (
 const styles = StyleSheet.create({
   task: {
     paddingHorizontal: normalize(14),
-    paddingBottom: normalize(16),
-    marginVertical: normalize(-20),
   },
   title: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 5,
   },
   taskDetail: {

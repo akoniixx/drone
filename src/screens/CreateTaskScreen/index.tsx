@@ -189,6 +189,7 @@ const CreateTaskScreen = ({route, navigation}: Props) => {
       }
     } catch (error) {
       console.log(error);
+      setShowWarningServerDown(true);
     }
   };
 
