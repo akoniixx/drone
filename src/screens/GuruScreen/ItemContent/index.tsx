@@ -45,7 +45,8 @@ export default function ItemContent({navigation, item}: Props) {
   const loveCount = item.like;
   // const commentCount =  item.commentCount;
   const readCount = item.view;
-  const dateCreate = moment(item.createdAt);
+
+  const dateCreate = moment(item.startDate ? item.startDate : item.createdAt);
   const isMoreThanOneDay = moment().diff(dateCreate, 'days') > 0;
   const dateFormat = momentExtend.toBuddhistYear(
     dateCreate.toDate(),
