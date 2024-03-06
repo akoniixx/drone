@@ -141,7 +141,7 @@ android {
         applicationId "com.iconkaset.droner"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 28
+        versionCode 29
         versionName "1.13.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
