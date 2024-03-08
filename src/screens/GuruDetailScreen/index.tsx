@@ -54,7 +54,9 @@ const GuruDetailScreen: React.FC<Props> = ({navigation, route}) => {
   const loveCount = guruDetail.like;
   const commentCount = guruDetail.commentCount;
   const readCount = guruDetail.view;
-  const dateCreate = moment(guruDetail.createdAt);
+  const dateCreate = moment(
+    guruDetail?.startDate ? guruDetail.startDate : guruDetail.createdAt,
+  );
   const isMoreThanOneDay = moment().diff(dateCreate, 'days') > 0;
   const dateFormat = momentExtend.toBuddhistYear(
     dateCreate.toDate(),

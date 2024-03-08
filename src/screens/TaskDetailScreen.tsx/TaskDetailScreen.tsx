@@ -55,6 +55,7 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
   const taskId = route.params.taskId;
   const isFinishTask = route.params.isFinishTask;
   const isFromTaskDetail = route.params.isFromTaskDetail || false;
+  const isWaitStart = route.params.isWaitStart || false;
   const isFocused = useIsFocused();
 
   const [data, setData] = useState<any>();
@@ -160,15 +161,6 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
       .finally(() => {
         setLoading(false);
       });
-  };
-
-  const onFinishTaskSuccess = () => {
-    // navigation.navigate('FinishTaskScreen', {
-    //   taskId: taskId,
-    //   isFromTaskDetail: true,
-    //   taskAppointment: data.dateAppointment,
-    // });
-    setTogleModalSuccess(false);
   };
 
   const updateTask = (status: string) => {
@@ -280,9 +272,19 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
     setDronerId((await AsyncStorage.getItem('droner_id')) ?? '');
   };
   const onPressBack = () => {
+    const isInProgress = data.status === 'IN_PROGRESS';
+    const isWaitStart = data.status === 'WAIT_START';
     if (isFromTaskDetail) {
       navigation.navigate('MainScreen', {
         screen: 'myTask',
+      });
+    } else if (isWaitStart) {
+      navigation.navigate('myTask', {
+        initialTab: 1,
+      });
+    } else if (isInProgress) {
+      navigation.navigate('myTask', {
+        initialTab: 0,
       });
     } else {
       navigation.goBack();
@@ -387,24 +389,28 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                         marginLeft: 4,
                       }}
                       status={data.status}
+                      statusDelay={data.statusDelay}
                       statusPayment={data.statusPayment}
                     />
                   </View>
                 </View>
                 <View style={styles.listTile}>
                   <Text
+                    numberOfLines={2}
                     style={{
                       fontFamily: fonts.medium,
                       fontSize: normalize(19),
                       color: colors.fontBlack,
+                      width: '75%',
                     }}>
-                    {data.farmerPlot.plantName}
+                    {`${data.purposeSpray.purposeSprayName}  (${data.farmerPlot.plantName})`}
                   </Text>
                   <Text
                     style={{
                       fontFamily: fonts.medium,
                       color: '#2EC66E',
                       fontSize: normalize(17),
+                      marginTop: 2,
                     }}>
                     ฿{' '}
                     {numberWithCommas(
@@ -472,13 +478,37 @@ const TaskDetailScreen: React.FC<any> = ({navigation, route}) => {
                     <Text style={styles.font16}>{data.preparationBy}</Text>
                   </View>
                 </View>
+                {data?.preparationRemark && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: normalize(10),
+                    }}>
+                    <Image
+                      style={{
+                        width: normalize(20),
+                        height: normalize(20),
+                        marginRight: normalize(5),
+                      }}
+                      source={icons.bottleDarkGreen}
+                    />
+                    <Text
+                      style={{
+                        color: colors.grey2,
+                        fontSize: 14,
+                      }}>
+                      {data.preparationRemark}
+                    </Text>
+                  </View>
+                )}
               </View>
               <View
                 style={{backgroundColor: colors.white, padding: normalize(15)}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image
                     source={icons.note}
-                    style={{marginRight: 20, height: 24, width: 24}}
+                    style={{marginRight: 20, height: 28, width: 28}}
                   />
                   <Text style={styles.fontGray}>
                     {data.comment ? data.comment : '-'}
@@ -1184,11 +1214,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 5,
   },
   font16: {
-    fontFamily: fonts.medium,
+    fontFamily: fonts.semiBold,
     fontSize: normalize(16),
     color: colors.fontBlack,
   },

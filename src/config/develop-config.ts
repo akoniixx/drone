@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as RootNavigation from '../navigations/RootNavigation';
 
-export const BASE_URL = 'https://api-dnds-dev.iconkaset.com';
+// export const BASE_URL = 'https://api-dnds-dev.iconkaset.com';
+export const BASE_URL = 'https://api-dnds.iconkaset.com';
 export const MIXPANEL_DEV = 'dbdab0029a094a9cd5a329d2fb86f3a9';
 export const MIXPANEL_PROD = '2c9e81de185d8112243c357376c986e3';
 

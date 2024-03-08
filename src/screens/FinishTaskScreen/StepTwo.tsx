@@ -54,12 +54,15 @@ export default function StepTwo({
           return;
         }
         const isFileMoreThan20MB = fileSize > 20 * 1024 * 1024;
+        const createDate = result?.creationDate && +result?.creationDate;
+
+        const modificationDate =
+          result?.modificationDate && +result?.modificationDate;
+
         const modifedDate =
-          (Platform.OS === 'ios'
-            ? result.creationDate
-            : result.modificationDate) || moment().unix();
-        const date = result?.modificationDate
-          ? moment(moment.unix(+modifedDate))
+          Platform.OS === 'ios' ? createDate : modificationDate;
+        const date = modifedDate
+          ? moment.unix(modifedDate as number)
           : moment();
         const isDateBefore48Hours = moment()
           .subtract(48, 'hours')
@@ -67,27 +70,28 @@ export default function StepTwo({
         const isDateAfter48Hours = moment(taskAppointment)
           .add(48, 'hours')
           .isBefore(date);
+        const isIOS = Platform.OS === 'ios';
 
-        // if (isDateBefore48Hours) {
-        //   setImageSpray({
-        //     isError: true,
-        //     errorMessage:
-        //       'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
-        //     assets: [],
-        //   });
-        //   setShowModalSelectImage(false);
-        //   return;
-        // }
-        // if (isDateAfter48Hours) {
-        //   setImageSpray({
-        //     isError: true,
-        //     errorMessage:
-        //       'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
-        //     assets: [],
-        //   });
-        //   setShowModalSelectImage(false);
-        //   return;
-        // }
+        if (isDateBefore48Hours && isIOS) {
+          setImageSpray({
+            isError: true,
+            errorMessage:
+              'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+            assets: [],
+          });
+          setShowModalSelectImage(false);
+          return;
+        }
+        if (isDateAfter48Hours && isIOS) {
+          setImageSpray({
+            isError: true,
+            errorMessage:
+              'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+            assets: [],
+          });
+          setShowModalSelectImage(false);
+          return;
+        }
 
         if (isFileMoreThan20MB) {
           // setError('กรุณาอับโหลดรูปที่มีขนาดใหญ่ไม่เกิน 20 MB');
@@ -242,7 +246,7 @@ export default function StepTwo({
       <View style={styles.footer}>
         <View style={styles.rowFooter}>
           <View style={styles.leftFooter}>
-            <Text style={styles.leftTitle}>อัพโหลดภาพปุ๋ย/ยา</Text>
+            <Text style={styles.leftTitle}>อัปโหลดภาพปุ๋ย/ยา</Text>
             <Text style={styles.subTitle}>จำนวน 1 ภาพ</Text>
             {imageSpray.errorMessage && (
               <Text
@@ -407,9 +411,7 @@ export default function StepTwo({
         onCancel={() => {
           setShowModalSelectImage(false);
         }}
-        onPressLibrary={() => {
-          onAddImageController();
-        }}
+        onPressLibrary={onAddImageController}
         visible={showModalSelectImage}
       />
     </View>
@@ -459,7 +461,7 @@ const styles = StyleSheet.create({
   leftFooter: {
     alignSelf: 'flex-start',
     alignItems: 'flex-start',
-    flex: 0.7,
+    flex: 0.6,
   },
   leftTitle: {
     fontFamily: font.semiBold,
@@ -473,7 +475,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   rightFooter: {
-    flex: 0.3,
+    flex: 0.4,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-end',

@@ -1,10 +1,10 @@
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   Image,
   ScrollView,
   StyleSheet,
+  FlatList,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import CustomHeader from '../../components/CustomHeader';
@@ -16,6 +16,10 @@ import {BASE_URL, httpClient} from '../../config/develop-config';
 import Text from '../../components/Text';
 import CardRedeemDigital from '../../components/CardRedeemDigital/CardRedeemDigital';
 import moment from 'moment';
+import Modal from '../../components/Modal/Modal';
+import {rewardDatasource} from '../../datasource/RewardDatasource';
+import FastImage from 'react-native-fast-image';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface Props {
   navigation: any;
@@ -29,32 +33,104 @@ interface Branch {
   nameEn: string | null;
   updatedAt: string;
 }
+interface CompanyData {
+  id: string;
+  name: string;
+  companyCode: string;
+  createdAt: string;
+  isActive: boolean;
+  nameEn: string | null;
+  imagePath: string;
+}
 
 export default function RedeemScreen({navigation, route}: Props) {
   const {data, imagePath, expiredUsedDate} = route.params;
   const [selectedArea, setSelectedArea] = React.useState<any>(null);
+  const [companyData, setCompanyData] = React.useState<{
+    data: CompanyData[];
+    count: number;
+  }>({
+    data: [],
+    count: 0,
+  });
   const isExpired = React.useMemo(() => {
     return moment(expiredUsedDate).isBefore(moment());
   }, [expiredUsedDate]);
+  const [companyItem, setCompanyItem] = React.useState<CompanyData>({
+    name: '',
+    id: '',
+  } as CompanyData);
   const [dataBranch, setDataBranch] = React.useState<Branch[]>([]);
+  const [showBrandModal, setShowBrandModal] = React.useState(false);
+
+  const onShowBrand = async () => {
+    try {
+      setShowBrandModal(true);
+      const result = await rewardDatasource.getAllCompany();
+      setCompanyData(result);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const getBranch = async (companyId: string) => {
+    try {
+      const result = await httpClient.get(
+        BASE_URL + '/branch?isActive=true&companyId=' + companyId,
+      );
+      setDataBranch(result.data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onPressCompany = async (item: CompanyData) => {
+    try {
+      await getBranch(item.id);
+      setCompanyItem(item);
+      setShowBrandModal(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
-    const getBranch = async () => {
-      try {
-        const result = await httpClient.get(BASE_URL + '/branch');
-        setDataBranch(result.data.data);
-      } catch (e) {
-        console.log(e);
+    const onSelectedBrand = async () => {
+      const result: {
+        selected: any;
+      } = await SheetManager.show('selectArea', {
+        payload: {
+          selected: selectedArea,
+          data: dataBranch,
+          dronerTransactionId: data.dronerTransaction.id,
+          navigation,
+          companyItem,
+        },
+      });
+      if (result?.selected) {
+        setSelectedArea(result.selected);
       }
     };
-    getBranch();
-  }, []);
-
+    if (dataBranch.length > 0) {
+      setTimeout(() => {
+        onSelectedBrand();
+      }, 500);
+    }
+  }, [
+    dataBranch,
+    navigation,
+    data.dronerTransaction.id,
+    selectedArea,
+    companyItem,
+  ]);
   return (
     <SafeAreaView
+      edges={['right', 'top', 'left']}
       style={{
         flex: 1,
+        backgroundColor: colors.white,
       }}>
       <CustomHeader
+        styleWrapper={{
+          height: 56,
+        }}
         headerRight={() => {
           return (
             <TouchableOpacity
@@ -63,10 +139,10 @@ export default function RedeemScreen({navigation, route}: Props) {
                 padding: 16,
               }}>
               <Image
-                source={icons.closeBlack}
+                source={icons.closeGreyX}
                 style={{
-                  width: 20,
-                  height: 20,
+                  width: 30,
+                  height: 30,
                   resizeMode: 'contain',
                 }}
               />
@@ -75,7 +151,12 @@ export default function RedeemScreen({navigation, route}: Props) {
         }}
       />
 
-      <ScrollView contentContainerStyle={{flexGrow: 1, padding: 16}}>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          padding: 16,
+          backgroundColor: '#f9fafd',
+        }}>
         <View
           style={{
             flex: 1,
@@ -115,25 +196,12 @@ export default function RedeemScreen({navigation, route}: Props) {
           {!isExpired && (
             <View
               style={{
-                marginVertical: 16,
+                marginTop: 16,
+                marginBottom: 32,
               }}>
               <TouchableOpacity
                 style={styles.buttonPrimary}
-                onPress={async () => {
-                  const result: {
-                    selected: any;
-                  } = await SheetManager.show('selectArea', {
-                    payload: {
-                      selected: selectedArea,
-                      data: dataBranch,
-                      dronerTransactionId: data.dronerTransaction.id,
-                      navigation,
-                    },
-                  });
-                  if (result?.selected) {
-                    setSelectedArea(result.selected);
-                  }
-                }}>
+                onPress={onShowBrand}>
                 <Text
                   style={{
                     color: colors.white,
@@ -147,10 +215,122 @@ export default function RedeemScreen({navigation, route}: Props) {
           )}
         </View>
       </ScrollView>
+      <Modal visible={showBrandModal}>
+        <View style={styles.containerBrand}>
+          <FlatList
+            ListHeaderComponent={
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={styles.titleModal}>เลือกบริษัทที่ใช้สิทธิ์</Text>
+                <Text style={styles.desc}>
+                  กรุณาเลือกบริษัทให้ตรงกับคูปองที่ใช้งาน
+                </Text>
+                <Text style={styles.desc}>
+                  หากเลือกใช้ผิด กรุณาติดต่อเจ้าหน้าที่
+                </Text>
+              </View>
+            }
+            style={{
+              width: '100%',
+            }}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              width: '100%',
+            }}
+            data={companyData.data || []}
+            renderItem={({item}) => {
+              const isLastIndex =
+                companyData.data.indexOf(item) === companyData.data.length - 1;
+              return (
+                <TouchableOpacity
+                  onPress={() => onPressCompany(item)}
+                  style={[
+                    styles.listCompany,
+                    !isLastIndex && {
+                      borderBottomWidth: 1,
+                      borderBottomColor: colors.disable,
+                    },
+                  ]}>
+                  <FastImage
+                    source={{
+                      uri: item.imagePath,
+                    }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      marginRight: 16,
+                      borderWidth: 1,
+                      borderColor: colors.grey3,
+                    }}
+                    resizeMode="contain"
+                  />
+                  <Text>{item.name}</Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
+          {/* <View
+            style={{
+              width: '100%',
+              height: 1,
+              backgroundColor: colors.disable,
+              marginBottom: 16,
+            }}
+          /> */}
+          <TouchableOpacity
+            style={{
+              padding: 8,
+              width: '100%',
+              alignItems: 'center',
+              height: 54,
+            }}
+            onPress={() => {
+              setShowBrandModal(false);
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: font.semiBold,
+              }}>
+              ยกเลิก
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
+  listCompany: {
+    paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  desc: {
+    fontSize: 16,
+    fontFamily: font.regular,
+    color: colors.decreasePoint,
+    marginBottom: 2,
+  },
+  titleModal: {
+    fontSize: 20,
+    fontFamily: font.semiBold,
+    marginBottom: 8,
+  },
+  containerBrand: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 16,
+    paddingBottom: 8,
+    borderRadius: 8,
+    width: '100%',
+    backgroundColor: colors.white,
+  },
   card: {
     backgroundColor: 'white',
     padding: 16,

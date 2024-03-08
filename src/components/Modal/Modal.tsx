@@ -24,6 +24,7 @@ interface Props {
   iconTop?: JSX.Element;
   disablePrimary?: boolean;
   noBackdrop?: boolean;
+  showCancelBtn?: boolean;
 }
 export default function Modal({
   visible,
@@ -39,6 +40,7 @@ export default function Modal({
   disablePrimary = false,
   iconTop,
   noBackdrop = false,
+  showCancelBtn = true,
 }: Props) {
   function isPromise(func: any) {
     return Promise.resolve(func) instanceof Promise;
@@ -94,6 +96,7 @@ export default function Modal({
                   fontSize: 20,
                   fontFamily: font.medium,
                   color: colors.fontBlack,
+                  textAlign: 'center',
                 }}>
                 {title}
               </Text>
@@ -134,13 +137,15 @@ export default function Modal({
                 }
               }}
             />
-            <TouchableOpacity
-              style={styles.subButton}
-              onPress={() => {
-                onPressSecondary && onPressSecondary();
-              }}>
-              <Text style={styles.textSubButton}>{titleSecondary}</Text>
-            </TouchableOpacity>
+            {showCancelBtn && (
+              <TouchableOpacity
+                style={styles.subButton}
+                onPress={() => {
+                  onPressSecondary && onPressSecondary();
+                }}>
+                <Text style={styles.textSubButton}>{titleSecondary}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         )}
       </View>
@@ -170,7 +175,7 @@ const styles = StyleSheet.create({
   },
   textSubButton: {
     fontSize: 18,
-    fontFamily: font.bold,
+    fontFamily: font.semiBold,
     color: colors.fontBlack,
   },
   subButton: {

@@ -2,7 +2,7 @@ import {View, TouchableOpacity, Image, ScrollView} from 'react-native';
 import React from 'react';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {StackParamList} from '../../navigations/MainNavigator';
-import {icons} from '../../assets';
+import {colors, icons} from '../../assets';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader';
 import {rewardDatasource} from '../../datasource/RewardDatasource';
@@ -33,10 +33,15 @@ export default function RedeemDetailDigitalScreen({navigation, route}: Props) {
   );
   return (
     <SafeAreaView
+      edges={['right', 'top', 'left']}
       style={{
         flex: 1,
+        backgroundColor: colors.white,
       }}>
       <CustomHeader
+        styleWrapper={{
+          height: 56,
+        }}
         headerRight={() => {
           return (
             <TouchableOpacity
@@ -51,10 +56,10 @@ export default function RedeemDetailDigitalScreen({navigation, route}: Props) {
                 padding: 16,
               }}>
               <Image
-                source={icons.closeBlack}
+                source={icons.closeGreyX}
                 style={{
-                  width: 20,
-                  height: 20,
+                  width: 28,
+                  height: 28,
                   resizeMode: 'contain',
                 }}
               />
@@ -63,7 +68,12 @@ export default function RedeemDetailDigitalScreen({navigation, route}: Props) {
         }}
       />
       {Object.keys(rewardDetailData).length > 0 ? (
-        <ScrollView contentContainerStyle={{flexGrow: 1, padding: 16}}>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            padding: 16,
+            backgroundColor: '#f9fafd',
+          }}>
           <View
             style={{
               flex: 1,

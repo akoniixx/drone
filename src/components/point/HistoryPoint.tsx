@@ -26,6 +26,7 @@ interface guruData {
   };
   mission?: {
     missionType: string;
+    missionNo: string;
   } | null;
 }
 export const HistoryPoint: React.FC<guruData> = ({
@@ -77,6 +78,13 @@ export const HistoryPoint: React.FC<guruData> = ({
     campaignName,
     props.rewardName,
   ]);
+
+  const codeNo = useMemo(() => {
+    if (mission && mission?.missionType === 'MISSION_POINT') {
+      return mission?.missionNo;
+    }
+    return taskNo || '-';
+  }, [taskNo, mission]);
   return (
     <View key={index}>
       <View
@@ -96,7 +104,7 @@ export const HistoryPoint: React.FC<guruData> = ({
               ? props?.redeemDetail?.redeemNo || '-'
               : isHaveReward
               ? props.redeemNo
-              : taskNo}
+              : codeNo}
           </Text>
         </View>
         <View style={{flex: 0.4}}>

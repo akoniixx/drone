@@ -153,7 +153,7 @@ export default function ReadyToUseTab({navigation}: {navigation: any}) {
                   style={{
                     marginTop: 4,
                     fontSize: 14,
-                    fontFamily: fonts.light,
+                    fontFamily: fonts.regular,
                   }}>
                   {`แลกเมื่อ ${momentExtend.toBuddhistYear(
                     item.redeemDate,
@@ -189,7 +189,7 @@ export default function ReadyToUseTab({navigation}: {navigation: any}) {
                     <Text
                       style={{
                         fontSize: 14,
-                        fontFamily: fonts.light,
+                        fontFamily: fonts.regular,
                         color: colors.gray,
                       }}>
                       {
@@ -246,7 +246,7 @@ export default function ReadyToUseTab({navigation}: {navigation: any}) {
             />
             <Text
               style={{
-                fontFamily: fonts.light,
+                fontFamily: fonts.regular,
                 fontSize: 16,
                 color: colors.gray,
               }}>

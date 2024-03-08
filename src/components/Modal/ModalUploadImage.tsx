@@ -18,7 +18,7 @@ import AsyncButton from '../Button/AsyncButton';
 interface Props {
   visible: boolean;
   onCancel: () => void;
-  onPressLibrary: () => Promise<void>;
+  onPressLibrary: () => Promise<any>;
   onPressCamera: () => void;
   onFinishedTakePhoto: (v: any) => void;
   onCloseModalSelect: () => void;

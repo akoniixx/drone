@@ -17,3 +17,15 @@ export function mixValidator(str: string) {
   }
   return str;
 }
+export const validatorDecimal = (str: string) => {
+  const decimalTwo = /^(\d+)?([.]?\d{0,2})?$/;
+
+  if (containsEmoji(str)) {
+    return str.slice(0, -2);
+  }
+
+  if (decimalTwo.test(str)) {
+    return str;
+  }
+  return str.slice(0, -1);
+};

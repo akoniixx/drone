@@ -33,6 +33,7 @@ export interface ImageDataType {
     type: string;
     fileName: string;
     uri: string;
+    createdDate?: string;
     errorMessage?: string[];
     isError?: boolean;
     errorTypeList?: Array<
@@ -138,7 +139,7 @@ export default function FinishTaskScreen({navigation, route}: Props) {
         });
       });
       await Promise.all(multiList);
-      const result = await TaskDatasource.finishTask({
+      await TaskDatasource.finishTask({
         fileDrug: imageSpray,
         taskId: taskId,
         updateBy: user?.firstname + ' ' + user?.lastname,
@@ -175,7 +176,7 @@ export default function FinishTaskScreen({navigation, route}: Props) {
             onPressBack={step < 1 ? onPressBack : onCancel}
             showBackBtn
           />
-          <Text style={styles.subTitle}>กรุณาอัพโหลดภาพงานเสร็จสิ้น 2 ภาพ</Text>
+          <Text style={styles.subTitle}>กรุณาอัปโหลดภาพงานเสร็จสิ้น 2 ภาพ</Text>
 
           <ScrollView
             style={styles.container}

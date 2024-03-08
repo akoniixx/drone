@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 import {normalize} from '@rneui/themed';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {FlatList} from 'react-native-gesture-handler';
@@ -10,7 +10,10 @@ import {colors, image, icons} from '../../assets';
 import fonts from '../../assets/fonts';
 
 import Tasklists from '../../components/TaskList/Tasklists';
-import {TaskDatasource} from '../../datasource/TaskDatasource';
+import {
+  CurrentTaskDroner,
+  TaskDatasource,
+} from '../../datasource/TaskDatasource';
 
 import {stylesCentral} from '../../styles/StylesCentral';
 import {dataUpdateStatusEntity} from '../../entities/TaskScreenEntities';
@@ -26,6 +29,7 @@ import Loading from '../../components/Loading/Loading';
 import NetworkLost from '../../components/NetworkLost/NetworkLost';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {mixpanel} from '../../../mixpanel';
+import {numberWithCommas} from '../../function/utility';
 
 interface Prop {
   navigation: any;
@@ -54,10 +58,6 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [checkResIsComplete, setCheckResIsComplete] = useState<boolean>(false);
 
-  // const [toggleModalStartTask, setToggleModalStartTask] =
-  //   useState<boolean>(false);
-
-  // const [toggleModalReview, setToggleModalReview] = useState<boolean>(false);
   const [imgUploaded] = useState<boolean>(false);
   const [finishImg, setFinishImg] = useState<any>(null);
   const [defaultRating, setDefaultRating] = useState<number>(0);
@@ -101,14 +101,15 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
 
     if (data.data.length < data.count) {
       setLoadingInfinite(true);
-      setPage(page + 1);
+
       const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
-      TaskDatasource.getTaskById(
-        droner_id,
-        ['WAIT_START', 'IN_PROGRESS'],
-        page + 1,
-        limit,
-      )
+      const payload: CurrentTaskDroner = {
+        dronerId: droner_id,
+        taskStatus: ['WAIT_START', 'IN_PROGRESS'],
+        page: initialPage,
+        take: limit,
+      };
+      TaskDatasource.getCurrentTaskDroner(payload)
         .then(res => {
           if (res !== undefined) {
             setData({
@@ -125,6 +126,7 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
           isFetching.current = false;
           setLoadingInfinite(false);
         });
+      setPage(page + 1);
     }
   };
   const startTask = () => {
@@ -206,12 +208,13 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
   const getData = async () => {
     setLoading(true);
     const droner_id = (await AsyncStorage.getItem('droner_id')) ?? '';
-    TaskDatasource.getTaskById(
-      droner_id,
-      ['WAIT_START', 'IN_PROGRESS'],
-      initialPage,
-      limit,
-    )
+    const payload: CurrentTaskDroner = {
+      dronerId: droner_id,
+      taskStatus: ['WAIT_START', 'IN_PROGRESS'],
+      page: initialPage,
+      take: limit,
+    };
+    TaskDatasource.getCurrentTaskDroner(payload)
       .then(res => {
         if (res !== undefined) {
           setData(res);
@@ -348,10 +351,7 @@ const TaskScreen: React.FC<Prop> = (props: Prop) => {
                       id={item.item.taskNo}
                       status={item.item.status}
                       title={item.item.farmerPlot.plantName}
-                      price={
-                        parseInt(item.item.price) +
-                        parseInt(item.item.revenuePromotion)
-                      }
+                      price={item.item.totalPrice}
                       date={item.item.dateAppointment}
                       address={item.item.farmerPlot.locationName}
                       distance={item.item.distance}

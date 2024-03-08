@@ -48,10 +48,9 @@ export default function SheetSelectArea(props: SheetProps) {
         dronerTransactionId: props.payload.dronerTransactionId,
         branchCode: selectedArea.branchCode,
         branchName: selectedArea.name,
-
         updateBy: `${user?.firstname} ${user?.lastname}`,
+        companyName: props.payload.companyItem.name,
       };
-
       const result = await rewardDatasource.useRedeemCode(payload);
       if (result) {
         setLoading(false);
@@ -74,13 +73,6 @@ export default function SheetSelectArea(props: SheetProps) {
   };
   return (
     <ActionSheet
-      //   onClose={async () => {
-      //     await SheetManager.hide(props.sheetId, {
-      //       payload: {
-      //         selected: selectedArea,
-      //       },
-      //     });
-      //   }}
       closeOnTouchBackdrop={false}
       id={props.sheetId}
       containerStyle={{

@@ -40,8 +40,8 @@ const TaskTapNavigator: React.FC<Prop> = (props: Prop) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'task', title: 'งานที่ต้องทำ'},
-    {key: 'newTask', title: 'งานใหม่สำหรับคุณ'},
+    {key: 'task', title: 'งานวันนี้'},
+    {key: 'newTask', title: 'งานใหม่'},
   ]);
   const renderScene = ({route}: any) => {
     switch (route.key) {

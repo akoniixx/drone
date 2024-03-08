@@ -1,3 +1,11 @@
+## Feature [1.12.0] 2023-12-22
+- droner create task
+-  48 hours validation
+-  fix some ui
+  
+## Feature [1.11.1] 2023-12-22
+- add feature create task
+
 ## Checkpoint [1.11.0] 2023-12-01
 - checkpoint before deploy production
 ## Feature [1.10.5] 2023-12-01

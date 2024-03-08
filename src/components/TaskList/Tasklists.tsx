@@ -60,6 +60,7 @@ const Tasklists: React.FC<any> = (props: Props) => {
   const defaultRating = props.defaultRating;
   const starImgFilled = props.starImgFilled;
   const starImgCorner = props.starImgCorner;
+  const purposeSpray = props.purposeSpray;
 
   const taskId = props.taskId;
   const statusDelay = props.statusDelay;
@@ -133,18 +134,23 @@ const Tasklists: React.FC<any> = (props: Props) => {
           }>
           <View style={styles.listTile}>
             <Text
+              numberOfLines={2}
               style={{
                 color: colors.fontBlack,
                 fontFamily: fonts.medium,
                 fontSize: normalize(19),
+                width: '75%',
               }}>
-              {`${props.title} | ${checkDecimal(+props.farmArea)} ไร่`}
+              {`${purposeSpray.purposeSprayName} (${
+                props.title
+              })  | ${checkDecimal(+props.farmArea)} ไร่`}
             </Text>
             <Text
               style={{
                 fontFamily: fonts.medium,
                 color: '#2EC66E',
                 fontSize: normalize(17),
+                marginTop: 2,
               }}>
               ฿{' '}
               {props.price
@@ -635,7 +641,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 5,
   },
   g19: {

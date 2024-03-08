@@ -158,7 +158,7 @@ export default function HistoryTab({navigation}: {navigation: any}) {
         />
         <Text
           style={{
-            fontFamily: fonts.light,
+            fontFamily: fonts.regular,
             fontSize: 16,
             color: colors.gray,
           }}>
@@ -248,7 +248,7 @@ export default function HistoryTab({navigation}: {navigation: any}) {
                   style={{
                     marginTop: 4,
                     fontSize: 14,
-                    fontFamily: fonts.light,
+                    fontFamily: fonts.regular,
                   }}>
                   {`แลกเมื่อ ${momentExtend.toBuddhistYear(
                     item.redeemDate,
@@ -258,16 +258,17 @@ export default function HistoryTab({navigation}: {navigation: any}) {
                 <View
                   style={{
                     marginTop: 4,
-
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     flex: 1,
+                    width: '100%',
                   }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
+                      flex: 1,
                     }}>
                     <View
                       style={{
@@ -284,7 +285,7 @@ export default function HistoryTab({navigation}: {navigation: any}) {
                     <Text
                       style={{
                         fontSize: 14,
-                        fontFamily: fonts.light,
+                        fontFamily: fonts.regular,
                         color: colors.gray,
                       }}>
                       {
@@ -297,19 +298,25 @@ export default function HistoryTab({navigation}: {navigation: any}) {
                   {isMission && (
                     <View
                       style={{
-                        borderRadius: 10,
-                        backgroundColor: '#FBCC96',
-                        paddingVertical: 2,
-                        paddingHorizontal: 8,
+                        flex: 1,
                       }}>
-                      <Text
+                      <View
                         style={{
-                          fontSize: 12,
-                          fontFamily: fonts.semiBold,
-                          color: '#993A03',
+                          borderRadius: 10,
+                          backgroundColor: '#FBCC96',
+                          paddingVertical: 2,
+                          paddingHorizontal: 8,
+                          alignSelf: 'flex-end',
                         }}>
-                        ภารกิจ
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            fontFamily: fonts.semiBold,
+                            color: '#993A03',
+                          }}>
+                          ภารกิจ
+                        </Text>
+                      </View>
                     </View>
                   )}
                 </View>

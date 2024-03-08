@@ -684,7 +684,7 @@ export const toastConfig = {
             <Text
               style={{
                 fontSize: normalize(14),
-                fontFamily: fonts.light,
+                fontFamily: fonts.regular,
                 color: colors.white,
               }}>
               กรุณารอการอนุมัติจากเจ้าหน้าที่
@@ -746,7 +746,7 @@ export const toastConfig = {
             <Text
               style={{
                 fontSize: normalize(14),
-                fontFamily: fonts.light,
+                fontFamily: fonts.regular,
                 color: colors.white,
               }}>
               ได้รับอนุมัติจากเจ้าหน้าที่แล้ว
@@ -888,7 +888,7 @@ export const toastConfig = {
             <Text
               style={{
                 fontSize: normalize(14),
-                fontFamily: fonts.light,
+                fontFamily: fonts.regular,
                 color: colors.white,
               }}>
               รอแจ้งเตือนงานใหม่ครั้งถัดไปได้อีกครั้ง

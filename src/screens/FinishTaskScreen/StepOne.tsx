@@ -25,15 +25,15 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {lineOfficialURI} from '../../definitions/externalLink';
 
 const mappingErrorMessage = {
-  isDuplicate: 'อัพโหลดภาพซ้ำ กรุณาลบแล้วอัพโหลดภาพใหม่อีกครั้ง',
-  isSize: 'อัพโหลดภาพที่มีขนาดเกิน 20 MB กรุณาลบแล้วอัพโหลดภาพใหม่อีกครั้ง',
-  isAfterOnly: 'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+  isDuplicate: 'อัปโหลดภาพซ้ำ กรุณาลบแล้วอัปโหลดภาพใหม่อีกครั้ง',
+  isSize: 'อัปโหลดภาพที่มีขนาดเกิน 20 MB กรุณาลบแล้วอัปโหลดภาพใหม่อีกครั้ง',
+  isAfterOnly: 'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
   isBeforeOnly:
-    'อัพโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+    'อัปโหลดภาพที่เกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
   isAfterAndDuplicate:
-    'ภาพที่อัพโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+    'ภาพที่อัปโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
   isBeforeAndDuplicate:
-    'ภาพที่อัพโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
+    'ภาพที่อัปโหลดซ้ำและเกินระยะเวลางาน 48 ชั่วโมง กรุณาติดต่อเจ้าหน้าที่',
 };
 const convertErrorMessage = (
   errorTypeList: Array<
@@ -104,6 +104,8 @@ export default function StepOne({
             size: el.fileSize,
             mime: el.type,
             filename: el.fileName,
+            creationDate: el.createdDate,
+            modificationDate: el.createdDate,
           };
         });
         const newResult = [...format, ...result];
@@ -120,28 +122,31 @@ export default function StepOne({
           } else {
             hashMap[convertSha] = true; // Add to hash map
           }
+          const createDate = item?.creationDate && item?.creationDate;
+          const modificationDate =
+            item?.modificationDate && +item?.modificationDate;
           const modifedDate =
-            (Platform.OS === 'ios'
-              ? item.creationDate
-              : item.modificationDate) || moment().unix();
-          const date = item?.modificationDate
-            ? moment(moment.unix(+modifedDate))
+            Platform.OS === 'ios' ? createDate : modificationDate;
+          const date = modifedDate
+            ? moment.unix(modifedDate as number)
             : moment();
+          const isIos = Platform.OS === 'ios';
           const isDateBefore48Hours = moment()
             .subtract(48, 'hours')
             .isAfter(date);
+
           const isDateAfter48Hours = moment(taskAppointment)
             .add(48, 'hours')
             .isBefore(date);
 
-          // if (isDateBefore48Hours) {
-          //   errorMessages.push('เกินเวลา');
-          //   errorTypeList.push('isAfter');
-          // }
-          // if (isDateAfter48Hours) {
-          //   errorMessages.push('เกินเวลา');
-          //   errorTypeList.push('isBefore');
-          // }
+          if (isDateBefore48Hours && isIos) {
+            errorMessages.push('เกินเวลา');
+            errorTypeList.push('isAfter');
+          }
+          if (isDateAfter48Hours && isIos) {
+            errorMessages.push('เกินเวลา');
+            errorTypeList.push('isBefore');
+          }
 
           if (item?.size) {
             const isFileMoreThan20MB = item.size > 20 * 1024 * 1024;
@@ -156,6 +161,7 @@ export default function StepOne({
             type: item.mime,
             fileName: item?.filename,
             uri: item.path,
+            createdDate: modifedDate,
             //   fileData: fileData,
             errorMessage: errorMessages,
             isError: errorMessages.length > 0,
@@ -175,7 +181,7 @@ export default function StepOne({
             setLoading(false);
           },
         );
-        //   console.log('newAssets :>> ', JSON.stringify(newAssets, null, 2));
+
         const errorTypeList = newAssets.reduce((acc: any, item: any) => {
           if (item.errorTypeList) {
             return [...acc, ...item.errorTypeList];
@@ -211,7 +217,7 @@ export default function StepOne({
         setImageData(prev => ({
           isError: true,
           assets: prev.assets,
-          errorMessage: 'อัพโหลดภาพที่มีขนาดเกิน 20 MB',
+          errorMessage: 'อัปโหลดภาพที่มีขนาดเกิน 20 MB',
         }));
         return false;
       }
@@ -225,8 +231,8 @@ export default function StepOne({
       setShowModalSelectImage(false);
       setImageData(prev => ({
         assets: [...prev.assets, newAssets],
-        isError: false,
-        errorMessage: null,
+        isError: prev.isError || false,
+        errorMessage: prev.errorMessage || null,
       }));
     }
   };
@@ -239,7 +245,7 @@ export default function StepOne({
         setImageData(prev => ({
           isError: true,
           assets: prev.assets,
-          errorMessage: 'อัพโหลดภาพที่มีขนาดเกิน 5 MB',
+          errorMessage: 'อัปโหลดภาพที่มีขนาดเกิน 5 MB',
         }));
 
         return false;
@@ -256,8 +262,8 @@ export default function StepOne({
 
       setImageData(prev => ({
         assets: [...prev.assets, newPhoto],
-        isError: false,
-        errorMessage: null,
+        isError: prev.isError || false,
+        errorMessage: prev.errorMessage || null,
       }));
 
       setShowModalSelectImage(false);
@@ -285,6 +291,7 @@ export default function StepOne({
           hashMap[convertSha] = true; // Add to hash map
         }
         return {
+          createdDate: item.createdDate,
           fileSize: item.fileSize,
           type: item.type,
           fileName: item.fileName,
@@ -354,7 +361,7 @@ export default function StepOne({
       <View style={styles.footer}>
         <View style={styles.rowFooter}>
           <View style={styles.leftFooter}>
-            <Text style={styles.leftTitle}>อัพโหลดภาพหลักฐานการบิน</Text>
+            <Text style={styles.leftTitle}>อัปโหลดภาพหลักฐานการบิน</Text>
             <Text style={styles.subTitle}>สูงสุดจำนวน 5 ภาพ</Text>
             {imageData.errorMessage && (
               <Text
@@ -451,21 +458,11 @@ export default function StepOne({
                   key={index}
                   style={{
                     marginTop: 8,
-                    borderRadius: 12,
-
                     overflow: 'hidden',
                     marginBottom: 4,
 
                     marginRight: 12,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                    backgroundColor: colors.white,
+                    backgroundColor: 'transparent',
                   }}>
                   <TouchableOpacity
                     onPress={() => {
@@ -580,7 +577,7 @@ const styles = StyleSheet.create({
   leftFooter: {
     alignSelf: 'flex-start',
     alignItems: 'flex-start',
-    flex: 0.7,
+    flex: 0.6,
   },
   leftTitle: {
     fontFamily: font.semiBold,
